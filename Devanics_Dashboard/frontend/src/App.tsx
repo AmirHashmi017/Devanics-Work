@@ -8,7 +8,7 @@ const App: React.FC = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Navigate to="/profile/create" />} />
+        <Route path="/" element={<Navigate to="/profiles" />} />
         <Route path="/profile/create" element={<ProfileCreation />} />
         <Route path="/profiles" element={<ProfileList />} />
       </Routes>

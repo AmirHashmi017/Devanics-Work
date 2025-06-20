@@ -1,9 +1,31 @@
-import React from 'react';
+import {useState,useEffect} from 'react';
+import { useNavigate,useLocation } from 'react-router-dom';
 import "../styles/Sidebar.css"
 import "../styles/Components.css"
 import "../styles/dashboard.css"
 
+
 const Sidebar = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [activeItem, setActiveItem] = useState<string>('recruitment');
+
+  useEffect(() => {
+    if (location.pathname === '/profile/create') {
+      setActiveItem('profile');
+    } else if (location.pathname === '/profiles') {
+      setActiveItem('recruitment');
+    }
+  }, [location.pathname]);
+
+  const handlenewprofileClick = () => {
+    setActiveItem('profile');
+    navigate('/profile/create'); 
+  };
+   const profilesClick = () => {
+    setActiveItem('recruitment');
+    navigate('/profiles'); 
+  };
   return (<div className="sidebar">
         <div className="sidebar__logo">
           <img className="sidebar__logo-icon" src="../assets/Illustration.png"/>
@@ -22,21 +44,18 @@ const Sidebar = () => {
             <span><img src="../assets/candidates.png"></img></span>
             <span>My candidates</span>
           </div>
-          <div className="sidebar__nav-item">
+          <div className={`sidebar__nav-item ${activeItem === 'profile' ? 'sidebar__nav-item--active' : ''}`} onClick={handlenewprofileClick}>
             <span><img src="../assets/Profile.png"></img></span>
             <span>My profile</span>
           </div>
-          <div className="sidebar__nav-item sidebar__nav-item--active">
+          <div className={`sidebar__nav-item ${activeItem === 'recruitment' ? 'sidebar__nav-item--active' : ''}`} onClick={profilesClick}>
             <span><img src="../assets/recuriment.png"></img></span>
             <span>My Recruitment</span>
           </div>
-          <p className="sidebar__footer-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+          <button className="sidebar__upgrade-btn">Upgrade Now</button>
         </nav>
 
-        <div className="sidebar__footer">
-          
-          <button className="sidebar__upgrade-btn">Upgrade Now</button>
-        </div>
+        
       </div>)
 }
 export default Sidebar

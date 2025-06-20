@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { updateProfile, deleteProfile, archiveProfile, fetchProfilesAsync } from "../redux/profileSlice"
 import type { RootState, AppDispatch } from "../redux/store"
+import { useNavigate } from 'react-router-dom';
 import axios from "axios"
 import { Card, CardContent } from "./Card"
 import { Input } from "./Input"
@@ -17,6 +18,8 @@ import "../styles/dashboard.css"
 interface ProfileTableProps {
   onEdit: (profile: any) => void
 }
+
+
 
 export default function ProfileTable({ onEdit }: ProfileTableProps) {
   const dispatch: AppDispatch = useDispatch()
@@ -79,6 +82,11 @@ export default function ProfileTable({ onEdit }: ProfileTableProps) {
         return "status-badge--progress"
     }
   }
+const navigate = useNavigate();
+
+  const handleCreateClick = () => {
+    navigate('/profile/create');
+  };
 
   return (
     <div className="dashboard">
@@ -143,7 +151,7 @@ export default function ProfileTable({ onEdit }: ProfileTableProps) {
             <div className="content__controls">
               
 
-              <button className="create-btn">Create Profile</button>
+              <button className="create-btn" onClick={handleCreateClick}>Create Profile</button>
             </div>
           </div>
 

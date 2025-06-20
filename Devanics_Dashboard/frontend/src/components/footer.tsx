@@ -55,10 +55,10 @@ const Footer = () => {
               
               <div className="footer__newsletter">
                 <div className="footer__social">
-                  <span className="footer__social-icon"><img src="assets/twitter.png"></img></span>
-                  <span className="footer__social-icon"><img src="assets/facebook.png"></img></span>
-                  <span className="footer__social-icon"><img src="assets/insta.png"></img></span>
-                  <span className="footer__social-icon"><img src="assets/LinkedIn.png"></img></span>
+                  <span className="footer__social-icon"><img src="../assets/twitter.png"></img></span>
+                  <span className="footer__social-icon"><img src="../assets/facebook.png"></img></span>
+                  <span className="footer__social-icon"><img src="../assets/insta.png"></img></span>
+                  <span className="footer__social-icon"><img src="../assets/LinkedIn.png"></img></span>
                 </div>
                 <p>Subscribe our Newsletters to keep updated yourself with Current Revolution in Fitness Sector.</p>
                 <div className="footer__newsletter-form">

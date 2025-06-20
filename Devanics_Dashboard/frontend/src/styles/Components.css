@@ -1,0 +1,239 @@
+/* Button Styles - Exact match to design */
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.2s;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  text-decoration: none;
+}
+
+.button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.button--default {
+  background-color: #2d3748;
+  color: white;
+  padding: 10px 16px;
+}
+
+.button--default:hover:not(:disabled) {
+  background-color: #4a5568;
+}
+
+.button--ghost {
+  background-color: transparent;
+  color: #718096;
+  padding: 8px 12px;
+}
+
+.button--ghost:hover:not(:disabled) {
+  background-color: #f7fafc;
+  color: #4a5568;
+}
+
+.button--outline {
+  background-color: white;
+  color: #4a5568;
+  border: 1px solid #e2e8f0;
+  padding: 10px 16px;
+}
+
+.button--outline:hover:not(:disabled) {
+  background-color: #f7fafc;
+  border-color: #cbd5e0;
+}
+
+.button--sm {
+  padding: 6px 12px;
+  font-size: 12px;
+}
+
+.button--lg {
+  padding: 12px 24px;
+  font-size: 16px;
+}
+
+.button--icon {
+  padding: 8px;
+  width: 36px;
+  height: 36px;
+}
+
+/* Card Styles - Exact match */
+.card {
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  border: 1px solid #f1f5f9;
+}
+
+.card__content {
+  padding: 0;
+}
+
+/* Input Styles - Exact match */
+.input {
+  display: flex;
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  background-color: white;
+  padding: 10px 12px;
+  font-size: 14px;
+  transition: all 0.2s;
+  color: #2d3748;
+}
+
+.input:focus {
+  outline: none;
+  border-color: #3182ce;
+  box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.1);
+}
+
+.input::placeholder {
+  color: #a0aec0;
+}
+
+/* Dropdown Styles - Fixed z-index issues */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown__content {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  z-index: 9999; /* High z-index to appear above everything */
+  min-width: 160px;
+  background-color: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  padding: 4px 0;
+  animation: dropdownFadeIn 0.15s ease-out;
+}
+
+/* Animation for dropdown appearance */
+@keyframes dropdownFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Special positioning for status dropdowns */
+.dropdown--status .dropdown__content {
+  left: 0;
+  right: auto;
+}
+
+/* Special positioning for action dropdowns */
+.dropdown--actions .dropdown__content {
+  right: 0;
+  left: auto;
+}
+
+/* Special positioning for user dropdown */
+.dropdown--user .dropdown__content {
+  right: 0;
+  left: auto;
+  min-width: 180px;
+}
+
+/* Special positioning for help dropdown */
+.dropdown--help .dropdown__content {
+  bottom: calc(100% + 4px);
+  top: auto;
+  right: 0;
+  left: auto;
+}
+
+.dropdown__item {
+  padding: 10px 16px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  color: #4a5568;
+  white-space: nowrap;
+}
+
+.dropdown__item:hover {
+  background-color: #f7fafc;
+  color: #2d3748;
+}
+
+.dropdown__item:first-child {
+  border-radius: 8px 8px 0 0;
+}
+
+.dropdown__item:last-child {
+  border-radius: 0 0 8px 8px;
+}
+
+/* Table Styles - Exact match */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  position: relative; /* Ensure table doesn't interfere with dropdowns */
+}
+
+.table__header {
+  background-color: #f7fafc;
+}
+
+.table__head {
+  padding: 16px 20px;
+  text-align: left;
+  font-weight: 600;
+  color: #4a5568;
+  font-size: 14px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.table__body .table__row {
+  border-bottom: 1px solid #f1f5f9;
+  transition: background-color 0.2s;
+  position: relative; /* Ensure rows don't interfere with dropdowns */
+}
+
+.table__body .table__row:hover {
+  background-color: #f8fafc;
+}
+
+.table__body .table__row:last-child {
+  border-bottom: none;
+}
+
+.table__cell {
+  padding: 16px 20px;
+  color: #2d3748;
+  vertical-align: middle;
+  position: relative; /* Ensure cells don't interfere with dropdowns */
+}
+
+/* Ensure table container doesn't clip dropdowns */
+.table-container {
+  overflow: visible;
+}
+
+.card {
+  overflow: visible; /* Allow dropdowns to extend outside card */
+}
+
+.card__content {
+  overflow: visible; /* Allow dropdowns to extend outside card content */
+}

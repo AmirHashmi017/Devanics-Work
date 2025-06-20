@@ -1,0 +1,94 @@
+
+.sidebar {
+  width: 260px;
+  background-color: #142D52;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.sidebar__logo {
+  padding: 24px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sidebar__logo-icon {
+  width: 90px;
+  height: 90px;
+  filter: brightness(1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  
+}
+
+.sidebar__nav {
+  flex: 1;
+  padding: 8px 16px;
+}
+
+.sidebar__nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  color: #94a3b8;
+  cursor: pointer;
+  border-radius: 8px;
+  margin-bottom: 2px;
+  transition: all 0.2s ease;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.sidebar__nav-item:hover {
+  color: white;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.sidebar__nav-item--active {
+  color: white;
+}
+
+.sidebar__nav-item span:first-child {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+
+.sidebar__footer {
+  padding: 20px 16px 24px;
+}
+
+.sidebar__footer-text {
+  margin-top: 55px;
+  font-size: 12px;
+  color: #64748b;
+  text-align: center;
+  margin-bottom: 16px;
+  line-height: 1.4;
+}
+
+.sidebar__upgrade-btn {
+  width: 100%;
+  background-color: #06BF97;
+  color: white;
+  padding: 12px 16px;
+  border: none;
+  border-radius: 3px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.sidebar__upgrade-btn:hover {
+  background-color: #059669;
+}

@@ -1,87 +1,280 @@
-import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { updateProfile, deleteProfile, archiveProfile, fetchProfilesAsync } from '../redux/profileSlice';
-import { RootState, AppDispatch } from '../redux/store';
-import axios from 'axios';
+"use client"
+
+import { useState, useEffect } from "react"
+import { useDispatch, useSelector } from "react-redux"
+import { updateProfile, deleteProfile, archiveProfile, fetchProfilesAsync } from "../redux/profileSlice"
+import type { RootState, AppDispatch } from "../redux/store"
+import axios from "axios"
+import { Card, CardContent } from "./Card"
+import { Input } from "./Input"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./DropdownMenu"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "./Table"
+import Sidebar from './sidebar';
+import Footer from './footer';
+import "../styles/Components.css"
+import "../styles/dashboard.css"
 
 interface ProfileTableProps {
-  onEdit: (profile: any) => void;
+  onEdit: (profile: any) => void
 }
 
-const ProfileTable: React.FC<ProfileTableProps> = ({ onEdit }) => {
-  const dispatch: AppDispatch = useDispatch();
-  const profiles = useSelector((state: RootState) => state.profiles);
-  const [refresh, setRefresh] = useState(false);
+export default function ProfileTable({ onEdit }: ProfileTableProps) {
+  const dispatch: AppDispatch = useDispatch()
+  const profiles = useSelector((state: RootState) => state.profiles)
+  const [refresh, setRefresh] = useState(false)
+  const [activeTab, setActiveTab] = useState<"active" | "archive">("active")
+  const [searchTerm, setSearchTerm] = useState("")
+  const [currentPage, setCurrentPage] = useState(1)
+  const itemsPerPage = 10
 
   useEffect(() => {
     dispatch(fetchProfilesAsync()).then(() => {
-      console.log('Fetched profiles:', profiles);
-      setRefresh(prev => !prev); // Trigger re-render
-    });
-  }, [dispatch]);
+      console.log("Fetched profiles:", profiles)
+      setRefresh((prev) => !prev)
+    })
+  }, [dispatch])
 
   const handleStatusChange = (id: string, status: string) => {
-    const validStatus = status as 'In Progress' | 'Draft' | 'Completed';
-    if (['In Progress', 'Draft', 'Completed'].includes(status)) {
-      dispatch(updateProfile({ id, changes: { status: validStatus } }));
-      axios.put(`http://localhost:3001/api/profiles/${id}`, { status: validStatus });
+    const validStatus = status as "In Progress" | "Draft" | "Completed"
+    if (["In Progress", "Draft", "Completed"].includes(status)) {
+      dispatch(updateProfile({ id, changes: { status: validStatus } }))
+      axios.put(`http://localhost:3001/api/profiles/${id}`, { status: validStatus })
     }
-  };
+  }
 
   const handleArchive = (id: string) => {
-    const profile = profiles.find(p => p.id === id);
+    const profile = profiles.find((p) => p.id === id)
     if (profile) {
-      dispatch(archiveProfile(id));
-      axios.put(`http://localhost:3001/api/profiles/${id}`, { archived: !profile.archived });
+      dispatch(archiveProfile(id))
+      axios.put(`http://localhost:3001/api/profiles/${id}`, { archived: !profile.archived })
     }
-  };
+  }
+
+  const handleDelete = (id: string) => {
+    dispatch(deleteProfile(id))
+    axios.delete(`http://localhost:3001/api/profiles/${id}`)
+  }
+
+  const filteredProfiles = profiles.filter((profile) => {
+    const matchesTab = activeTab === "active" ? !profile.archived : profile.archived
+    const matchesSearch =
+      profile.companyName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      profile.id.toLowerCase().includes(searchTerm.toLowerCase())
+    return matchesTab && matchesSearch
+  })
+
+  const totalPages = Math.ceil(filteredProfiles.length / itemsPerPage)
+  const startIndex = (currentPage - 1) * itemsPerPage
+  const paginatedProfiles = filteredProfiles.slice(startIndex, startIndex + itemsPerPage)
+
+  const getStatusClass = (status: string) => {
+    switch (status) {
+      case "In Progress":
+        return "status-badge--progress"
+      case "Draft":
+        return "status-badge--draft"
+      case "Completed":
+        return "status-badge--completed"
+      default:
+        return "status-badge--progress"
+    }
+  }
 
   return (
-    <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-      <thead>
-        <tr style={{ background: '#fff' }}>
-          <th>ID</th>
-          <th>Company Name</th>
-          <th>Logo</th>
-          <th>No of hires/year</th>
-          <th>Start Date</th>
-          <th>Status</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        {profiles.length > 0 ? (
-          profiles.map((profile) => (
-            <tr key={profile.id} style={{ background: '#fff' }}>
-              <td>{profile.id}</td>
-              <td>{profile.companyName}</td>
-              {/* <td>{profile.logo ? <img src={profile.logo} alt="Logo" width="50" /> : 'No Logo'}</td> */}
-              <td>{profile.hiresPerYear}</td>
-              <td>{profile.startDate}</td>
-              <td>
-                <select value={profile.status} onChange={(e) => handleStatusChange(profile.id, e.target.value)}>
-                  <option value="In Progress">In Progress</option>
-                  <option value="Draft">Draft</option>
-                  <option value="Completed">Completed</option>
-                </select>
-              </td>
-              <td>
-                <button onClick={() => onEdit(profile)}>Edit</button>
-                <button onClick={() => { dispatch(deleteProfile(profile.id)); axios.delete(`http://localhost:3001/api/profiles/${profile.id}`); }}>Delete</button>
-                <button onClick={() => handleArchive(profile.id)}>
-                  {profile.archived ? 'Unarchive' : 'Archive'}
-                </button>
-              </td>
-            </tr>
-          ))
-        ) : (
-          <tr>
-            <td colSpan={7}>No profiles available</td>
-          </tr>
-        )}
-      </tbody>
-    </table>
-  );
-};
+    <div className="dashboard">
+      {/* Sidebar */}
+      <Sidebar />
 
-export default ProfileTable;
+      {/* Main Content */}
+      <div className="main-content">
+        {/* Header */}
+        <header className="header">
+          <h1 className="header__title">Profiles</h1>
+
+          <div className="header__actions">
+            <div className="header__lang">
+              <span><img width={70} height={40} src="../assets/language.png"></img></span>
+              
+            </div>
+
+            <button className="header__notification"><img src="../assets/Vector.png"></img></button>
+
+            <DropdownMenu>
+              <DropdownMenuTrigger>
+                <div className="header__user">
+                  <div className="header__user-avatar"><img src="../assets/john.png"></img></div>
+                  <span className="header__user-name">John Doe</span>
+                  <span className="header__user-dropdown">▼</span>
+                </div>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem>Profile</DropdownMenuItem>
+                <DropdownMenuItem>Settings</DropdownMenuItem>
+                <DropdownMenuItem>Logout</DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        </header>
+
+        {/* Content */}
+        <div className="content">
+          <div className="content__header">
+            <div className="content__tabs">
+              <button
+                onClick={() => {
+                  setActiveTab("active")
+                  setCurrentPage(1)
+                }}
+                className={`content__tab ${activeTab === "active" ? "content__tab--active" : ""}`}
+              >
+                Active
+              </button>
+              <button
+                onClick={() => {
+                  setActiveTab("archive")
+                  setCurrentPage(1)
+                }}
+                className={`content__tab ${activeTab === "archive" ? "content__tab--active" : ""}`}
+              >
+                Archive
+              </button>
+            </div>
+
+            <div className="content__controls">
+              
+
+              <button className="create-btn">Create Profile</button>
+            </div>
+          </div>
+
+          <Card>
+            <CardContent>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>ID</TableHead>
+                    <TableHead>Name</TableHead>
+                    <TableHead>No. of hires/year</TableHead>
+                    <TableHead>Start Date</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead>Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {paginatedProfiles.length > 0 ? (
+                    paginatedProfiles.map((profile) => (
+                      <TableRow key={profile.id}>
+                        <TableCell className="table__cell--id">RID-{profile.id.slice(-3)}</TableCell>
+                        <TableCell>
+                          <div className="company-info">
+                            
+                            <span className="company-name">{profile.companyName}</span>
+                          </div>
+                        </TableCell>
+                        <TableCell>{profile.hiresPerYear}</TableCell>
+                        <TableCell>{new Date(profile.startDate).toLocaleDateString("en-GB")}</TableCell>
+                        <TableCell>
+                          <DropdownMenu>
+                            <DropdownMenuTrigger>
+                              <div className={`status-badge ${getStatusClass(profile.status)}`}>
+                                {profile.status}
+                                <span>▼</span>
+                              </div>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent>
+                              <DropdownMenuItem onClick={() => handleStatusChange(profile.id, "In Progress")}>
+                                In Progress
+                              </DropdownMenuItem>
+                              <DropdownMenuItem onClick={() => handleStatusChange(profile.id, "Draft")}>
+                                Draft
+                              </DropdownMenuItem>
+                              <DropdownMenuItem onClick={() => handleStatusChange(profile.id, "Completed")}>
+                                Completed
+                              </DropdownMenuItem>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
+                        </TableCell>
+                        <TableCell>
+                          <div className="action-buttons">
+                            <DropdownMenu>
+                              <DropdownMenuTrigger>
+                                <button className="action-btn action-btn--more" title="More actions">
+                                  <img src="assets/archive.png"></img>
+                                </button>
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent>
+                                <DropdownMenuItem onClick={() => handleArchive(profile.id)}>
+                                  {profile.archived ? "Unarchive" : "Archive"}
+                                </DropdownMenuItem>
+                                
+                              </DropdownMenuContent>
+                            </DropdownMenu>
+                            <button
+                              className="action-btn action-btn--delete"
+                              onClick={() => handleDelete(profile.id)}
+                              title="Delete"
+                            >
+                              <img src="assets/Delete.png"></img>
+                            </button>
+                            <button
+                              className="action-btn action-btn--edit"
+                              onClick={() => onEdit(profile)}
+                              title="Edit"
+                            >
+                              <img src="assets/Edit.png"></img>
+                            </button>
+                            
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  ) : (
+                    <TableRow>
+                      <TableCell colSpan={6}>
+                        <div className="empty-state">
+                          <div className="empty-state__icon">📋</div>
+                          <div className="empty-state__title">No profiles available</div>
+                          <div className="empty-state__description">
+                            {searchTerm
+                              ? "Try adjusting your search terms"
+                              : "Create your first profile to get started"}
+                          </div>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
+
+          {filteredProfiles.length > 0 && (
+            <div className="pagination">
+              <button
+                className="pagination__btn"
+                onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
+                disabled={currentPage === 1}
+              >
+                ‹
+              </button>
+              <span className="pagination__info">
+                {currentPage} of {totalPages}
+              </span>
+              <button
+                className="pagination__btn"
+                onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
+                disabled={currentPage === totalPages}
+              >
+                ›
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* Footer */}
+        <Footer/>
+        
+      </div>
+    </div>
+  )
+}

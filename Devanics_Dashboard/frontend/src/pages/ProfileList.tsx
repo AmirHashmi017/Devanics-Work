@@ -1,18 +1,21 @@
-import React from 'react';
-import ProfileTable from '../components/ProfileTable';
+"use client"
 
-const ProfileList: React.FC = () => {
+import type React from "react"
+import { Provider } from "react-redux"
+import { store } from "../redux/store"
+import ProfileTable from "../components/ProfileTable"
+
+const ProfileListPage: React.FC = () => {
   const handleEdit = (profile: any) => {
     // Logic to load and edit profile
-    console.log(`Edit profile:`, profile);
-  };
+    console.log(`Edit profile:`, profile)
+  }
 
   return (
-    <div style={{ backgroundColor: '#f5f7fa', padding: '20px' }}>
-      <h1>Profiles</h1>
+    <Provider store={store}>
       <ProfileTable onEdit={handleEdit} />
-    </div>
-  );
-};
+    </Provider>
+  )
+}
 
-export default ProfileList;
+export default ProfileListPage

@@ -1,4 +1,4 @@
-# Steps tio run the Project
+# Steps to run the Project
 ## Open backend Folder
 ### npm install
 ### npm start

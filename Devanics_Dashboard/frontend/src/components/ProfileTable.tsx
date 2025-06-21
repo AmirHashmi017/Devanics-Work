@@ -93,11 +93,10 @@ export default function ProfileTable({ onEdit }: ProfileTableProps) {
 
   return (
     <div className="dashboard">
-      
-      <Sidebar />
 
+      <Sidebar />   
       <div className="main-content">
- 
+
         <header className="header">
           <h1 className="header__title">Profiles</h1>
 

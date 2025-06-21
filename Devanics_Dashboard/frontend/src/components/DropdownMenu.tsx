@@ -87,24 +87,21 @@ export const DropdownMenuContent: React.FC<
 
   useEffect(() => {
     if (isOpen && contentRef.current) {
-      
+    
       const rect = contentRef.current.getBoundingClientRect()
       const viewportWidth = window.innerWidth
       const viewportHeight = window.innerHeight
 
-      
       contentRef.current.style.left = ''
       contentRef.current.style.right = ''
       contentRef.current.style.top = ''
       contentRef.current.style.bottom = ''
 
-      
       if (rect.right > viewportWidth - 20) {
         contentRef.current.style.right = '0'
         contentRef.current.style.left = 'auto'
       }
 
-      
       if (rect.bottom > viewportHeight - 20) {
         contentRef.current.style.bottom = '100%'
         contentRef.current.style.top = 'auto'

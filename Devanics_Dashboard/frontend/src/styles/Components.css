@@ -1,4 +1,4 @@
-/* Enhanced Table Responsiveness */
+
 .card {
   overflow: hidden;
 }
@@ -8,7 +8,6 @@
   -webkit-overflow-scrolling: touch;
 }
 
-/* Table Container for Horizontal Scroll */
 .table-container {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
@@ -16,10 +15,9 @@
 }
 
 .table {
-  min-width: 800px; /* Ensure minimum width for proper layout */
+  min-width: 800px; 
 }
 
-/* Mobile-specific table adjustments */
 @media (max-width: 768px) {
   .card__content {
     padding: 0;
@@ -78,7 +76,6 @@
   }
 }
 
-/* Extra small screens */
 @media (max-width: 480px) {
   .table {
     min-width: 800px;
@@ -112,7 +109,6 @@
   }
 }
 
-/* Header responsiveness improvements */
 @media (max-width: 768px) {
   .header {
     padding: 12px 16px;
@@ -137,7 +133,6 @@
   }
 }
 
-/* Content header responsiveness */
 @media (max-width: 768px) {
   .content__header {
     flex-direction: column;
@@ -166,7 +161,6 @@
   }
 }
 
-/* Search input responsiveness */
 @media (max-width: 768px) {
   .search-input {
     width: 100%;
@@ -174,7 +168,6 @@
   }
 }
 
-/* Pagination responsiveness */
 @media (max-width: 480px) {
   .pagination {
     gap: 12px;
@@ -191,7 +184,6 @@
   }
 }
 
-/* Empty state responsiveness */
 @media (max-width: 768px) {
   .empty-state {
     padding: 60px 24px;
@@ -210,7 +202,6 @@
   }
 }
 
-/* Dropdown menu improvements for mobile */
 @media (max-width: 768px) {
   .dropdown-menu-content {
     min-width: 150px;
@@ -222,7 +213,6 @@
   }
 }
 
-/* Ensure table scrolls horizontally on all small screens */
 @media (max-width: 1024px) {
   .card__content {
     overflow-x: auto;
@@ -233,28 +223,22 @@
   }
 }
 
-/* Fix for very wide screens */
 @media (min-width: 1400px) {
   .table {
     min-width: 100%;
   }
 }
 
-/* Responsive Table Enhancements */
-
-/* Table wrapper for horizontal scrolling */
 .table-wrapper {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   border-radius: 12px;
 }
 
-/* Ensure table has minimum width for proper layout */
 .table {
   min-width: 800px;
 }
 
-/* Custom scrollbar for table wrapper */
 .table-wrapper::-webkit-scrollbar {
   height: 8px;
 }
@@ -273,7 +257,7 @@
   background: #94a3b8;
 }
 
-/* Mobile Responsive Styles */
+
 @media (max-width: 1024px) {
   .table {
     min-width: 900px;
@@ -286,7 +270,7 @@
 }
 
 @media (max-width: 768px) {
-  /* Table adjustments for mobile */
+  
   .table {
     min-width: 800px;
     font-size: 13px;
@@ -304,32 +288,30 @@
     white-space: nowrap;
   }
 
-  /* Ensure minimum column widths */
   .table__cell:first-child {
-    min-width: 80px; /* ID column */
+    min-width: 80px; 
   }
 
   .table__cell:nth-child(2) {
-    min-width: 150px; /* Name column */
+    min-width: 150px; 
   }
 
   .table__cell:nth-child(3) {
-    min-width: 100px; /* Hires column */
+    min-width: 100px; 
   }
 
   .table__cell:nth-child(4) {
-    min-width: 100px; /* Date column */
+    min-width: 100px; 
   }
 
   .table__cell:nth-child(5) {
-    min-width: 120px; /* Status column */
+    min-width: 120px;
   }
 
   .table__cell:nth-child(6) {
-    min-width: 120px; /* Actions column */
+    min-width: 120px; 
   }
 
-  /* Status badge mobile adjustments */
   .status-badge {
     padding: 4px 8px;
     font-size: 11px;
@@ -337,14 +319,12 @@
     justify-content: center;
   }
 
-  /* Action buttons mobile adjustments */
   .action-buttons {
     min-width: 100px;
     justify-content: center;
     gap: 2px;
   }
 
-  /* Button size adjustments for mobile */
   .button--sm {
     padding: 4px 8px;
     font-size: 11px;
@@ -356,7 +336,6 @@
     height: 28px;
   }
 
-  /* Dropdown adjustments for mobile */
   .dropdown__content {
     min-width: 120px;
     max-width: 180px;
@@ -369,7 +348,6 @@
 }
 
 @media (max-width: 480px) {
-  /* Extra small screen adjustments */
   .table {
     min-width: 700px;
     font-size: 12px;
@@ -402,7 +380,6 @@
   }
 }
 
-/* Dashboard layout responsive fixes */
 @media (max-width: 768px) {
   .dashboard {
     flex-direction: column;
@@ -413,7 +390,6 @@
     overflow-x: auto;
   }
 
-  /* Header responsive adjustments */
   .header {
     padding: 12px 16px;
     flex-wrap: wrap;
@@ -428,7 +404,6 @@
     gap: 12px;
   }
 
-  /* Content area adjustments */
   .content {
     padding: 16px;
   }
@@ -457,19 +432,16 @@
     gap: 12px;
   }
 
-  /* Search input full width on mobile */
   .search-input {
     width: 100%;
   }
 
-  /* Create button full width on mobile */
   .create-btn {
     width: 100%;
     justify-content: center;
   }
 }
 
-/* Pagination responsive adjustments */
 @media (max-width: 480px) {
   .pagination {
     gap: 8px;
@@ -492,7 +464,6 @@
   }
 }
 
-/* Empty state responsive adjustments */
 @media (max-width: 768px) {
   .empty-state {
     padding: 40px 20px;
@@ -511,20 +482,18 @@
   }
 }
 
-/* Ensure card content allows horizontal scrolling */
+
 .card__content {
   overflow-x: auto;
   overflow-y: visible;
 }
 
-/* Fix for very wide screens */
 @media (min-width: 1400px) {
   .table {
     min-width: 100%;
   }
 }
 
-/* Focus states for accessibility */
 .table__cell:focus,
 .button:focus,
 .input:focus,
@@ -533,7 +502,6 @@
   outline-offset: 2px;
 }
 
-/* High contrast mode support */
 @media (prefers-contrast: high) {
   .table__row:hover {
     background-color: #e2e8f0;
@@ -544,7 +512,6 @@
   }
 }
 
-/* Reduced motion support */
 @media (prefers-reduced-motion: reduce) {
   * {
     animation-duration: 0.01ms !important;

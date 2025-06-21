@@ -137,7 +137,7 @@ margin-top: 45px;
   }
 
   .footer__sections {
-    order: -1; /* Move newsletter section to top on mobile */
+    order: -1; 
   }
 
   .footer__newsletter {
@@ -180,7 +180,6 @@ margin-top: 45px;
   }
 }
 
-/* Extra small screens */
 @media (max-width: 320px) {
   .footer {
     padding: 20px 8px 12px;

@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Profile, Logo } from '../types/profile';
 import axios from 'axios';
-import { Buffer } from 'buffer'; // Import Buffer for browser
+import { Buffer } from 'buffer'; 
 
 const initialState: Profile[] = [];
 
@@ -39,7 +39,7 @@ export const fetchProfilesAsync = () => async (dispatch: any) => {
     const profiles: Profile[] = response.data.map((item: any) => {
       let logoBase64: string | null = null;
       if (item.logo && item.logo.data && item.logo.data.data) {
-        const buffer = Buffer.from(item.logo.data.data); // Use imported Buffer
+        const buffer = Buffer.from(item.logo.data.data); 
         logoBase64 = `data:${item.logo.contentType};base64,${buffer.toString('base64')}`;
       }
       return {

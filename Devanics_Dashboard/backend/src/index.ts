@@ -13,6 +13,7 @@ const upload = multer({ storage });
 
 mongoose.connect('mongodb://localhost:27017/profileDB');
 
+
 app.post('/api/profiles', upload.single('logo'), async (req: Request & { file?: Express.Multer.File }, res) =>{
   const { companyName, websiteLink, hiresPerYear, address, city, country, zipCode, phoneNumber, vatNumber, description, sendEmails, agreeGDPR, status } = req.body;
   if (!companyName || !websiteLink || !hiresPerYear || !address || !city || !country || !zipCode || !phoneNumber || !vatNumber || !description) {

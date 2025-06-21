@@ -77,7 +77,6 @@
   }
 }
 
-/* Type variants */
 .slider--success {
   background: linear-gradient(135deg, #10b981, #059669);
 }
@@ -110,7 +109,6 @@
   color: white;
 }
 
-/* Responsive */
 @media (max-width: 768px) {
   .slider__content {
     padding: 12px 16px;

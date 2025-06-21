@@ -62,7 +62,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ initialData, onEdit, isEditMo
   const [sliderType, setSliderType] = useState<"success" | "error" | "warning" | "info">("success")
   const [sliderMessage, setSliderMessage] = useState("")
 
-  // Set initial logo preview if editing
+
   useEffect(() => {
     if (isEditMode && initialData?.logo && typeof initialData.logo === 'string') {
       setLogoPreview(initialData.logo)
@@ -95,8 +95,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ initialData, onEdit, isEditMo
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    
-    // Validation checks with specific messages
+
     if (!formData.companyName.trim()) {
       setSliderType("warning")
       setSliderMessage("Company name cannot be empty")
@@ -203,12 +202,12 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ initialData, onEdit, isEditMo
         setSliderMessage("Profile updated successfully!")
         setShowSlider(true)
         
-        // Navigate back to profiles list after a short delay
+
         setTimeout(() => {
           navigate('/profiles')
         }, 2000)
       } else {
-        // Create new profile
+
         const response = await axios.post("http://localhost:3001/api/profiles", formDataToSend, {
           headers: { "Content-Type": "multipart/form-data" },
         })
@@ -232,7 +231,6 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ initialData, onEdit, isEditMo
     const file = e.target.files?.[0] || null
     setFormData({ ...formData, logo: file })
 
-    // Create preview URL
     if (file) {
       const reader = new FileReader()
       reader.onload = (e) => {
@@ -255,13 +253,12 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ initialData, onEdit, isEditMo
   return (
     <div className="app-container">
       <Slider type={sliderType} message={sliderMessage} show={showSlider} onClose={() => setShowSlider(false)} />
-      
-      {/* Sidebar and Main Content Container */}
+
       <div className="profile-dashboard">
         <Sidebar />
 
         <div className="main-content">
-          {/* Header */}
+
           <header className="header">
             <h1 className="header__title">{isEditMode ? 'Edit Profile' : 'My Profile'}</h1>
 
@@ -295,15 +292,13 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ initialData, onEdit, isEditMo
             </div>
           </header>
 
-          {/* Content Area */}
           <div className="content-area">
             <div className="profile-section">
-              {/* Profile Tabs */}
+
               <div className="profile-tabs">
                 <div className="profile-tab">Profile Details</div>
               </div>
 
-              {/* Profile Form */}
               <form className="profile-form" onSubmit={handleSubmit}>
                 <div className="upload-section">
                   <div className="upload-field-container">
@@ -327,7 +322,6 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ initialData, onEdit, isEditMo
                     </div>
                   </div>
 
-                  {/* Preview Area - Separate from upload field */}
                   <div className="preview-area">
                     <div className="logo-preview-circle">
                       {logoPreview ? (
@@ -341,7 +335,6 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ initialData, onEdit, isEditMo
                   </div>
                 </div>
 
-                {/* Form Fields */}
                 <div className="form-grid">
                   <div className="form-group">
                     <input
@@ -439,7 +432,6 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ initialData, onEdit, isEditMo
                   </div>
                 </div>
 
-                {/* Description */}
                 <div className="form-group full-width">
                   <textarea
                     placeholder="Write description here"
@@ -449,7 +441,6 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ initialData, onEdit, isEditMo
                   />
                 </div>
 
-                {/* Checkboxes */}
                 <div className="checkbox-group">
                   <div className="checkbox-item">
                     <input
@@ -477,7 +468,6 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ initialData, onEdit, isEditMo
                   </div>
                 </div>
 
-                {/* Form Actions */}
                 <div className="form-actions">
                   <button type="button" className="btn btn-secondary" onClick={handleCancel}>
                     Cancel

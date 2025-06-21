@@ -1,4 +1,4 @@
-/* Reset and Base Styles */
+
 * {
   margin: 0;
   padding: 0;
@@ -19,7 +19,7 @@ body {
 
 
 
-/* Main Content */
+
 .main-content {
   flex: 1;
   display: flex;
@@ -27,7 +27,6 @@ body {
   background-color: #F4F8FB;
 }
 
-/* Header - Exact Figma Match */
 .header {
   background-color: #F4F8FB;
   border-bottom: 1px solid white;
@@ -131,7 +130,6 @@ body {
   margin-left: 4px;
 }
 
-/* Content Area - Exact Figma Match */
 .content {
   flex: 1;
   padding: 24px 32px 32px;
@@ -235,7 +233,6 @@ body {
   box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
 }
 
-/* Table Card - Exact Figma Match */
 .card {
   background-color: white;
   border-radius: 12px;
@@ -248,7 +245,6 @@ body {
   padding: 0;
 }
 
-/* Table Styles - Exact Figma Match */
 .table {
   width: 100%;
   border-collapse: collapse;
@@ -288,14 +284,12 @@ body {
   vertical-align: middle;
 }
 
-/* ID Cell */
 .table__cell--id {
   font-weight: 600;
   color: #475569;
   font-family: "SF Mono", "Monaco", "Inconsolata", "Roboto Mono", monospace;
 }
 
-/* Company Info - Exact Figma Match */
 .company-info {
   display: flex;
   align-items: center;
@@ -328,7 +322,6 @@ body {
   font-size: 14px;
 }
 
-/* Status Badges - Exact Figma Match */
 .status-badge {
   display: inline-flex;
   align-items: center;
@@ -375,7 +368,6 @@ body {
   margin-left: 2px;
 }
 
-/* Action Buttons - Exact Figma Match */
 .action-buttons {
   display: flex;
   align-items: center;
@@ -438,7 +430,6 @@ body {
   background-color: #f1f5f9;
 }
 
-/* Empty State - Exact Figma Match */
 .empty-state {
   text-align: center;
   padding: 80px 32px;
@@ -464,7 +455,6 @@ body {
   line-height: 1.5;
 }
 
-/* Pagination - Exact Figma Match */
 .pagination {
   display: flex;
   align-items: center;
@@ -506,7 +496,6 @@ body {
 
 
 
-/* Responsive Design */
 @media (max-width: 1200px) {
   .sidebar {
     width: 220px;

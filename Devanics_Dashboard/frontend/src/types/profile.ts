@@ -5,7 +5,7 @@ export interface Logo {
 
 export interface Profile {
   id: string;
-  logo: Logo | string | null; // Allow Logo object, string, or null
+  logo: Logo | string | null; 
   companyName: string;
   websiteLink: string;
   hiresPerYear: string;

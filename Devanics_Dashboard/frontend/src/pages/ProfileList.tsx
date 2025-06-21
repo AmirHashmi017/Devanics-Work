@@ -7,7 +7,6 @@ import ProfileTable from "../components/ProfileTable"
 
 const ProfileListPage: React.FC = () => {
   const handleEdit = (profile: any) => {
-    // Logic to load and edit profile
     console.log(`Edit profile:`, profile)
   }
 

@@ -1,4 +1,4 @@
-/* App Container - Wraps everything */
+
 .app-container {
   min-height: 100vh;
   display: flex;
@@ -8,7 +8,6 @@
   width: 100%;
 }
 
-/* Main Dashboard Container - Sidebar + Content */
 .profile-dashboard {
   display: flex;
   flex: 1;
@@ -17,7 +16,6 @@
   width: 100%;
 }
 
-/* Sidebar Styles */
 .sidebar {
   width: 280px;
   background-color: #142d52;
@@ -108,7 +106,6 @@
   background-color: #059669;
 }
 
-/* Main Content */
 .main-content {
   margin-left: 280px;
   flex: 1;
@@ -118,7 +115,6 @@
   max-width: calc(100% - 280px);
 }
 
-/* Header */
 .header {
   background-color: #F4F8FB;
   border-bottom: 1px solid #e5e5e5;
@@ -197,7 +193,7 @@
   font-size: 0.75rem;
 }
 
-/* Content Area */
+
 .content-area {
   flex: 1;
   padding: 2rem;
@@ -245,7 +241,7 @@
   border-radius: 50%;
 }
 
-/* Profile Section */
+
 .profile-section {
   max-width: 900px;
   width: 100%;
@@ -266,7 +262,7 @@
   color: #142d52;
 }
 
-/* Form Styles */
+
 .profile-form {
   background-color: white;
   border-radius: 12px;
@@ -277,7 +273,6 @@
   box-sizing: border-box;
 }
 
-/* FIXED: Upload Section with Independent Layout */
 .upload-section {
   display: flex;
   align-items: flex-start;
@@ -366,7 +361,6 @@
   background-color: #1976d2;
 }
 
-/* Preview Area - Independent */
 .preview-area {
   display: flex;
   align-items: center;
@@ -539,10 +533,7 @@
   background-color: rgba(6, 191, 151, 0.05);
 }
 
-/* FIXED: Footer icons - ensure they show properly */
 
-
-/* Responsive Design */
 @media (max-width: 768px) {
   .profile-dashboard {
     flex-direction: column;

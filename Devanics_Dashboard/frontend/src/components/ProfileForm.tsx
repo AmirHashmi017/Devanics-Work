@@ -1,17 +1,16 @@
 "use client"
 
 import type React from "react"
-import { useState, useRef } from "react"
+import { useState, useRef, useEffect } from "react"
 import { useDispatch } from "react-redux"
-import { addProfile } from "../redux/profileSlice"
+import { addProfile, updateProfile } from "../redux/profileSlice"
+import { useNavigate } from "react-router-dom"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./DropdownMenu"
 import axios from "axios"
 import Sidebar from "./sidebar"
 import Footer from "./footer"
 import Slider from "./Slider"
 import "../styles/ProfileForm.css"
-
-
 
 interface ProfileFormProps {
   initialData?: {
@@ -33,9 +32,10 @@ interface ProfileFormProps {
     startDate: string
   }
   onEdit?: (id: string) => void
+  isEditMode?: boolean
 }
 
-const ProfileForm: React.FC<ProfileFormProps> = ({ initialData, onEdit }) => {
+const ProfileForm: React.FC<ProfileFormProps> = ({ initialData, onEdit, isEditMode = false }) => {
   const [formData, setFormData] = useState({
     logo: null as File | null,
     companyName: initialData?.companyName || "",
@@ -54,116 +54,125 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ initialData, onEdit }) => {
     startDate: initialData?.startDate || new Date().toISOString().split("T")[0],
   })
   
-   
   const [logoPreview, setLogoPreview] = useState<string | null>(null)
   const dispatch = useDispatch()
+  const navigate = useNavigate()
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [showSlider, setShowSlider] = useState(false)
-   const [sliderType, setSliderType] = useState<"success" | "error" | "warning" | "info">("success")
-    const [sliderMessage, setSliderMessage] = useState("")
-const clearForm = () => {
-  setFormData({
-    logo: null,
-    companyName: "",
-    websiteLink: "",
-    hiresPerYear: "",
-    address: "",
-    city: "",
-    country: "",
-    zipCode: "",
-    phoneNumber: "",
-    vatNumber: "",
-    description: "",
-    sendEmails: false,
-    agreeGDPR: false,
-    status: "In Progress",
-    startDate: new Date().toISOString().split("T")[0],
-  })
-  setLogoPreview(null)
-  if (fileInputRef.current) {
-    fileInputRef.current.value = ""
-  }
-}
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    // Validation checks with specific messages
-  if (!formData.companyName.trim()) {
-    setSliderType("warning")
-    setSliderMessage("Company name cannot be empty")
-    setShowSlider(true)
-    return
-  }
-  
-  if (!formData.websiteLink.trim()) {
-    setSliderType("warning")
-    setSliderMessage("Website link cannot be empty")
-    setShowSlider(true)
-    return
-  }
-  
-  if (!formData.hiresPerYear.trim()) {
-    setSliderType("warning")
-    setSliderMessage("Number of hires per year cannot be empty")
-    setShowSlider(true)
-    return
-  }
-  
-  if (!formData.address.trim()) {
-    setSliderType("warning")
-    setSliderMessage("Address cannot be empty")
-    setShowSlider(true)
-    return
-  }
-  
-  if (!formData.city) {
-    setSliderType("warning")
-    setSliderMessage("Please select a city")
-    setShowSlider(true)
-    return
-  }
-  
-  if (!formData.country) {
-    setSliderType("warning")
-    setSliderMessage("Please select a country")
-    setShowSlider(true)
-    return
-  }
-  
-  if (!formData.zipCode.trim()) {
-    setSliderType("warning")
-    setSliderMessage("Zip code cannot be empty")
-    setShowSlider(true)
-    return
-  }
-  
-  if (!formData.phoneNumber.trim()) {
-    setSliderType("warning")
-    setSliderMessage("Phone number cannot be empty")
-    setShowSlider(true)
-    return
-  }
-  
-  if (!formData.vatNumber.trim()) {
-    setSliderType("warning")
-    setSliderMessage("VAT number cannot be empty")
-    setShowSlider(true)
-    return
-  }
-  
-  if (!formData.description.trim()) {
-    setSliderType("warning")
-    setSliderMessage("Description cannot be empty")
-    setShowSlider(true)
-    return
-  }
-  
-  if (!formData.agreeGDPR) {
-    setSliderType("warning")
-    setSliderMessage("You must agree to GDPR compliance")
-    setShowSlider(true)
-    return
+  const [sliderType, setSliderType] = useState<"success" | "error" | "warning" | "info">("success")
+  const [sliderMessage, setSliderMessage] = useState("")
+
+  // Set initial logo preview if editing
+  useEffect(() => {
+    if (isEditMode && initialData?.logo && typeof initialData.logo === 'string') {
+      setLogoPreview(initialData.logo)
+    }
+  }, [isEditMode, initialData])
+
+  const clearForm = () => {
+    setFormData({
+      logo: null,
+      companyName: "",
+      websiteLink: "",
+      hiresPerYear: "",
+      address: "",
+      city: "",
+      country: "",
+      zipCode: "",
+      phoneNumber: "",
+      vatNumber: "",
+      description: "",
+      sendEmails: false,
+      agreeGDPR: false,
+      status: "In Progress",
+      startDate: new Date().toISOString().split("T")[0],
+    })
+    setLogoPreview(null)
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ""
+    }
   }
 
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    
+    // Validation checks with specific messages
+    if (!formData.companyName.trim()) {
+      setSliderType("warning")
+      setSliderMessage("Company name cannot be empty")
+      setShowSlider(true)
+      return
+    }
+    
+    if (!formData.websiteLink.trim()) {
+      setSliderType("warning")
+      setSliderMessage("Website link cannot be empty")
+      setShowSlider(true)
+      return
+    }
+    
+    if (!formData.hiresPerYear.trim()) {
+      setSliderType("warning")
+      setSliderMessage("Number of hires per year cannot be empty")
+      setShowSlider(true)
+      return
+    }
+    
+    if (!formData.address.trim()) {
+      setSliderType("warning")
+      setSliderMessage("Address cannot be empty")
+      setShowSlider(true)
+      return
+    }
+    
+    if (!formData.city) {
+      setSliderType("warning")
+      setSliderMessage("Please select a city")
+      setShowSlider(true)
+      return
+    }
+    
+    if (!formData.country) {
+      setSliderType("warning")
+      setSliderMessage("Please select a country")
+      setShowSlider(true)
+      return
+    }
+    
+    if (!formData.zipCode.trim()) {
+      setSliderType("warning")
+      setSliderMessage("Zip code cannot be empty")
+      setShowSlider(true)
+      return
+    }
+    
+    if (!formData.phoneNumber.trim()) {
+      setSliderType("warning")
+      setSliderMessage("Phone number cannot be empty")
+      setShowSlider(true)
+      return
+    }
+    
+    if (!formData.vatNumber.trim()) {
+      setSliderType("warning")
+      setSliderMessage("VAT number cannot be empty")
+      setShowSlider(true)
+      return
+    }
+    
+    if (!formData.description.trim()) {
+      setSliderType("warning")
+      setSliderMessage("Description cannot be empty")
+      setShowSlider(true)
+      return
+    }
+    
+    if (!formData.agreeGDPR) {
+      setSliderType("warning")
+      setSliderMessage("You must agree to GDPR compliance")
+      setShowSlider(true)
+      return
+    }
 
     const formDataToSend = new FormData()
     if (formData.logo) formDataToSend.append("logo", formData.logo)
@@ -183,18 +192,39 @@ const clearForm = () => {
     formDataToSend.append("startDate", formData.startDate)
 
     try {
-      const response = await axios.post("http://localhost:3001/api/profiles", formDataToSend, {
-        headers: { "Content-Type": "multipart/form-data" },
-      })
-      dispatch(addProfile(response.data))
-      setSliderType("success")
-      setSliderMessage("Profile saved successfully!")
-     setShowSlider(true)
-     clearForm()
+      if (isEditMode && initialData?.id) {
+        
+        const response = await axios.put(`http://localhost:3001/api/profiles/${initialData.id}`, formDataToSend, {
+          headers: { "Content-Type": "multipart/form-data" },
+        })
+
+        dispatch(updateProfile({ id: initialData.id, changes: response.data }))
+        setSliderType("success")
+        setSliderMessage("Profile updated successfully!")
+        setShowSlider(true)
+        
+        // Navigate back to profiles list after a short delay
+        setTimeout(() => {
+          navigate('/profiles')
+        }, 2000)
+      } else {
+        // Create new profile
+        const response = await axios.post("http://localhost:3001/api/profiles", formDataToSend, {
+          headers: { "Content-Type": "multipart/form-data" },
+        })
+        dispatch(addProfile(response.data))
+        setSliderType("success")
+        setSliderMessage("Profile saved successfully!")
+        setShowSlider(true)
+        clearForm()
+        setTimeout(() => {
+          navigate('/profiles')
+        }, 2000)
+      }
     } catch (error) {
       setSliderType("error")
-      setSliderMessage("Error saving profile. Please try again.")
-     setShowSlider(true)
+      setSliderMessage(`Error ${isEditMode ? 'updating' : 'saving'} profile. Please try again.`)
+      setShowSlider(true)
     }
   }
 
@@ -214,9 +244,18 @@ const clearForm = () => {
     }
   }
 
+  const handleCancel = () => {
+    if (isEditMode) {
+      navigate('/profiles')
+    } else {
+      clearForm()
+    }
+  }
+
   return (
     <div className="app-container">
-    <Slider type={sliderType} message={sliderMessage} show={showSlider} onClose={() => setShowSlider(false)} />
+      <Slider type={sliderType} message={sliderMessage} show={showSlider} onClose={() => setShowSlider(false)} />
+      
       {/* Sidebar and Main Content Container */}
       <div className="profile-dashboard">
         <Sidebar />
@@ -224,18 +263,16 @@ const clearForm = () => {
         <div className="main-content">
           {/* Header */}
           <header className="header">
-            <h1 className="header__title">My Profile</h1>
+            <h1 className="header__title">{isEditMode ? 'Edit Profile' : 'My Profile'}</h1>
 
             <div className="header__actions">
               <div className="header__lang">
                 <span>
-                  {/* FIXED: Use absolute path from public folder */}
                   <img width={70} height={40} src="/assets/language.png" alt="Language" />
                 </span>
               </div>
 
               <button className="header__notification">
-                {/* FIXED: Use absolute path from public folder */}
                 <img src="/assets/Vector.png" alt="Notifications" />
               </button>
 
@@ -243,7 +280,6 @@ const clearForm = () => {
                 <DropdownMenuTrigger>
                   <div className="header__user">
                     <div className="header__user-avatar">
-                      {/* FIXED: Use absolute path from public folder */}
                       <img src="/assets/john.png" alt="John Doe" />
                     </div>
                     <span className="header__user-name">John Doe</span>
@@ -269,7 +305,6 @@ const clearForm = () => {
 
               {/* Profile Form */}
               <form className="profile-form" onSubmit={handleSubmit}>
-            
                 <div className="upload-section">
                   <div className="upload-field-container">
                     <div className="upload-area-new">
@@ -290,8 +325,6 @@ const clearForm = () => {
                         className="file-input-new"
                       />
                     </div>
-
-                    
                   </div>
 
                   {/* Preview Area - Separate from upload field */}
@@ -356,9 +389,9 @@ const clearForm = () => {
                       className="form-select"
                     >
                       <option value="">Select City</option>
-                      <option value="New York">Lahore</option>
-                      <option value="London">Islamabad</option>
-                      <option value="Tokyo">Karachi</option>
+                      <option value="Lahore">Lahore</option>
+                      <option value="Islamabad">Islamabad</option>
+                      <option value="Karachi">Karachi</option>
                       <option value="New York">New York</option>
                       <option value="London">London</option>
                     </select>
@@ -371,10 +404,9 @@ const clearForm = () => {
                       className="form-select"
                     >
                       <option value="">Select Country</option>
-                      <option value="UK">Pakistan</option>
+                      <option value="Pakistan">Pakistan</option>
                       <option value="USA">USA</option>
                       <option value="UK">UK</option>
-                      
                     </select>
                   </div>
                   <div className="form-group">
@@ -447,17 +479,12 @@ const clearForm = () => {
 
                 {/* Form Actions */}
                 <div className="form-actions">
-                  <button type="button" className="btn btn-secondary" onClick={clearForm}>
+                  <button type="button" className="btn btn-secondary" onClick={handleCancel}>
                     Cancel
                   </button>
                   <button type="submit" className="btn btn-primary">
-                    Save
+                    {isEditMode ? 'Update' : 'Save'}
                   </button>
-                  {onEdit && initialData && (
-                    <button type="button" onClick={() => onEdit(initialData.id)} className="btn btn-primary">
-                      Edit
-                    </button>
-                  )}
                 </div>
               </form>
             </div>

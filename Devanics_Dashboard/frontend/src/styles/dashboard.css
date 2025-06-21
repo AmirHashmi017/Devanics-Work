@@ -138,6 +138,7 @@ body {
   flex: 1;
   padding: 24px 32px 32px;
   background-color: white;
+  overflow-y: hidden;
 }
 
 .content__header {

@@ -42,13 +42,13 @@ export const DropdownMenu: React.FC<DropdownMenuProps> = ({ children, className 
     if (isOpen) {
       document.addEventListener("mousedown", handleClickOutside)
       document.addEventListener("keydown", handleEscape)
-      // Prevent body scroll when dropdown is open
-      document.body.style.overflow = "hidden"
+      // Remove the body scroll prevention as it's causing layout issues
     }
 
     return () => {
       document.removeEventListener("mousedown", handleClickOutside)
       document.removeEventListener("keydown", handleEscape)
+      // Reset body overflow
       document.body.style.overflow = "unset"
     }
   }, [isOpen])
@@ -73,19 +73,58 @@ export const DropdownMenuTrigger: React.FC<
     setIsOpen?.(!isOpen)
   }
 
-  return <div onClick={handleClick}>{children}</div>
+  return (
+    <div onClick={handleClick} style={{ display: 'inline-block', cursor: 'pointer' }}>
+      {children}
+    </div>
+  )
 }
 
 export const DropdownMenuContent: React.FC<
   DropdownMenuContentProps & { isOpen?: boolean; setIsOpen?: (open: boolean) => void }
 > = ({ children, isOpen, setIsOpen, align = "start" }) => {
+  const contentRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (isOpen && contentRef.current) {
+      // Adjust position to prevent overflow
+      const rect = contentRef.current.getBoundingClientRect()
+      const viewportWidth = window.innerWidth
+      const viewportHeight = window.innerHeight
+
+      // Reset any previous adjustments
+      contentRef.current.style.left = ''
+      contentRef.current.style.right = ''
+      contentRef.current.style.top = ''
+      contentRef.current.style.bottom = ''
+
+      // Check if dropdown would overflow right edge
+      if (rect.right > viewportWidth - 20) {
+        contentRef.current.style.right = '0'
+        contentRef.current.style.left = 'auto'
+      }
+
+      // Check if dropdown would overflow bottom edge
+      if (rect.bottom > viewportHeight - 20) {
+        contentRef.current.style.bottom = '100%'
+        contentRef.current.style.top = 'auto'
+        contentRef.current.style.marginBottom = '4px'
+      }
+    }
+  }, [isOpen])
+
   if (!isOpen) return null
 
-  const alignmentClass =
-    align === "end" ? "dropdown--actions" : align === "center" ? "dropdown--user" : "dropdown--status"
+  const alignmentClass = align === "end" ? "dropdown--actions" : 
+                        align === "center" ? "dropdown--user" : 
+                        "dropdown--status"
 
   return (
-    <div className={`dropdown__content ${alignmentClass}`}>
+    <div 
+      ref={contentRef}
+      className={`dropdown__content ${alignmentClass}`}
+      onClick={(e) => e.stopPropagation()}
+    >
       {React.Children.map(children, (child) =>
         React.isValidElement(child) ? React.cloneElement(child as React.ReactElement<any>, { setIsOpen }) : child,
       )}

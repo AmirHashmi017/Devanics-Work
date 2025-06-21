@@ -103,6 +103,7 @@
 }
 
 /* Dropdown Styles - Fixed z-index issues */
+/* Fixed Dropdown Styles */
 .dropdown {
   position: relative;
   display: inline-block;
@@ -112,14 +113,19 @@
   position: absolute;
   top: calc(100% + 4px);
   left: 0;
-  z-index: 9999; /* High z-index to appear above everything */
+  z-index: 9999 !important; /* Force high z-index */
   min-width: 160px;
+  max-width: 250px; /* Prevent excessive width */
   background-color: white;
   border: 1px solid #e2e8f0;
   border-radius: 8px;
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
   padding: 4px 0;
   animation: dropdownFadeIn 0.15s ease-out;
+  /* Prevent content from causing horizontal scroll */
+  white-space: nowrap;
+  overflow: hidden;
+  overflow-y: hidden;
 }
 
 /* Animation for dropdown appearance */
@@ -168,6 +174,8 @@
   transition: background-color 0.2s;
   color: #4a5568;
   white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 .dropdown__item:hover {
@@ -181,6 +189,145 @@
 
 .dropdown__item:last-child {
   border-radius: 0 0 8px 8px;
+}
+
+/* Ensure table and card containers don't interfere with dropdowns */
+.table-container,
+.card,
+.card__content {
+  overflow: visible !important;
+  position: relative;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  position: relative;
+}
+
+.table__header {
+  background-color: #f7fafc;
+  position: relative;
+  z-index: 1;
+}
+
+.table__head {
+  padding: 16px 20px;
+  text-align: left;
+  font-weight: 600;
+  color: #4a5568;
+  font-size: 14px;
+  border-bottom: 1px solid #e2e8f0;
+  position: relative;
+}
+
+.table__body .table__row {
+  border-bottom: 1px solid #f1f5f9;
+  transition: background-color 0.2s;
+  position: relative;
+  z-index: 1;
+}
+
+.table__body .table__row:hover {
+  background-color: #f8fafc;
+  z-index: 2;
+}
+
+.table__body .table__row:last-child {
+  border-bottom: none;
+}
+
+.table__cell {
+  padding: 16px 20px;
+  color: #2d3748;
+  vertical-align: middle;
+  position: relative;
+}
+
+/* Ensure dropdowns in table cells have proper stacking */
+.table__cell .dropdown {
+  z-index: 3;
+}
+
+.table__cell .dropdown.dropdown--open {
+  z-index: 9999;
+}
+
+/* Prevent horizontal scrolling issues */
+.main-content {
+  overflow-x: hidden;
+  min-width: 0;
+}
+
+.content {
+  overflow-x: auto;
+  overflow-y: visible;
+  min-width: 0;
+}
+
+/* Fix for action buttons container */
+.action-buttons {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  position: relative;
+  z-index: 2;
+}
+
+.action-buttons .dropdown {
+  position: relative;
+  z-index: 3;
+}
+
+/* Ensure status badges don't cause overflow */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s;
+  text-transform: capitalize;
+  white-space: nowrap;
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Responsive dropdown adjustments */
+@media (max-width: 768px) {
+  .dropdown__content {
+    min-width: 140px;
+    max-width: 200px;
+  }
+  
+  .dropdown__item {
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+}
+
+/* Additional overflow fixes */
+.dashboard {
+  overflow-x: hidden;
+}
+
+.header {
+  position: relative;
+  z-index: 10;
+}
+
+.header .dropdown {
+  z-index: 11;
+}
+
+.header .dropdown__content {
+  z-index: 9999 !important;
 }
 
 /* Table Styles - Exact match */

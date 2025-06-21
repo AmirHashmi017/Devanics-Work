@@ -19,8 +19,6 @@ interface ProfileTableProps {
   onEdit: (profile: any) => void
 }
 
-
-
 export default function ProfileTable({ onEdit }: ProfileTableProps) {
   const dispatch: AppDispatch = useDispatch()
   const profiles = useSelector((state: RootState) => state.profiles)
@@ -29,6 +27,7 @@ export default function ProfileTable({ onEdit }: ProfileTableProps) {
   const [searchTerm, setSearchTerm] = useState("")
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 10
+  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(fetchProfilesAsync()).then(() => {
@@ -58,6 +57,11 @@ export default function ProfileTable({ onEdit }: ProfileTableProps) {
     axios.delete(`http://localhost:3001/api/profiles/${id}`)
   }
 
+  const handleEdit = (profile: any) => {
+    // Navigate to profile creation page with the profile data
+    navigate('/profile/create', { state: { profileData: profile, isEdit: true } });
+  }
+
   const filteredProfiles = profiles.filter((profile) => {
     const matchesTab = activeTab === "active" ? !profile.archived : profile.archived
     const matchesSearch =
@@ -82,7 +86,6 @@ export default function ProfileTable({ onEdit }: ProfileTableProps) {
         return "status-badge--progress"
     }
   }
-const navigate = useNavigate();
 
   const handleCreateClick = () => {
     navigate('/profile/create');
@@ -149,8 +152,6 @@ const navigate = useNavigate();
             </div>
 
             <div className="content__controls">
-              
-
               <button className="create-btn" onClick={handleCreateClick}>Create Profile</button>
             </div>
           </div>
@@ -175,7 +176,6 @@ const navigate = useNavigate();
                         <TableCell className="table__cell--id">RID-{profile.id.slice(-3)}</TableCell>
                         <TableCell>
                           <div className="company-info">
-                            
                             <span className="company-name">{profile.companyName}</span>
                           </div>
                         </TableCell>
@@ -214,7 +214,6 @@ const navigate = useNavigate();
                                 <DropdownMenuItem onClick={() => handleArchive(profile.id)}>
                                   {profile.archived ? "Unarchive" : "Archive"}
                                 </DropdownMenuItem>
-                                
                               </DropdownMenuContent>
                             </DropdownMenu>
                             <button
@@ -226,12 +225,11 @@ const navigate = useNavigate();
                             </button>
                             <button
                               className="action-btn action-btn--edit"
-                              onClick={() => onEdit(profile)}
+                              onClick={() => handleEdit(profile)}
                               title="Edit"
                             >
                               <img src="assets/Edit.png"></img>
                             </button>
-                            
                           </div>
                         </TableCell>
                       </TableRow>
@@ -281,7 +279,6 @@ const navigate = useNavigate();
 
         {/* Footer */}
         <Footer/>
-        
       </div>
     </div>
   )

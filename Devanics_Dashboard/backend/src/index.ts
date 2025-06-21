@@ -46,11 +46,35 @@ app.get('/api/profiles', async (req, res) => {
   res.send(profiles);
 });
 
-app.put('/api/profiles/:id', async (req, res) => {
+app.put('/api/profiles/:id', upload.single('logo'), async (req: Request & { file?: Express.Multer.File }, res) => {
   const { id } = req.params;
+  const { companyName, websiteLink, hiresPerYear, address, city, country, zipCode, phoneNumber, vatNumber, description, sendEmails, agreeGDPR, status } = req.body;
 
   try {
-    const profile = await Profile.findByIdAndUpdate(id, req.body, { new: true });
+    const updateData: any = {
+      companyName,
+      websiteLink,
+      hiresPerYear,
+      address,
+      city,
+      country,
+      zipCode,
+      phoneNumber,
+      vatNumber,
+      description,
+      sendEmails: sendEmails === 'true',
+      agreeGDPR: agreeGDPR === 'true',
+      status: status || 'In Progress',
+    };
+
+    if (req.file) {
+      updateData.logo = {
+        data: req.file.buffer,
+        contentType: req.file.mimetype,
+      };
+    }
+
+    const profile = await Profile.findByIdAndUpdate(id, updateData, { new: true });
     if (!profile) {
       return res.status(404).json({ error: 'Profile not found' });
     }

@@ -8,7 +8,10 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import axios from "axios"
 import Sidebar from "./sidebar"
 import Footer from "./footer"
+import Slider from "./Slider"
 import "../styles/ProfileForm.css"
+
+
 
 interface ProfileFormProps {
   initialData?: {
@@ -50,13 +53,118 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ initialData, onEdit }) => {
     status: initialData?.status || "In Progress",
     startDate: initialData?.startDate || new Date().toISOString().split("T")[0],
   })
-
+  
+   
   const [logoPreview, setLogoPreview] = useState<string | null>(null)
   const dispatch = useDispatch()
   const fileInputRef = useRef<HTMLInputElement>(null)
-
+  const [showSlider, setShowSlider] = useState(false)
+   const [sliderType, setSliderType] = useState<"success" | "error" | "warning" | "info">("success")
+    const [sliderMessage, setSliderMessage] = useState("")
+const clearForm = () => {
+  setFormData({
+    logo: null,
+    companyName: "",
+    websiteLink: "",
+    hiresPerYear: "",
+    address: "",
+    city: "",
+    country: "",
+    zipCode: "",
+    phoneNumber: "",
+    vatNumber: "",
+    description: "",
+    sendEmails: false,
+    agreeGDPR: false,
+    status: "In Progress",
+    startDate: new Date().toISOString().split("T")[0],
+  })
+  setLogoPreview(null)
+  if (fileInputRef.current) {
+    fileInputRef.current.value = ""
+  }
+}
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    // Validation checks with specific messages
+  if (!formData.companyName.trim()) {
+    setSliderType("warning")
+    setSliderMessage("Company name cannot be empty")
+    setShowSlider(true)
+    return
+  }
+  
+  if (!formData.websiteLink.trim()) {
+    setSliderType("warning")
+    setSliderMessage("Website link cannot be empty")
+    setShowSlider(true)
+    return
+  }
+  
+  if (!formData.hiresPerYear.trim()) {
+    setSliderType("warning")
+    setSliderMessage("Number of hires per year cannot be empty")
+    setShowSlider(true)
+    return
+  }
+  
+  if (!formData.address.trim()) {
+    setSliderType("warning")
+    setSliderMessage("Address cannot be empty")
+    setShowSlider(true)
+    return
+  }
+  
+  if (!formData.city) {
+    setSliderType("warning")
+    setSliderMessage("Please select a city")
+    setShowSlider(true)
+    return
+  }
+  
+  if (!formData.country) {
+    setSliderType("warning")
+    setSliderMessage("Please select a country")
+    setShowSlider(true)
+    return
+  }
+  
+  if (!formData.zipCode.trim()) {
+    setSliderType("warning")
+    setSliderMessage("Zip code cannot be empty")
+    setShowSlider(true)
+    return
+  }
+  
+  if (!formData.phoneNumber.trim()) {
+    setSliderType("warning")
+    setSliderMessage("Phone number cannot be empty")
+    setShowSlider(true)
+    return
+  }
+  
+  if (!formData.vatNumber.trim()) {
+    setSliderType("warning")
+    setSliderMessage("VAT number cannot be empty")
+    setShowSlider(true)
+    return
+  }
+  
+  if (!formData.description.trim()) {
+    setSliderType("warning")
+    setSliderMessage("Description cannot be empty")
+    setShowSlider(true)
+    return
+  }
+  
+  if (!formData.agreeGDPR) {
+    setSliderType("warning")
+    setSliderMessage("You must agree to GDPR compliance")
+    setShowSlider(true)
+    return
+  }
+
+
     const formDataToSend = new FormData()
     if (formData.logo) formDataToSend.append("logo", formData.logo)
     formDataToSend.append("companyName", formData.companyName)
@@ -79,10 +187,14 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ initialData, onEdit }) => {
         headers: { "Content-Type": "multipart/form-data" },
       })
       dispatch(addProfile(response.data))
-      alert("Profile saved successfully!")
+      setSliderType("success")
+      setSliderMessage("Profile saved successfully!")
+     setShowSlider(true)
+     clearForm()
     } catch (error) {
-      console.error("Error saving profile:", error)
-      alert("Error saving profile. Please try again.")
+      setSliderType("error")
+      setSliderMessage("Error saving profile. Please try again.")
+     setShowSlider(true)
     }
   }
 
@@ -104,6 +216,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ initialData, onEdit }) => {
 
   return (
     <div className="app-container">
+    <Slider type={sliderType} message={sliderMessage} show={showSlider} onClose={() => setShowSlider(false)} />
       {/* Sidebar and Main Content Container */}
       <div className="profile-dashboard">
         <Sidebar />
@@ -156,7 +269,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ initialData, onEdit }) => {
 
               {/* Profile Form */}
               <form className="profile-form" onSubmit={handleSubmit}>
-                {/* FIXED: Logo Upload with Independent Layout */}
+            
                 <div className="upload-section">
                   <div className="upload-field-container">
                     <div className="upload-area-new">
@@ -243,9 +356,11 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ initialData, onEdit }) => {
                       className="form-select"
                     >
                       <option value="">Select City</option>
+                      <option value="New York">Lahore</option>
+                      <option value="London">Islamabad</option>
+                      <option value="Tokyo">Karachi</option>
                       <option value="New York">New York</option>
                       <option value="London">London</option>
-                      <option value="Tokyo">Tokyo</option>
                     </select>
                   </div>
 
@@ -256,9 +371,10 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ initialData, onEdit }) => {
                       className="form-select"
                     >
                       <option value="">Select Country</option>
+                      <option value="UK">Pakistan</option>
                       <option value="USA">USA</option>
                       <option value="UK">UK</option>
-                      <option value="Japan">Japan</option>
+                      
                     </select>
                   </div>
                   <div className="form-group">
@@ -331,7 +447,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ initialData, onEdit }) => {
 
                 {/* Form Actions */}
                 <div className="form-actions">
-                  <button type="button" className="btn btn-secondary">
+                  <button type="button" className="btn btn-secondary" onClick={clearForm}>
                     Cancel
                   </button>
                   <button type="submit" className="btn btn-primary">

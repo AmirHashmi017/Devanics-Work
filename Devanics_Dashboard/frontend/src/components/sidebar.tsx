@@ -24,7 +24,7 @@ const Sidebar = () => {
   };
    const profilesClick = () => {
     setActiveItem('recruitment');
-    navigate('/profiles'); 
+    window.location.href="http://localhost:3000/profiles"
   };
   return (<div className="sidebar">
         <div className="sidebar__logo">

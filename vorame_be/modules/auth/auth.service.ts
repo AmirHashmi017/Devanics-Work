@@ -6,7 +6,7 @@ import { ResponseMessage } from "../../enums/resMessage.enum";
 import { CustomError } from "../../errors/custom.error";
 import User from "../user/user.model";
 import { EMails } from "../../contants/EMail";
-import mailNotification from "../../helper/SESMail";
+import mailNotification from "../../helper/AWSService";
 import smsNotification from "../../helper/AWSService";
 import { generateOTP } from "../../helper/otpGenerate";
 import { config } from "../../config/config";
@@ -49,7 +49,9 @@ class AuthService {
     }
 
     // Find user by email or phone number
-    const user = await User.findOne(email ? { email } : { phoneNumber });
+    const user = await User.findOne(
+      email ? { email: email.toLowerCase() } : { phoneNumber }
+    );
 
     if (!user) {
       throw new CustomError(
@@ -250,7 +252,7 @@ class AuthService {
     const { email, userName, password } = body;
 
     // Find user by email
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email: email.toLowerCase() });
 
     if (!user) {
       throw new CustomError(
@@ -426,9 +428,7 @@ class AuthService {
   async userVerification(req: Request) {
     const { email } = req.body;
 
-    console.log(email, "emailemailemailemail");
-
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email: email.toLowerCase() });
 
     if (!user) {
       throw new CustomError(
@@ -447,13 +447,11 @@ class AuthService {
   // Otp verification using email
   async otpVerification(req: Request) {
     const { email, otp } = req.body;
-    const normalizedEmail = email?.trim().toLowerCase();
-    console.log('OTP Verification request:', { email: normalizedEmail, rawEmail: email, otp });
+    const lowerEmail = email.toLowerCase();
     const user = await User.findOne({
-      email: { $regex: new RegExp('^' + normalizedEmail + '$', 'i') }
+      email:lowerEmail
     });
     if (!user) {
-      console.error('OTP Verification Error: User not found for email', normalizedEmail);
       throw new CustomError(
         EHttpStatus.BAD_REQUEST,
         ResponseMessage.USER_NOT_FOUND
@@ -729,7 +727,7 @@ class AuthService {
       );
     } else if (email) {
       user = await User.findOneAndUpdate(
-        { email: email },
+        { email: email.toLowerCase() },
         { password: passwordHash },
         { new: true }
       );
@@ -771,7 +769,7 @@ class AuthService {
       avatar,
       providerId,
       providerType,
-      email: email,
+      email: email.toLowerCase(),
     });
 
     const token = jwt.sign({ _id: user._id }, `${config.JWT_SECRET_VORAME}`, {
@@ -789,7 +787,7 @@ class AuthService {
   async socialAuthUserVerification(body) {
     const { email } = body;
 
-    let user: any = await User.findOne({ email: email });
+    let user: any = await User.findOne({ email: email.toLowerCase() });
 
     if (!user) {
       throw new CustomError(

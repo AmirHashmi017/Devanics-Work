@@ -1,36 +1,90 @@
-import React from "react";
-import { Box, Grid } from "@mui/material";
-import SingleTape from "../components/SingleTape";
-import { TAPE } from "services/constants";
-import useApiQuery from "hooks/useApiQuery";
+import React, { useEffect, useState } from "react";
+import { Box, Grid, Button } from "@mui/material";
+import SingleTranquility from "../components/SingleTape";
+import TranquilityApi from "services/api/tranquility";
 import NoData from "components/NoData";
 import Loader from "components/Loader";
 import Error from "components/Error";
+import { useQuery } from "react-query";
+
+const LIMIT = 25;
 
 const Tapes = ({ searchTerm }) => {
+  const [offset, setOffset] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
 
-    const {
-        isLoading,
-        error,
-        data: apiResponse,
-    } = useApiQuery({ queryKey: ["tapes", searchTerm], url: TAPE + `list?searchTerm=${searchTerm}` });
-    if (isLoading) return <Loader />
-    if (error) return <Error error={error} />
+  const { data: apiResponse, isLoading, isError, error, refetch } = useQuery(
+    ["tranquilities", offset],
+    () => TranquilityApi.getTranquilities(offset, LIMIT),
+    {
+      keepPreviousData: true,
+    }
+  );
 
-    return <Box mt={6}>
-        <Grid container spacing={2} mt={3}>
-            {apiResponse &&
-                (apiResponse.data.tapes.length > 0 ? (
-                    apiResponse.data.tapes.map((tapeData) => (
-                        <Grid width={1} key={tapeData._id} item sm={6} md={6} lg={4}>
-                            <SingleTape {...tapeData} />
-                        </Grid>
-                    ))
-                ) : (
-                    <NoData />
-                ))}
-        </Grid>
+  const tranquilityList = apiResponse?.tranquilties || [];
+
+  useEffect(() => {
+    if (tranquilityList.length > 0) {
+      setHasMore(tranquilityList.length === LIMIT);
+    }
+  }, [tranquilityList.length]);
+
+  // Filter client-side for search
+  const filteredList = tranquilityList.filter(item => {
+    const term = searchTerm.trim().toLowerCase();
+    if (!term) return true;
+    return (
+      (item.title && item.title.toLowerCase().includes(term)) ||
+      (item.description && item.description.toLowerCase().includes(term))
+    );
+  });
+
+  useEffect(() => {
+    // Reset and fetch when searchTerm changes
+    setOffset(0);
+    refetch();
+    // eslint-disable-next-line
+  }, [searchTerm, refetch]);
+
+  if (isLoading && offset === 0) return <Loader />;
+  if (isError) return <Error error={error} />;
+
+  return (
+    <Box>
+      <Grid container rowSpacing={2} sx={{ marginLeft: 0, marginRight: 0 }}>
+        {filteredList && filteredList.length > 0 ? (
+          filteredList.map((tranquilityData) => (
+            <Grid 
+              key={tranquilityData._id} 
+              item 
+              xs={12} 
+              sm={6} 
+              md={3}
+              sx={{ 
+                flex: '0 0 auto'
+              }}
+            >
+              <SingleTranquility {...tranquilityData} />
+            </Grid>
+          ))
+        ) : (
+          <NoData />
+        )}
+      </Grid>
+      {hasMore && !isLoading && (
+        <Box display="flex" justifyContent="center" mt={4}>
+          <Button variant="contained" onClick={() => setOffset(prev => prev + LIMIT)}>
+            Show More
+          </Button>
+        </Box>
+      )}
+      {isLoading && offset > 0 && (
+        <Box display="flex" justifyContent="center" mt={4}>
+          <Loader />
+        </Box>
+      )}
     </Box>
+  );
 };
 
 export default Tapes;

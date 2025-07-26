@@ -8,12 +8,42 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import moment from "moment";
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import IconButton from '@mui/material/IconButton';
+import Menu from '@mui/material/Menu';
 
 const SingleSupportTicket = (ticketData) => {
-  const { _id, category, subject, status, createdAt } = ticketData;
+  const { _id, category, subject, status, createdAt ,postedBy} = ticketData;
+  
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { mutate } = useApiMutation();
+
+  // 3-dot menu state
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const handleMenuClick = (event) => {
+    event.stopPropagation();
+    setAnchorEl(event.currentTarget);
+  };
+  const handleMenuClose = (event) => {
+    event && event.stopPropagation();
+    setAnchorEl(null);
+  };
+  const handleViewDetails = (event) => {
+    event.stopPropagation();
+    navigate(`/support-ticket/${_id}`, {
+      state: {
+        ticketOwner: {
+          avatar: postedBy?.avatar,
+          name: postedBy?.name,
+          firstName: postedBy?.firstName,
+          lastName: postedBy?.lastName,
+        }
+      }
+    });
+    setAnchorEl(null);
+  };
 
   const fetchTickets = () => queryClient.invalidateQueries({ queryKey: SUPPORT_TICKET_KEY });
 
@@ -38,7 +68,6 @@ const SingleSupportTicket = (ticketData) => {
       className='cursor-pointer'
       boxShadow="0px 0px 34px 0px #2632381F"
       height="100%"
-      onClick={() => navigate(`/support-ticket/${_id}`)}
     >
       <Grid container
         flexGrow={1}
@@ -108,7 +137,7 @@ const SingleSupportTicket = (ticketData) => {
             </Typography>
           </Box>
         </Grid>
-        <Grid item md={2.4}>
+        <Grid item md={2.4} display="flex" alignItems="center" justifyContent="space-between">
           <Stack maxWidth={300} direction='column' justifyContent='center' alignItems='center'>
             <Typography marginRight='50px' variant="body1" fontSize="10px" color="#858688">
               Status
@@ -137,7 +166,21 @@ const SingleSupportTicket = (ticketData) => {
               </Box>
             </FormControl>
           </Stack>
-
+          {/* 3-dot menu for actions */}
+          <Box>
+            <IconButton onClick={handleMenuClick}>
+              <MoreVertIcon />
+            </IconButton>
+            <Menu
+              anchorEl={anchorEl}
+              open={open}
+              onClose={handleMenuClose}
+              anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+              transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+            >
+              <MenuItem onClick={handleViewDetails}>View Details</MenuItem>
+            </Menu>
+          </Box>
         </Grid>
       </Grid>
     </Box>

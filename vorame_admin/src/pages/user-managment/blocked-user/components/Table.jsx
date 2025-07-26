@@ -16,6 +16,7 @@ export default function UserManagementTable({
   limit,
   offset,
   setTotal,
+  plan,
 }) {
   const {
     data: apiResponse,
@@ -23,12 +24,13 @@ export default function UserManagementTable({
     isError,
     error,
   } = useApiQuery({
-    queryKey: ["users", limit, offset, searchTerm],
-    url: USER + `list?searchTerm=${searchTerm}&offset=${offset}&limit=${limit}`,
+    queryKey: ["users", limit, offset, searchTerm, plan],
+    url: USER + `list?searchTerm=${searchTerm}&offset=${offset}&limit=${limit}&plan=${plan}`,
     searchTerm,
+    plan,
     otherOptions: {
       onSuccess: ({data}) => {
-      setTotal(data.total)
+        setTotal(data.total)
       },
     },
   });

@@ -42,25 +42,26 @@ const CustomFormDialog = ({
 
   return (
     <StyledDialog open={open} onClose={onClose}>
-      <StyledDialogTitle
-        sx={{
-          fontSize: "20px",
-          fontWeight: 600,
-        }}
-      >
-        {dialogTitle}
-        <IconButton
-          onClick={onClose}
-          sx={{
-            position: "absolute",
-            right: 6,
-            top: 6,
-            color: "black",
-          }}
-        >
-          <Close />
-        </IconButton>
-      </StyledDialogTitle>
+     <StyledDialogTitle
+  sx={{
+    fontSize: "20px",
+    fontWeight: 600,
+    position: "relative",
+  }}
+>
+  {dialogTitle}
+  <IconButton
+    onClick={onClose}
+    sx={{
+      // position: "absolute",
+      right: 6,
+      top: 6,
+    }}
+  >
+    <Close sx={{ color: "gray" }} /> 
+  </IconButton>
+</StyledDialogTitle>
+
       <DialogContent dividers>
         <form onSubmit={formik.handleSubmit}>
           <Grid container spacing={2}>
@@ -197,7 +198,7 @@ const CustomFormDialog = ({
               loading={loading}
               sx={{ px: 1, py: 1, border: "5", fontsize: "14px", fontWeight: 500 }}
             >
-              {id ? "Add" : "Add"}{" "}
+              {id ? "Update " : "Add"}{" "}
               {/* i change >>> Update : add  to this button >>> Add : Add */}
             </CustomButton>
           </DialogActions>

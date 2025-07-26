@@ -238,9 +238,10 @@ const Blogs = () => {
   </Box>
 
   {blogList && blogList.length > 0 ? (
-    <Box display="flex" flexWrap="wrap" >
+    <Box display="flex" flexWrap="wrap" gap={2}>
       {blogList.map((blog, index) => (
         <Box
+        
           key={index}
           flexBasis={{ xs: "100%", md: "33.5%" }}
           borderRadius="12px"
@@ -253,7 +254,7 @@ const Blogs = () => {
           // boxShadow={shadows.softDepthShadow}
           // bgcolor="white"
         >
-          <Box display="flex" justifyContent="center">
+          <Box display="flex" justifyContent="center" >
             <StyledCardMedia
               component="img"
               image={blog.file[0]?.url}
@@ -321,8 +322,8 @@ const Blogs = () => {
 
   {/* Dialogs and Forms */}
   <ConfirmDialog
-    title="Delete Blog ?"
-    dialogContext="Are you sure to delete blog ?"
+    title="Delete blog post"
+    dialogContext="Are you sure you want to delete this blog? This action cannot be undone."
     open={confirmOpen}
     setOpen={setConfirmOpen}
     onConfirm={handleDelete}

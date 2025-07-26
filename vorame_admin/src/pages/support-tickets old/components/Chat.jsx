@@ -1,5 +1,5 @@
 import { Box } from '@mui/material'
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 import ReceiverMsg from './ReceiverMsg'
 import SenderMsg from './SenderMsg'
 import { SUPPORT_TICKET } from 'services/constants';
@@ -8,6 +8,8 @@ import useApiQuery from "hooks/useApiQuery";
 import Loader from "components/Loader";
 import Error from "components/Error";
 import localStorage from "../../../managers/auth";
+import AddMessage from './AddMessage';
+import NoData from 'components/NoData';
 
 const Chat = ({ setStatus }) => {
 
@@ -31,6 +33,19 @@ const Chat = ({ setStatus }) => {
         }
     }, [apiResponse])
 
+    const chatContainerRef = useRef(null);
+
+    useEffect(() => {
+        if (chatContainerRef.current) {
+            chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+        }
+    }, [apiResponse]);
+
+    const handleMessageSent = () => {
+        if (chatContainerRef.current) {
+            chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+        }
+    };
 
 
     if (isLoading) return <Loader />
@@ -38,21 +53,39 @@ const Chat = ({ setStatus }) => {
 
     const ticketMessages = apiResponse ? apiResponse.data.messages : []
 
+    
+
     return (
-        <Box height='62vh' overflow='auto' p={2} display='flex' flexDirection='column' gap={2}>
-            {
+        <Box
+            ref={chatContainerRef}
+            height='62vh'
+            overflow='auto'
+            p={2}
+            display='flex'
+            flexDirection='column'
+            gap={2}
+        >
+            {ticketMessages.length === 0 ? (
+                <Box flex={1} display='flex' alignItems='center' justifyContent='center'>
+                    <NoData message='No Messages Yet' />
+                </Box>
+            ) : (
                 ticketMessages.map((messageData) => {
                     const { _id, postedBy } = messageData;
-                    const { _id: postedById = "" } = postedBy || {};
+                    // If postedBy is missing, treat as sent by current user
+                    const postedById = postedBy && postedBy._id ? postedBy._id : user._id;
+                    const msg = messageData.message || messageData.text || messageData.content || "";
                     return (
-                        postedById === user._id ? <SenderMsg key={_id} {...messageData} /> : (
-                            <ReceiverMsg key={_id} {...messageData} />
-                        )
+                        postedById === user._id
+                            ? <SenderMsg key={_id} message={msg} {...messageData} />
+                            : <ReceiverMsg key={_id} message={msg} {...messageData} />
                     )
                 })
-            }
+            )}
         </Box>
     )
 }
 
-export default Chat
+export default function ChatWithScroll(props) {
+    return <Chat {...props} AddMessageComponent={AddMessage} />;
+}

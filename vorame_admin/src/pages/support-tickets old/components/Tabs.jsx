@@ -28,24 +28,9 @@ CustomTabPanel.propTypes = {
 };
 
 export default function SupportTicketTabs({ startDate, endDate }) {
-    const [value, setValue] = React.useState(1);
-
-    const handleChange = (_, newValue) => {
-        setValue(newValue);
-    };
-
     return (
         <Box sx={{ width: '100%' }}>
-            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-                    <Tab value={1} label="Active Tickets" />
-                    <Tab value={0} label="Closed Tickets" />
-                </Tabs>
-            </Box>
-            <CustomTabPanel value={0} index={0}>
-                <SupportTickets status={value} startDate={startDate} endDate={endDate} />
-            </CustomTabPanel>
-
+            <SupportTickets startDate={startDate} endDate={endDate} />
         </Box>
     );
 }

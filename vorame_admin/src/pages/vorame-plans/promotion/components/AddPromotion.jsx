@@ -1,19 +1,15 @@
 import { Box, Typography } from "@mui/material";
 import React, { useState } from "react";
-import CreatePromotion from "./CreatePromotion";
-import { CustomButton } from "components";
+import CreatePromo from "../../promos/components/CreatePromo";
+import CustomButton from "components/Button";
 import CustomDialog from "components/Modal";
 
-const AddPromotion = ({}) => {
+const AddPromotion = () => {
   const [open, setOpen] = useState(false);
   return (
     <div>
-      <CustomDialog
-        title="Create new promotion"
-        open={open}
-        onClose={() => setOpen(false)}
-      >
-        <CreatePromotion setOpen={setOpen} />
+      <CustomDialog title="Create new promotion" open={open} onClose={() => setOpen(false)}>
+        <CreatePromo setOpen={setOpen} />
       </CustomDialog>
 
       <CustomButton

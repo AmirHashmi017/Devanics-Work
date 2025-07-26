@@ -14,7 +14,7 @@ const Headbar = ({ searchTerm, setSearchTerm }) => {
 
   return (
     <>
-      <CustomDialog open={open} onClose={() => setOpen(false)} title='Add Tape'>
+      <CustomDialog open={open} onClose={() => setOpen(false)} title='Add Tranquility'>
         <CreateTap setOpen={setOpen} />
       </CustomDialog>
       <Box
@@ -22,9 +22,11 @@ const Headbar = ({ searchTerm, setSearchTerm }) => {
         justifyContent="space-between"
         alignItems="center"
         gap={2}
+        mt={4} // 32px top margin from header
+        mb={3} // 24px bottom margin to content
       >
         <Typography variant="body1" fontWeight={600} fontSize={24}>
-          Tape
+          Tranquility
         </Typography>
         <Box
           display="flex"
@@ -32,30 +34,33 @@ const Headbar = ({ searchTerm, setSearchTerm }) => {
           alignItems="stretch"
           gap={2}
         >
-          <Paper
-            component="form"
-            sx={{
-              p: "2px 4px",
-              display: "flex",
-              alignItems: "center",
-              width: 300,
-              bgcolor: "#F4F5F6",
-            }}
-          >
-            <IconButton type="button" sx={{ p: "5px" }} aria-label="search">
-              <SearchIcon />
-            </IconButton>
-            <InputBase
-              size="small"
-              value={searchTerm}
-              onChange={(event) => {
-                setSearchTerm(event.target.value);
-              }}
-              sx={{ ml: 1, flex: 1 }}
-              placeholder="Search"
-              inputProps={{ "aria-label": "search google maps" }}
-            />
-          </Paper>
+          <Box display="flex" alignItems="center" gap={2}>
+                    <Paper
+                      component="form"
+                      sx={{
+                        p: "2px 8px",
+                        display: "flex",
+                        alignItems: "center",
+                        width: 280,
+                        borderRadius: "8px",
+                        height: "40px !important",
+                        backgroundColor: "#F4F5F6",
+                        boxShadow: "none",
+                      }}
+                      onSubmit={e => e.preventDefault()}
+                    >
+                      <IconButton type="button" sx={{ p: 0.5 }}>
+                        <SearchIcon fontSize="small" />
+                      </IconButton>
+                      <InputBase
+                        sx={{ ml: 1, flex: 1, fontSize: "14px" }}
+                        placeholder="Search"
+                        value={searchTerm}
+                        onChange={e => setSearchTerm(e.target.value)}
+                        inputProps={{ "aria-label": "search" }}
+                      />
+                    </Paper>
+                  </Box>
 
           <CustomButton
             startIcon={<Add />}

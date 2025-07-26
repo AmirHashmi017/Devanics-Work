@@ -1,11 +1,9 @@
-import React, { useEffect, useState } from "react";
-import Headbar from "../TableTab";
+import React, { useState } from "react";
 import UserManagementTable from "./components/Table";
 import { Box, IconButton, Pagination, Typography } from "@mui/material";
 import { ArrowBack, ArrowForward } from "@mui/icons-material";
 
-const BlockedUser = () => {
-  const [searchTerm, setSearchTerm] = useState("");
+const BlockedUser = ({ searchTerm }) => {
   const [limit] = useState(9);
   const [offset, setOffset] = useState(0);
   const [total, setTotal] = useState(0);
@@ -16,20 +14,15 @@ const BlockedUser = () => {
     setOffset(page > 1 ? (page - 1) * limit : 0);
   };
 
-  useEffect(() => {
-    setOffset(0);
-    setPage(1);
-  }, [searchTerm]);
-
   return (
     <Box>
-      {/* <Headbar searchTerm={searchTerm} setSearchTerm={setSearchTerm} /> */}
       <Box mt={2}>
         <UserManagementTable
           searchTerm={searchTerm}
           limit={limit}
           offset={offset}
           setTotal={setTotal}
+          plan="blocked"
         />
         {total > 1 && (
           <Box

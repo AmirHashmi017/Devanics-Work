@@ -5,17 +5,18 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import SingleUser from "./SingleUser";
+import SinglePromoRow from "./SinglePromoRow";
 import useApiQuery from "hooks/useApiQuery";
-import { USER } from "services/constants";
+import { PROMO } from "services/constants";
 import Loader from "components/Loader";
 import NoData from "components/NoData";
 
-export default function UserManagementTable({
+export default function PromosTable({
   searchTerm,
   limit,
   offset,
   setTotal,
+  plansMap,
 }) {
   const {
     data: apiResponse,
@@ -23,12 +24,12 @@ export default function UserManagementTable({
     isError,
     error,
   } = useApiQuery({
-    queryKey: ["users", limit, offset, searchTerm],
-    url: USER + `list?searchTerm=${searchTerm}&offset=${offset}&limit=${limit}`,
+    queryKey: ["promos", limit, offset, searchTerm],
+    url: PROMO + `list?searchTerm=${searchTerm}&offset=${offset}&limit=${limit}`,
     searchTerm,
     otherOptions: {
       onSuccess: ({data}) => {
-      setTotal(data.total)
+        setTotal(data.total || data.length);
       },
     },
   });
@@ -54,21 +55,18 @@ export default function UserManagementTable({
       >
         <TableHead sx={{ bgcolor: "#F4F7FA", }}>
           <TableRow>
-            <TableCell sx={{ fontWeight: 400, p: 1.3 }}>Promotion Title</TableCell>
-            <TableCell align="center" sx={{ fontWeight: 400, p: 1.3 }}>
-              Plan
-            </TableCell>
+            <TableCell sx={{ fontWeight: 400, p: 1.3 }}>Promo Code</TableCell>
             <TableCell align="center" sx={{ fontWeight: 400, p: 1.3 }}>
               Discount
             </TableCell>
             <TableCell align="center" sx={{ fontWeight: 400, p: 1.3 }}>
-              Date
+              Applied To
             </TableCell>
             <TableCell align="center" sx={{ fontWeight: 400, p: 1.3 }}>
-              Purchased
+              Start Date
             </TableCell>
             <TableCell align="center" sx={{ fontWeight: 400, p: 1.3 }}>
-              Status
+              Expiry Date
             </TableCell>
             <TableCell align="center" sx={{ fontWeight: 400, p: 1.3 }}>
               Action
@@ -76,9 +74,11 @@ export default function UserManagementTable({
           </TableRow>
         </TableHead>
         <TableBody>
-          {apiResponse.data.users.length>0?apiResponse.data.users.map((userData) => (
-            <SingleUser key={userData._id} {...userData} />
-          )): <TableCell colSpan={7}><NoData/></TableCell>}
+          {apiResponse.data.length > 0 ? apiResponse.data
+            .slice(offset, offset + limit)
+            .map((promoData) => (
+              <SinglePromoRow key={promoData._id} {...promoData} plansMap={plansMap} />
+            )) : <TableCell colSpan={7}><NoData/></TableCell>}
         </TableBody>
       </Table>
     </TableContainer>

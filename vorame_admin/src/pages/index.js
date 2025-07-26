@@ -27,7 +27,7 @@ export const modulesHasmap = {
     "Whistle": "./whistle",
     "Dashboard": "./",
     "Lounges": "./lounge",
-    "Tapes": "./tape",
+    "Tapes": "./tranquility",
     "Concepts": "./concepts",
     "Users": "./users",
     "Add User": "./user/add",

@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Box } from "@mui/material";
+import { Box, Grid } from "@mui/material";
 import SinglePractice from "./SinglePractice";
 import NoData from "components/NoData";
 import Loader from "components/Loader";
@@ -7,7 +7,7 @@ import Error from "components/Error";
 import PracticeApi from "services/api/practice";
 import { useQuery } from "react-query";
 
-const CARD_WIDTH = 320;
+const CARD_WIDTH = 280;
 const CARD_HEIGHT = 370; // Adjust as needed for your content
 const CARD_GAP = 24;
 
@@ -37,24 +37,24 @@ const Practices = ({ searchTerm, setRefetch }) => {
     );
 
     return (
-        <Box display="flex" flexWrap="wrap" gap={`${CARD_GAP}px`}>
+        <Grid container rowSpacing={2} sx={{ marginLeft: 0, marginRight: 0 }}>
             {filteredPractices.length > 0 ? (
                 filteredPractices.map((practiceData) => (
-                    <Box
+                    <Grid
                         key={practiceData._id}
-                        width={`${CARD_WIDTH}px`}
-                        minHeight={`${CARD_HEIGHT}px`}
-                        display="flex"
-                        flexDirection="column"
-                        justifyContent="space-between"
+                        item
+                        xs={12}
+                        sm={6}
+                        md={3}
+                        sx={{ flex: '0 0 auto' }}
                     >
                         <SinglePractice practiceData={practiceData} onAction={handleAction} />
-                    </Box>
+                    </Grid>
                 ))
             ) : (
                 <NoData />
             )}
-        </Box>
+        </Grid>
     );
 };
 

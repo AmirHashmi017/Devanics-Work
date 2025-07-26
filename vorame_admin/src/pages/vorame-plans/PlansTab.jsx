@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { Box, Tabs, Tab } from "@mui/material";
 import { FilterList, Search as SearchIcon } from "@mui/icons-material";
-import Promotions from "./promotion/index";
+import PromoModule from "./promos/index";
 import Plans from "./plan/index";
+import Promotions from "./promotion/index";
 import AddPromotion from "./promotion/components/AddPromotion";
 import AddPlan from "./plan/components/AddPlan";
 

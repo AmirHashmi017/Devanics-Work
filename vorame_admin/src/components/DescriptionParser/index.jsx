@@ -8,6 +8,7 @@ const CustomDescriptionParser = ({
   color = "#666",
   fontsize = "14px",
   fontWeight = 400,
+  onExpandChange,
 }) => {
   const [expanded, setExpanded] = useState(false);
   const [showToggle, setShowToggle] = useState(false);
@@ -23,6 +24,10 @@ const CustomDescriptionParser = ({
       }
     }
   }, [description, expanded, limit]);
+
+  useEffect(() => {
+    if (onExpandChange) onExpandChange(expanded);
+  }, [expanded, onExpandChange]);
 
   return (
     <Box>
@@ -45,7 +50,7 @@ const CustomDescriptionParser = ({
         <Typography
           onClick={() => setExpanded(!expanded)}
           sx={{
-            mt: 2,
+            mt: 0.25,
             fontSize: "13px",
             color: "#555",
             fontWeight: 500,

@@ -280,7 +280,7 @@ const Library = () => {
             <Grid container spacing={2} sx={{ overflowY: "auto" }}>
               {libraryList?.map((blog, index) => (
                 <Grid item lg={6} md={6} sm={12} xs={12} key={index}>
-                  <SingeLibraryComponent id={blog._id} {...blog} setSatus={setStatus} setLibraryID={setLibraryID} setDialogOpen={setDialogOpen} setOpenFormDialog={setOpenFormDialog} setDeleteID={setDeleteID} setConfirmOpen={setConfirmOpen} blog={blog} expandedDescriptionId={expandedDescriptionId} />
+                  <SingeLibraryComponent id={blog._id} {...blog} setStatus={setStatus} setLibraryID={setLibraryID} setDialogOpen={setDialogOpen} setOpenFormDialog={setOpenFormDialog} setDeleteID={setDeleteID} setConfirmOpen={setConfirmOpen} blog={blog} expandedDescriptionId={expandedDescriptionId} />
                 </Grid>
               ))}
             </Grid>
@@ -302,6 +302,7 @@ const Library = () => {
             <CustomStatusDialog
               open={dialogOpen}
               onClose={() => setDialogOpen(false)}
+              
               onUpdate={handleUpdateStatus}
               status={status}
               setStatus={setStatus}
@@ -325,7 +326,7 @@ const Library = () => {
             autocompleteOptions={typeOptions}
           />
           <div>
-                <LibraryFooter />
+                {/* <LibraryFooter /> */}
 
           </div>
         </>

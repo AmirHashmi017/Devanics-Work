@@ -3,18 +3,34 @@ import { Box, Grid, Stack, Typography } from '@mui/material'
 import Chat from './Chat';
 import MsgDetails from './MiniTicketDetails';
 import AddMessage from './AddMessage';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import localStorage from "../../../managers/auth";
+import useApiQuery from "hooks/useApiQuery";
+import { SUPPORT_TICKET } from 'services/constants';
 
 const TicketDetails = () => {
+    const location = useLocation();
+    console.log(location.state)
     const { id } = useParams();
     const navigate = useNavigate();
-    const user = localStorage.getUser();
+
+    // Try to get ticketOwner from state
+    let ticketOwner = location.state?.ticketOwner;
+
+    // Fallback: fetch ticket details from API if ticketOwner is not in state
+    const { data: apiResponse } = useApiQuery({
+        queryKey: [SUPPORT_TICKET + `-owner-${id}`, id],
+        url: SUPPORT_TICKET + `/${id}`,
+        otherOptions: { enabled: !ticketOwner && !!id }
+    });
+    if (!ticketOwner && apiResponse) {
+        ticketOwner = apiResponse.data?.postedBy;
+    }
 
     const [status, setStatus] = useState(0);
 
     return (
-        <Grid container bgcolor='white' height='84vh' border='1px solid #EAECEE' borderRadius={2}>
+        <Grid container bgcolor='white' height='100%' border='1px solid #EAECEE' borderRadius={2}>
             <Grid lg={8} item>
                 <Box height='100%'>
                     <Box borderBottom='1px solid #EAECEE' width='100%' display='flex' justifyContent='space-between' alignItems='center' gap={2} borderRadius={1}>
@@ -37,18 +53,18 @@ const TicketDetails = () => {
                                     flexShrink={1}
                                     component="img"
                                     borderRadius="50%"
-                                    src="/icons/group.svg"
+                                    src={ticketOwner?.avatar || '/icons/group.svg'}
                                     alt={'profile'}
                                 />
                                 <Typography variant="body1" fontSize="18px" color="#222222">
-                                    {user.firstName} {user.lastName}
+                                    {ticketOwner?.name || ticketOwner?.firstName || ''}
                                 </Typography>
                             </Stack>
                         </Box>
 
                     </Box>
                     {/* chat messages */}
-                    <Chat setStatus={setStatus} />
+                    <Chat setStatus={setStatus} ticketOwner={ticketOwner} />
                     {/* add new message input */}
                     <Box mt='auto' p={2}>
                         <AddMessage status={status} />

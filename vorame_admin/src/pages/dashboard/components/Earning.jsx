@@ -36,7 +36,7 @@ const Earning = ({ duration, totalUsers, paidUsers, freeUsers }) => {
     queryKey: [DASHBOARD_EARNING_REPORT, reportDuration],
     url:
       DASHBOARD_EARNING_REPORT +
-      (reportDuration ? `/?duration=${reportDuration}` : ""),
+      (reportDuration === 'month' ? `/?duration=month` : ""),
   });
 
   const handleDurationChange = (e) => {

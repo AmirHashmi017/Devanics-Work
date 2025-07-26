@@ -88,8 +88,8 @@ const Sidebar = ({ handleDrawerToggle, children }) => {
               onClick: handleNavigation,
             },
             {
-              text: "Tape",
-              path: "/tape",
+              text: "Tranquility",
+              path: "/tranquility",
               onClick: handleNavigation,
             },
             {
@@ -139,8 +139,8 @@ const Sidebar = ({ handleDrawerToggle, children }) => {
           //     onClick: handleNavigation,
           //   },
           //   {
-          //     text: "Tape",
-          //     path: "/tape",
+          //     text: "Tranquility",
+          //     path: "/tranquility",
           //     onClick: handleNavigation,
           //   },
           //   {

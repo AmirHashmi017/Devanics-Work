@@ -1,4 +1,7 @@
+import * as Yup from "yup";
+
 export const TOKEN = "token";
+
 export const USER = "user";
 
 // Login initial values
@@ -114,16 +117,36 @@ export const typeOptions = Array.from({ length: 26 }, (_, i) =>
 );
 
 // Add whistle initial values
-export const whistleInitialValues = {
+export const whistleInitialValues  = {
   description: "",
-  date: null,
+  // date: null,
 };
+export const whistleValidationSchema = Yup.object({
+  description: Yup.string().required("Description is required"),
+});
+
+// ✅ Correct way
+export const createNewWhistle = (req) => ({
+  description: req.body.description,
+  date: new Date(),
+});
 
 // Add whistle form elements
+// export const addWhistleFormElements = [
+//   { type: "date", name: "date", label: "Date" },
+//   { type: "quill", name: "description" },
+// ];
+
 export const addWhistleFormElements = [
-  { type: "date", name: "date", label: "Date" },
-  { type: "quill", name: "description" },
+  {
+    type: "quill",
+    name: "description",
+    label: "Description",
+  },
+  // ❌ remove the `type: "date"` field
 ];
+
+
 
 // Blue print initial values
 export const bluePrintInitialValues = {

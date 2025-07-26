@@ -169,7 +169,7 @@ const SingleEvent = (eventData) => {
                 lineHeight: 1.3
               }}
             >
-              US Elections
+              {eventData.eventName}
             </Typography>
             <Box
               sx={{

@@ -27,28 +27,33 @@ const TopNav = () => {
   const menuItems = {
     contentManager: [
       { text: "After the Whistle", path: "/whistle" },
+      { text: "A-Z", path: "/library" },
       { text: "Blogs", path: "/blogs" },
+      { text: "BluePrint", path: "/blueprint" },
       { text: "BookClub", path: "/bookclub" },
       { text: "Clips", path: "/clips" },
-      { text: "A-Z", path: "/library" },
-      { text: "BluePrint", path: "/blueprint" },
-      { text: "Lounge", path: "/lounge" },
-      { text: "Tape", path: "/tape" },
       { text: "Concepts", path: "/concepts" },
-      { text: "Sessions", path: "/events" },
       { text: "Careers", path: "/careers" },
+      { text: "Lounge", path: "/lounge" },
+      { text: "Posts", path: "/posts" },
+      { text: "Reported Users", path: "/reported-users" },          
+      { text: "Sessions", path: "/events" },
       { text: "Support", path: "/support-tickets" },
-      { text: "Reported Users", path: "/reported-users" },
+      { text: "Tranquility", path: "/tranquility" },
+      
     ],
     vorAmePlans: [
       { text: "Plans", path: "/plans" },
       { text: "Discounted Plans", path: "/promotions" },
       { text: "Discounted Promos", path: "/promos" },
     ],
-    payments: [],
+    payments: [
+      { text: "Plans", path: "/plans" },
+    ],
   };
 
   const isSelected = (path) => location.pathname === path;
+  const isPaymentsSelected = location.pathname.startsWith("/plans");
 
   return (
     <Box
@@ -160,46 +165,29 @@ const TopNav = () => {
           />
         </Box>
 
-        <Box>
-          <Box
-            display="flex"
-            className="cursor-pointer"
-            onClick={(e) => handleMenuOpen("payments", e)}
-            gap="16px"
-            alignItems="center"
-          >
-            <ListItemText primary="Payments" 
+        <Box
+          display="flex"
+          className="cursor-pointer"
+          onClick={() => handleNavigation("/plans")}
+          gap="16px"
+          alignItems="center"
+          sx={{
+            bgcolor: isPaymentsSelected ? '#F5F5F5' : 'transparent',
+            borderRadius: 1,
+            '&:hover': {
+              bgcolor: '#F5F5F5',
+            },
+          }}
+        >
+          <ListItemText primary="Payments" 
             sx={{
-              fontWeight: isSelected("") ? 600 : 500,
-              color: isSelected("") ? "#222222" : "inherit",
-              bgcolor: isSelected("") ? "#F5F5F5" : "transparent",
+              fontWeight: isPaymentsSelected ? 600 : 500,
+              color: isPaymentsSelected ? "#222222" : "inherit",
               px: 1,
               py: 0.5,
               borderRadius: 1,
             }}
-            />
-          </Box>
-          {menuItems.payments.length > 0 && currentMenu === "payments" && (
-            <Menu
-              anchorEl={anchorEl}
-              open={Boolean(anchorEl)}
-              onClose={handleMenuClose}
-            >
-              {menuItems.payments.map((item) => (
-                <MenuItem
-                  key={item.text}
-                  onClick={() => handleNavigation(item.path)}
-                  sx={{
-                    fontWeight: isSelected(item.path) ? 600 : 400,
-                    color: isSelected(item.path) ? "#222222" : "inherit",
-                    bgcolor: isSelected(item.path) ? "#F5F5F5" : "transparent",
-                  }}
-                >
-                  <ListItemText primary={item.text} />
-                </MenuItem>
-              ))}
-            </Menu>
-          )}
+          />
         </Box>
 
         <Box

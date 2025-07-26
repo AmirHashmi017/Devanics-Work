@@ -7,6 +7,8 @@ import ThemeProvider from "./theme"; // this now includes MUI ThemeProvider and 
 
 const App = () => {
   const queryClient = new QueryClient();
+  console.log("runner updated");
+  
 
   return (
     <QueryClientProvider client={queryClient}>

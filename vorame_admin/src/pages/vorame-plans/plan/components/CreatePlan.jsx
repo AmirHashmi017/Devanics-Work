@@ -17,9 +17,9 @@ import ErrorMsg from "components/ErrorMsg";
 import useApiMutation from "hooks/useApiMutation";
 
 const APP_PLANS = [
-  { label: "Lifetime", value: "-1" },
-  { label: "12 Month", value: "12" },
+  { label: "1 Month", value: "1" },
   { label: "6 Month", value: "6" },
+  { label: "12 Month", value: "12" },
 ];
 
 const CreatePlan = ({ setOpen, planData = null }) => {
@@ -36,8 +36,9 @@ const CreatePlan = ({ setOpen, planData = null }) => {
   const initalValues = {
     name: planData?.name || "",
     price: planData?.price || "",
-    duration: planData?.duration || -1,
+    duration: planData?.duration || 1,
     status: planData?.status || "active",
+    discount: planData?.discount || 0,
   };
 
   const validationSchema = yup.object().shape({
@@ -48,17 +49,25 @@ const CreatePlan = ({ setOpen, planData = null }) => {
       .required("Price is required"),
     duration: yup.number().required("Duration is required"),
     status: yup.string().required("Status is required"),
+    discount: yup
+      .number()
+      .min(0, "Discount cannot be negative")
+      .max(100, "Discount cannot exceed 100%")
+      .required("Discount is required"),
   });
 
   const { setFieldValue, values, handleSubmit, errors } = useFormik({
     initialValues: initalValues,
     validationSchema: validationSchema,
     onSubmit: () => {
+      // Round price and discount to 2 decimals before submitting
+      const roundedPrice = Number(Number(values.price).toFixed(2));
+      const roundedDiscount = Number(Number(values.discount).toFixed(2));
       mutate(
         {
           method: planData ? "put" : "post",
           url: PLAN + (planData ? `update/${planData._id}` : "create"),
-          data: { ...values, discount: values.duration > 6 ? 10 : 0 },
+          data: { ...values, price: roundedPrice, discount: roundedDiscount },
         },
         {
           onSuccess: handleSuccess,
@@ -66,7 +75,7 @@ const CreatePlan = ({ setOpen, planData = null }) => {
       );
     },
   });
-  const { name, price, duration, status } = values;
+  const { name, price, duration, status, discount } = values;
 
   return (
     <form onSubmit={handleSubmit}>
@@ -133,11 +142,34 @@ const CreatePlan = ({ setOpen, planData = null }) => {
               value={price}
               disabled={planData ? true : false}
               onChange={({ target }) => setFieldValue("price", +target.value)}
-              placeholder="USD"
+              placeholder="£"
               type="number"
             />
           </Box>
           {errors.price && <ErrorMsg error={errors.price} />}
+        </Box>
+        <Box>
+          <Box
+            component="label"
+            htmlFor="discount"
+            fontSize="14px"
+            fontWeight="500"
+          >
+            Discount (%)
+          </Box>
+          <Box mt="6px">
+            <CustomTextField
+              size="medium"
+              name="discount"
+              value={discount}
+              onChange={({ target }) => setFieldValue("discount", +target.value)}
+              placeholder="Enter discount percentage"
+              type="number"
+              inputProps={{ min: 0, max: 100, step: 0.01 }}
+              disabled={!!planData}
+            />
+          </Box>
+          {errors.discount && <ErrorMsg error={errors.discount} />}
         </Box>
         <Box component="label" htmlFor="name" fontSize="14px" fontWeight={500}>
           Change Status

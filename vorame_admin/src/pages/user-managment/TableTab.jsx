@@ -22,9 +22,9 @@ const tabOptions = [
   "Blocked Users",
 ];
 
-const TableTab = ({ searchTerm, setSearchTerm }) => {
-  const [, setOpen] = useState(false);
+const TableTab = () => {
   const [selectedTab, setSelectedTab] = useState(0);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const renderTabContent = () => {
     switch (selectedTab) {
@@ -89,6 +89,7 @@ const TableTab = ({ searchTerm, setSearchTerm }) => {
               backgroundColor: "#F4F5F6",
               boxShadow: "none",
             }}
+            onSubmit={e => e.preventDefault()}
           >
             <IconButton type="button" sx={{ p: 0.5 }}>
               <SearchIcon fontSize="small" />

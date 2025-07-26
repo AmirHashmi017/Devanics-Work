@@ -14,6 +14,19 @@ export const UPDATE_BLOG_STATUS = `${BLOG}/update-status`;
 export const UPDATE_BLOG_FAVOURITE = `${BLOG}/update-favourite`;
 export const DELETE_BLOG = `${BLOG}/delete`;
 
+//Posts
+export const BOARDROOM= "boardroom";
+export const GET_POSTS= `${BOARDROOM}/messages`;
+export const GET_LIKES= `${BOARDROOM}/message-liked-users`;
+export const GET_COMMENTS= `${BOARDROOM}/message-comments`;
+export const GET_REPORTS= `${BOARDROOM}/reports`;
+export const DELETE_POST = `${BOARDROOM}/messagebyAdmin`;
+export const DELETE_COMMENT = `${BOARDROOM}/commentbyAdmin`;
+export const BLOCK_POST_USER= `user/blockUser`;
+
+
+
+
 // Book club
 export const BOOK_CLUB = "book-club";
 export const GET_BOOK_CLUBS = `${BOOK_CLUB}/list`;
@@ -63,7 +76,7 @@ export const UPDATE_BLUE_PRINT_STATUS = `${BLUE_PRINT}/update-status`;
 export const DELETE_BLUE_PRINT = `${BLUE_PRINT}/delete`;
 
 export const PLAN = "plan/";
-export const TAPE = "tape/";
+export const TRANQUILITY = "tranquility";
 export const USER = "user/";
 export const PRACTICE = "practice/";
 export const FAQ = "faq/";
@@ -123,3 +136,14 @@ export const DASHBOARD_TOTAL_USERS = `${DASHBOARD}/total-user/`;
 export const DASHBOARD_USERS = `${DASHBOARD}/users/`;
 export const DASHBOARD_EARNING = `${DASHBOARD}/total-earning`;
 export const DASHBOARD_EARNING_REPORT = `${DASHBOARD}/earning-report`;
+
+export const GET_TRANQUILITIES = `${TRANQUILITY}/list`;
+export const CREATE_TRANQUILITY = `${TRANQUILITY}/create`;
+export const UPDATE_TRANQUILITY = `${TRANQUILITY}/update`;
+export const DELETE_TRANQUILITY = `${TRANQUILITY}/delete`;
+export const GET_ONE_TRANQUILITY = `${TRANQUILITY}/list`;
+
+// Reports
+export const GET_BOARDROOM_REPORTS=`${BOARDROOM}/reports`;
+export const GET_LOUNGE_REPORTS=`${LOUNGE}/reports`;
+export const DELETE_MESSAGE=`${LOUNGE}/messageByAdmin`

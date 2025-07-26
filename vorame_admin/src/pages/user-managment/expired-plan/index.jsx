@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from "react";
-import Headbar from "../TableTab";
 import UserManagementTable from "./components/Table";
 import { Box, IconButton, Pagination, Typography } from "@mui/material";
 import { ArrowBack, ArrowForward } from "@mui/icons-material";
 
-const ExpiredPlan = () => {
-  const [searchTerm, setSearchTerm] = useState("");
+const ExpiredPlan = ({ searchTerm }) => {
   const [limit] = useState(9);
   const [offset, setOffset] = useState(0);
   const [total, setTotal] = useState(0);
@@ -23,13 +21,13 @@ const ExpiredPlan = () => {
 
   return (
     <Box>
-      {/* <Headbar searchTerm={searchTerm} setSearchTerm={setSearchTerm} /> */}
       <Box mt={2}>
         <UserManagementTable
           searchTerm={searchTerm}
           limit={limit}
           offset={offset}
           setTotal={setTotal}
+          plan="expired"
         />
         {total > 1 && (
           <Box

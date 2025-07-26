@@ -1,299 +1,343 @@
-// Blogs.js
-import React, { useEffect, useState } from "react";
-import { useQuery, useMutation } from "react-query";
+// import React, {  useState } from "react";
+
 import {
   Grid,
   Typography,
-  IconButton,
-  InputAdornment,
+  // IconButton,
   Stack,
-  TextField,
-  Box,
+  // Box,
 } from "@mui/material";
-import { Add } from "@mui/icons-material";
-import { toast } from "react-toastify";
+// import moment from "moment";
 import { useFormik } from "formik";
-import moment from "moment";
-import WhistleApi from "../../../services/api/whistle";
+import dayjs from "dayjs";
+// import { useQuery, useMutation } from "react-query";
+// import { toast } from "react-toastify";
+
 import {
   CustomButton,
-  ConfirmDialog,
-  CustomBadge,
-  CustomStatusDialog,
-  CustomFormDialog,
+  // CustomBadge,
+  // CustomStatusDialog,
+  // ConfirmDialog,
   CustomLoader,
-} from "../../../components/index";
-import { whistleInitialValues, addWhistleFormElements } from "../../../constants";
+} from "../../../components";
+import { useState } from "react";
 
-import { whistleValidationSchema } from "../../../utils/validation";
-
-import { StyledCard } from "./style";
-import dayjs from "dayjs";
-import DescriptionParser from "./components/DescriptionParser";
-import { shadows, vorameColors } from "theme/constants";
+import CustomQuillEditor from "../../../components/QuillEditor";
+// import WhistleApi from "../../../services/api/whistle";
+// import { whistleInitialValues } from "../../../constants";
+// import { whistleValidationSchema } from "../../../utils/validation";
+// import { StyledCard } from "./style";
+// import { shadows, vorameColors } from "theme/constants";
+// import DescriptionParser from "./components/DescriptionParser";
 
 const Whistle = () => {
-  const [whistelID, setWhistleID] = useState(null);
-  const [confirmOpen, setConfirmOpen] = useState(false);
-  const [dialogOpen, setDialogOpen] = useState(false);
-  const [status, setStatus] = useState("");
-  const [deleteID, setDeleteID] = useState(null);
-  const [openFormDialog, setOpenFormDialog] = React.useState(false);
-  const [progress, setProgress] = useState(0);
-  const [preview, setPreview] = useState(null);
-  const [expandedDescriptionId, setExpandedDescriptionId] = useState(null);
-  const [searchText, setSearchText] = useState("");
-  const [debouncedSearchText, setDebouncedSearchText] = useState("");
+  // const [whistelID, setWhistleID] = useState(null);
+  // const [confirmOpen, setConfirmOpen] = useState(false);
+  // const [dialogOpen, setDialogOpen] = useState(false);
+  // const [status, setStatus] = useState("");
+  // const [deleteID, setDeleteID] = useState(null);
+  // const [lastUpdated, setLastUpdated] = useState(new Date());
+  const [isLoading, setisLoading] = useState("")
+  const [description, setdescription] = useState("")
+  // const [formData , setformData] = useState({
+  //   description:'',
+  // })
 
-  // Get whistle list
-  const {
-    data: whistleList,
-    refetch,
-    isLoading,
-  } = useQuery(["WHISTLES_LIST", debouncedSearchText], () =>
-    WhistleApi.getWhistles({
-      searchKeyword: debouncedSearchText,
-    }),
-  );
-
-  // Get single whistle
-  const { data: singleWhistle } = useQuery(
-    ["SINGLE_WHISTLE", whistelID],
-    () => WhistleApi.getSingleWhistle({ id: whistelID }),
-    {
-      enabled: !!whistelID,
-    },
-  );
-
-  // Update whistle status mutation
-  const updateStatusMutation = useMutation(
-    (data) => WhistleApi.updateWhistleStatus(data),
-    {
-      onSuccess: () => {
-        toast.success("Status updated successfully!");
-        refetch();
-      },
-      onError: () => {
-        toast.error("Failed to update status.");
-      },
-    },
-  );
-
-  // Create and update whistle mutation
-  const { mutate: Whistle, isLoading: whistleMutationLoading } = useMutation(
-    (body) => {
-      if (whistelID) {
-        const updatedBody = { ...body, id: whistelID };
-        return WhistleApi.updateWhistle(updatedBody);
-      } else {
-        return WhistleApi.createWhistle(body);
-      }
-    },
-    {
-      onSuccess: (res) => {
-        if (res?.statusCode === 201 || res?.statusCode === 200) {
-          toast.success(res?.message);
-          refetch();
-          handleClose();
-        }
-      },
-      onError: (error) => {
-        toast.error(error.message);
-      },
-    },
-  );
-
-  // Set form values on update
-  useEffect(() => {
-    if (singleWhistle) {
-      const { description, date } = singleWhistle?.findWhistle;
-
-      const dateValue = date && dayjs(date);
-      formik.setValues({
-        description: description,
-        date: dateValue,
-      });
-    }
-  }, [singleWhistle]);
-
-  // Hanlde open delete confrim
-  const handleConfirmOpen = (id) => {
-    setDeleteID(id);
-    setConfirmOpen(true);
-  };
-
-  // Handle delete whistle api
-  const handleDelete = async (event) => {
-    event.preventDefault();
-    const response = await WhistleApi.deleteWhistle(deleteID);
-    if (response?.statusCode === 200) {
-      toast.success(response.message);
-      setConfirmOpen(false);
-      setDeleteID(null);
-      refetch();
-    } else {
-      toast.error("Whistle not deleted!");
-    }
-  };
-
-  // Handle badge click
-  const handleBadgeClick = (blog) => {
-    setWhistleID(blog._id);
-    setStatus(blog.status);
-    setDialogOpen(true);
-  };
-
-  // Handle update whistle status method
-  const handleUpdateStatus = () => {
-    updateStatusMutation.mutate({ id: whistelID, status });
-    setDialogOpen(false);
-  };
-
-  // Formik
-  const formik = useFormik({
-    initialValues: whistleInitialValues,
-    validationSchema: whistleValidationSchema,
-    onSubmit: (values) => handleSubmit(values),
-  });
-
-  // Handle File change
-  const handleFileChange = async (acceptedFiles) => { };
-
-  // Handle whistle form submit
-  const handleSubmit = async (values) => {
-    Whistle(values);
-  };
-
-  // Open add whistle
-  const handleClickOpen = (id) => {
-    if (id) {
-      setWhistleID(id);
-    }
-    setOpenFormDialog(true);
-  };
-
-  // Close add whistle
-  const handleClose = () => {
-    setOpenFormDialog(false);
-    formik.resetForm();
-    setWhistleID(null);
-    setPreview(null);
-    setProgress(0);
-  };
-
-  // Toggle the description on click
-  const handleExpandDescription = (id) => {
-    if (expandedDescriptionId === id) {
-      setExpandedDescriptionId(null);
-    } else {
-      setExpandedDescriptionId(id);
-    }
-  };
-
-  // Handle input change
-  const handleInputChange = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    setSearchText(e.target.value);
-  };
+    console.log("Form Data", description)
+    const plainText = description.replace(/<[^>]*>?/gm, '');
+    console.log(plainText); 
+    setdescription(plainText);
+ 
 
-  // Debounce searchText to avoid API calls on every keystroke
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      setDebouncedSearchText(searchText);
-    }, 500); // 500ms delay
 
-    return () => {
-      clearTimeout(handler);
-    };
-  }, [searchText]);
+  }
+
+
+  // const plainText = description.replace(/<[^>]+>/g, '');
+  // console.log("Plain Text:", plainText);
+
+  // const {
+  //   data: whistleList,
+  //   refetch,
+  //   isLoading,
+  // } = useQuery(["WHISTLES_LIST"], () => WhistleApi.getWhistles({}));
+
+  // const { data: singleWhistle } = useQuery(
+  //   ["SINGLE_WHISTLE", whistelID],
+  //   () => WhistleApi.getSingleWhistle({ id: whistelID }),
+  //   {
+  //     enabled: !!whistelID,
+  //   }
+  // );
+
+  // const updateStatusMutation = useMutation(
+  //   (data) => WhistleApi.updateWhistleStatus(data),
+  //   {
+  //     onSuccess: () => {
+  //       toast.success("Status updated successfully!");
+  //       refetch();
+  //     },
+  //     onError: () => {
+  //       toast.error("Failed to update status.");
+  //     },
+  //   }
+  // );
+
+  // const { mutate: Whistle, isLoading: whistleMutationLoading } = useMutation(
+  //   (body) => {
+  //     if (whistelID) {
+  //       const updatedBody = { ...body, id: whistelID };
+  //       return WhistleApi.updateWhistle(updatedBody);
+  //     } else {
+  //       return WhistleApi.createWhistle(body);
+  //     }
+  //   },
+  //   {
+  //     onSuccess: (res) => {
+  //       toast.success(res?.message);
+  //       refetch();
+  //     },
+  //     onError: (error) => {
+  //       toast.error(error.message);
+  //     },
+  //   }
+  // );
+
+  // const formik = useFormik({
+  //   initialValues: whistleInitialValues,
+  //   enableReinitialize: true,
+  //   validationSchema: whistleValidationSchema,
+  //   onSubmit: async (values) => {
+  //     const updatedValues = {
+  //       ...values,
+  //       date: new Date(), // ✅ inject new updated date
+  //     };
+
+  //     try {
+  //       await Whistle(updatedValues); // call API
+  //       setLastUpdated(new Date());   // update display
+  //     } catch (error) {
+  //       console.error("Error updating whistle:", error);
+  //     }
+  //   },
+  // });
+
+
+
+  // useEffect(() => {
+  //   if (singleWhistle && singleWhistle.findWhistle) {
+  //     const { description, date } = singleWhistle.findWhistle;
+  //     formik.setValues({ description });
+  //     setLastUpdated(date || new Date());
+  //   }
+  // }, [singleWhistle]);
+
+
+  // const handleBadgeClick = (blog) => {
+  //   setWhistleID(blog._id);
+  //   setStatus(blog.status);
+  //   setDialogOpen(true);
+  // };
+
+  // const handleUpdateStatus = () => {
+  //   updateStatusMutation.mutate({ id: whistelID, status });
+  //   setDialogOpen(false);
+  // };
+
+  // const handleConfirmOpen = (id) => {
+  //   setDeleteID(id);
+  //   setConfirmOpen(true);
+  // };
+
+  // const handleDelete = async (event) => {
+  //   event.preventDefault();
+  //   const response = await WhistleApi.deleteWhistle(deleteID);
+  //   if (response?.statusCode === 200) {
+  //     toast.success(response.message);
+  //     setConfirmOpen(false);
+  //     setDeleteID(null);
+  //     refetch();
+  //   } else {
+  //     toast.error("Whistle not deleted!");
+  //   }
+  // };
+
+  // const handleClickOpen = (id) => {
+  //   setWhistleID(id);
+  // };
+
+  // const handleExpandDescription = (id) => {
+  //   if (expandedDescriptionId === id) {
+  //     setExpandedDescriptionId(null);
+  //   } else {
+  //     setExpandedDescriptionId(id);
+  //   }
+  // };
+
+
+
+
+
+
+  // const handlechange = (e) => {
+  //   setformData(...forData , (e.target.description))
+  // }
+  // const handleSubmit = () => {
+  //   e.preventDefault();
+  //   console.log
+  // };
+
+
 
   return (
     <>
-      {isLoading ? (
-        <CustomLoader />
-      ) : (
-        <>
-          <Grid container sx={{ mb: 2, mt: 2 }} alignItems="center">
-            <Grid item xs={12} sm={6} lg={6} md={6} sx={{ mb: 1 }}>
-              <Typography variant="h4">After the Whistle</Typography>
-            </Grid>
-            <Grid item md={6} lg={6} sm={6} xs={12} textAlign="right">
-              <Stack
-                direction="row"
-                spacing={2}
-                justifyContent="flex-end"
-                alignItems='center'
-                width="100%"
-                sx={{
-                  mt: {
-                    xs: 1,
-                    sm: 1,
-                    md: 0,
-                    lg: 0,
-                  },
-                }}
-              >
-                <TextField
-                  size="small"
-                  placeholder="Search"
-                  value={searchText}
-                  onChange={handleInputChange}
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <img src={`/icons/search-lg.svg`} alt="Search" />
-                      </InputAdornment>
-                    ),
-                  }}
+      {
+        isLoading ?
+          (
+            <CustomLoader />
+          ) : (
+            <>
+              <form onSubmit={handleSubmit}>
+
+                {/* Top bar with title + buttons */}
+                <Grid
+                  container
+                  alignItems="center"
                   sx={{
-                    width: { xs: "100%", sm: "250px" },
-                    "& .MuiInputBase-root": {
-                      borderRadius: 2,
-                    },
-                  }}
-                />
-                <CustomButton
-                  startIcon={<Add />}
-                  size='medium'
-                  onClick={() => handleClickOpen(null)}
-                  sx={{
-                    marginLeft: { xs: 0, sm: 2 },
+                    px: 3,
+                    py: 2,
+                    // backgroundColor: "#fff",
+                    // borderBottom: "1px solid #e5e7eb",
+                    // boxShadow: "0 1px 2px rgba(0,0,0,0.05)",
+                    position: "sticky",
+                    top: 0,
+                    zIndex: 10,
+                    mb: 3,
                   }}
                 >
-                  Add
-                </CustomButton>
-              </Stack>
-            </Grid>
-          </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <Typography variant="h5" fontWeight="bold">
+                      After the Whistle
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={12} sm={6} textAlign="right">
+                    <Stack direction="row" spacing={2} justifyContent="flex-end">
+                      <CustomButton
+                        type="submit"
+                        size="medium"
+                      // onClick={() => {
+                      //   if (!whistelID) {
+                      //     toast.warning("Please select a blog to update.");
+                      //     return;
+                      //   }
 
-          {/* Whistle list map */}
-          {whistleList && whistleList?.length > 0 ? (
-            <Grid container spacing='20px' sx={{ overflowY: "auto" }}>
-              {whistleList?.map((blog, index) => (
+                      //   formik.submitForm(); // ✅ call proper submit
+                      // }}
+                      >
+                        Updated
+                      </CustomButton>
+
+
+                      <CustomButton
+                        size="medium"
+                        // onClick={() => {
+                        //   if (singleWhistle) {
+                        //     formik.setValues({
+                        //       description:
+                        //         singleWhistle?.findWhistle?.description || "",
+                        //     });
+                        //   } else {
+                        //     formik.resetForm();
+                        //   }
+                        // }}
+                        sx={{
+                          backgroundColor: "#fff",
+                          color: "#000",
+                          border: "1px solid #D1D5DB",
+                          "&:hover": {
+                            backgroundColor: "#f3f4f6",
+                          },
+                        }}
+                      >
+                        Reset
+                      </CustomButton>
+                    </Stack>
+                  </Grid>
+                </Grid>
+
+
+                {/* Whistle Editor Form */}
+
+                <Grid>
+                  <CustomQuillEditor
+                    formik={{
+                      values: { description },  // ✅ use your state variable
+                      setFieldValue: (field, value) => {
+                        if (field === 'description') {
+                          setdescription(value);  // ✅ keep this
+                        }
+                      },
+                      touched: {},
+                    }}
+                  />
+
+                </Grid>
+              </form>
+
+
+              {/* <Typography variant="body1" sx={{ mb: 1 }}>
+            Last updated: {dayjs(lastUpdated).format("DD MMMM YYYY")}
+          </Typography> */}
+
+              {/* Whistle Editor Form */}
+              {/* <form onSubmit={formik.handleSubmit}>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <CustomQuillEditor formik={formik} />
+              </Grid>
+            </Grid>
+          </form> */}
+              {/* <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <CustomQuillEditor
+                    formik={{
+                      values: { description: "" }, // or some static text
+                      setFieldValue: () => { },     // no-op
+                      touched: {},
+                      errors: {},
+                    }}
+                  />
+                </Grid>
+              </Grid> */}
+
+
+              {/* Whistle list below */}
+              {/* {whistleList && whistleList?.length > 0 ? (
+            <Grid container spacing={2} sx={{ mt: 4 }}>
+              {whistleList.map((blog, index) => (
                 <Grid item xs={12} key={index}>
-                  <StyledCard sx={{
-                    boxShadow: shadows.softDepthShadow, borderRadius: '12px', padding: '12px',
-                    marginBottom: 0
-                  }}>
-                    <Grid container alignItems='center'>
+                  <StyledCard
+                    sx={{
+                      boxShadow: shadows.softDepthShadow,
+                      borderRadius: "12px",
+                      padding: "12px",
+                    }}
+                  >
+                    <Grid container alignItems="center">
                       <Grid item xs={4}>
-                        {/* Library title */}
-                        <Typography variant="subtitle2" fontWeight={500} color={vorameColors.mirage}>
+                        <Typography
+                          variant="subtitle2"
+                          fontWeight={500}
+                          color={vorameColors.mirage}
+                        >
                           {moment(blog.date).format("DD MMMM YYYY")}
                         </Typography>
                       </Grid>
-                      {/* Icons and badge  */}
                       <Grid item xs={8} textAlign="right">
-                        <Stack
-                          direction="row"
-                          justifyContent="flex-end"
-                          width={1}
-                        >
-                          <Box sx={{
-                            marginRight: "35px",
-                            marginTop: "4px",
-                          }}>
-
+                        <Stack direction="row" justifyContent="flex-end">
+                          <Box sx={{ marginRight: "35px", marginTop: "4px" }}>
                             <CustomBadge
                               badgeContent={blog?.status}
                               onClick={() => handleBadgeClick(blog)}
@@ -301,28 +345,28 @@ const Whistle = () => {
                           </Box>
                           <IconButton
                             aria-label="edit"
-                            onClick={() => handleClickOpen(blog?._id)}
+                            onClick={() => handleClickOpen(blog._id)}
                           >
-                            <img src='icons/edit.svg' alt="edit" />
+                            <img src="icons/edit.svg" alt="edit" />
                           </IconButton>
                           <IconButton
                             aria-label="delete"
-                            onClick={() => handleConfirmOpen(blog?._id)}
+                            onClick={() => handleConfirmOpen(blog._id)}
                           >
-                            <img src='icons/trash.svg' alt="delete" />
+                            <img src="icons/trash.svg" alt="delete" />
                           </IconButton>
                           <IconButton
                             aria-label="expand"
                             onClick={() => handleExpandDescription(blog._id)}
                           >
-                            {expandedDescriptionId ? (
+                            {expandedDescriptionId === blog._id ? (
                               <img
-                                src='icons/chevron-up.svg'
+                                src="icons/chevron-up.svg"
                                 alt="expand-up"
                               />
                             ) : (
                               <img
-                                src='icons/chevron-down.svg'
+                                src="icons/chevron-down.svg"
                                 alt="expand"
                               />
                             )}
@@ -330,7 +374,6 @@ const Whistle = () => {
                         </Stack>
                       </Grid>
                     </Grid>
-                    {/* Custom description view in whistle */}
                     <DescriptionParser
                       description={blog?.description}
                       expandedDescriptionId={expandedDescriptionId}
@@ -341,48 +384,29 @@ const Whistle = () => {
               ))}
             </Grid>
           ) : (
-            <Grid>
-              <Typography variant="subtitle1">
-                {`Currently whistle not exists.`}
-              </Typography>
-            </Grid>
-          )}
-          <Grid>
-            <ConfirmDialog
-              title="Delete Whistle ?"
-              dialogContext="Are you sure to delete whistle ?"
-              open={confirmOpen}
-              setOpen={setConfirmOpen}
-              onConfirm={handleDelete}
-            />
-            <CustomStatusDialog
-              open={dialogOpen}
-              onClose={() => setDialogOpen(false)}
-              onUpdate={handleUpdateStatus}
-              status={status}
-              setStatus={setStatus}
-            />
-          </Grid>
-          {/* Add whistle grid */}
-          <CustomFormDialog
-            dialogTitle={
-              whistelID ? "Update After the Whistle" : "Add After the Whistle"
-            }
-            open={openFormDialog}
-            onClose={handleClose}
-            formik={formik}
-            handleFileChange={handleFileChange}
-            formElements={addWhistleFormElements}
-            id={whistelID}
-            loading={whistleMutationLoading}
-            progress={progress}
-            setProgress={setProgress}
-            preview={preview}
-            setPreview={setPreview}
-            autocompleteOptions={null}
+            <Typography variant="subtitle1" sx={{ mt: 4 }}>
+              Currently no whistle exists.
+            </Typography>
+          )} */}
+
+              {/* Dialogs */}
+              {/* <ConfirmDialog
+            title="Delete Whistle?"
+            dialogContext="Are you sure you want to delete this whistle?"
+            open={confirmOpen}
+            setOpen={setConfirmOpen}
+            onConfirm={handleDelete}
           />
-        </>
-      )}
+          <CustomStatusDialog
+            open={dialogOpen}
+            onClose={() => setDialogOpen(false)}
+            onUpdate={handleUpdateStatus}
+            status={status}
+            setStatus={setStatus}
+          /> */}
+            </>
+          )
+      }
     </>
   );
 };

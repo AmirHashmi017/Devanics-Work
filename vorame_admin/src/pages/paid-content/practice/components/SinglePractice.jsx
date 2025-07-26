@@ -1,26 +1,16 @@
 import React, { useState } from "react";
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import { ConfirmDialog } from "components";
 import { toast } from "react-toastify";
 import CustomDialog from "components/Modal";
 import UpdateStatusDialog from "components/StatusDialog/StatusDialog";
 import CreatePractice from "./CreatePractice";
-import FixedBox from "components/FixedBox";
 import CustomDescriptionParser from "components/DescriptionParser";
 import { vorameColors } from "theme/constants";
 import PracticeApi from "services/api/practice";
 
 const IMAGE_HEIGHT = 229;
-const CARD_MAX_WIDTH = 320;
-
-const clampStyle = {
-  display: '-webkit-box',
-  WebkitLineClamp: 3,
-  WebkitBoxOrient: 'vertical',
-  overflow: 'hidden',
-  textOverflow: 'ellipsis',
-  minHeight: '60px', // adjust as needed for 3 lines
-};
+const CARD_MAX_WIDTH = 290;
 
 const SinglePractice = ({ practiceData, onAction }) => {
   const { _id, description, file, status } = practiceData;
@@ -29,6 +19,7 @@ const SinglePractice = ({ practiceData, onAction }) => {
   const [openStatusModal, setOpenStatusModal] = useState(false);
   const [currentStatus, setCurrentStatus] = useState(status);
   const [loading, setLoading] = useState(false);
+  const [descExpanded, setDescExpanded] = useState(false);
 
   const handleDelete = async () => {
     setLoading(true);
@@ -79,6 +70,7 @@ const SinglePractice = ({ practiceData, onAction }) => {
       display="flex"
       flexDirection="column"
       justifyContent="space-between"
+      sx={{ height: descExpanded ? 'auto' : '420px', minHeight: '430px', transition: 'height 0.3s' }}
     >
       <ConfirmDialog
         title="Delete Practice ?"
@@ -131,17 +123,13 @@ const SinglePractice = ({ practiceData, onAction }) => {
           />
         )}
       </Box>
-      <Box className="concept-details" mt={3}>
-        <Typography
-          variant="subtitle1"
-          color={vorameColors.mirage}
-          fontWeight={500}
-        >
-          {/* You can add a title here if available */}
-        </Typography>
-        <Box sx={{ minHeight: '60px', display: 'flex', alignItems: 'flex-start' }}>
-          <CustomDescriptionParser description={description || ""} limit={1} color={vorameColors.lightSlateGrey} />
-        </Box>
+      <Box flex={1} mt={3} display="flex" flexDirection="column" justifyContent="space-between">
+        <CustomDescriptionParser
+          description={description || ""}
+          limit={2}
+          color={vorameColors.lightSlateGrey}
+          onExpandChange={setDescExpanded}
+        />
         <Box display="flex" justifyContent="space-between" mt={2}>
           <Button
             sx={{

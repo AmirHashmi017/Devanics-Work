@@ -130,11 +130,30 @@ const CreateLounge = ({ open, setOpen, id, setID, refetch }) => {
   }, [singleLounge]);
 
   // Formik
-  const formik = useFormik({
-    initialValues: loungeInitialValues,
-    validationSchema: loungeValidationSchema,
-    onSubmit: (values) => handleSubmit(values),
-  });
+  // const formik = useFormik({
+  //   initialValues: loungeInitialValues,
+  //   validationSchema: loungeValidationSchema,
+  //   onSubmit: (values) => handleSubmit(values),
+  // });
+//updated Formik
+const formik = useFormik({
+  initialValues: loungeInitialValues,
+  validationSchema: loungeValidationSchema,
+  onSubmit: (values) => handleSubmit(values),
+});
+
+//   const formik = useFormik({
+//   initialValues: loungeInitialValues,
+//   validationSchema: loungeValidationSchema,
+//   onSubmit: (values) => {
+//     if (!whistelID) {
+//       toast.warning("Please select a blog to update.");
+//       return;
+//     }
+//     Whistle(values);
+//   },
+// });
+
 
   // Handle close
   const handleClose = () => {

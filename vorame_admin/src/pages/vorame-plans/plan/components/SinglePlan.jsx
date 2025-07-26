@@ -21,7 +21,7 @@ const Plan = (planData) => {
     price,
   } = planData;
   const queryClient = useQueryClient();
-  const [discountOffer, setDiscountOffer] = useState("Best Offer");
+  const [discountOffer, setDiscountOffer] = useState("");
   const [discountPrice, setDiscountPrice] = useState(price);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [openUpdateModal, setOpenUpdateModal] = useState(false);
@@ -64,13 +64,27 @@ const Plan = (planData) => {
   };
 
   useEffect(() => {
-    if (duration > 6) {
-      setDiscountOffer("Save 10%");
-      setDiscountPrice(price - (price * discount) / 100);
-    } else if (discount && semiAnually) {
-      setDiscountOffer("");
+  if (duration == 12) {
+    setDiscountOffer("7-Day Free Trial");
+  } else if (discount) {
+    // Round discount to 2 decimals for display
+    const roundedDiscount = Number(Number(discount).toFixed(2));
+    setDiscountOffer(`Save ${roundedDiscount}%`);
+    setDiscountPrice(Number((price - (price * roundedDiscount) / 100).toFixed(2)));
+  } else if (discount && semiAnually) {
+    setDiscountOffer("");
+  } else {
+    setDiscountOffer("");
+  }
+}, [planData]);
+
+  useEffect(() => {
+    if (discount) {
+      setDiscountPrice(Number((price - (price * discount) / 100).toFixed(2)));
+    } else {
+      setDiscountPrice(Number(Number(price).toFixed(2)));
     }
-  }, [planData]);
+  }, [price, discount]);
 
   return (
     <>

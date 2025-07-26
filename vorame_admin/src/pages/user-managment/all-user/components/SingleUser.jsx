@@ -42,72 +42,9 @@ const SingleUser = (userData) => {
 
   const { name = "-" } = plan || {};
 
-  const handleSuccess = (message) => {
-    toast.success(message);
-    fetchUserList();
-  };
-
-  const updateStatusHandler = (status) => {
-    mutate(
-      { method: "patch", url: USER + `/${_id}`, data: { isActive: status } },
-      {
-        onSuccess: ({ message }) => {
-          handleSuccess(message);
-          setOpenStatusModal(false);
-        },
-      }
-    );
-  };
-
-  const handleOpenMenu = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleCloseMenu = () => {
-    setAnchorEl(null);
-  };
-
-  const handleConfirmUnblock = () => {
-    setIsBlocked(false);
-    setOpenUnblockDialog(false);
-    toast.success("User has been unblocked.");
-  };
-
-  const handleConfirmBlock = () => {
-    setIsBlocked(true);
-    setOpenBlockDialog(false);
-    toast.success("User has been blocked.");
-  };
-
   return (
     <>
-      <UpdateStatusDialog
-        open={openStatusModal}
-        onClose={() => setOpenStatusModal(false)}
-        onUpdate={updateStatusHandler}
-        isLoading={isLoading}
-        status={isActive}
-      />
-      <ConfirmationModal
-        open={openBlockDialog}
-        onClose={() => setOpenBlockDialog(false)}
-        onConfirm={handleConfirmBlock}
-        heading="Block this User?"
-        text="Are you sure you want to block this user? They will be restricted from accessing the platform."
-        imgSrc="/icons/block-user.svg"
-        cancelBtnText="Cancel"
-        confirmBtnText="Block User"
-      />
-      <ConfirmationModal
-        open={openUnblockDialog}
-        onClose={() => setOpenUnblockDialog(false)}
-        onConfirm={handleConfirmUnblock}
-        heading="Unblock this User?"
-        text="Are you sure you want to unblock this user? They will be able to access their account and interact with your platform again."
-        imgSrc="/icons/person-icon.svg"
-        cancelBtnText="Cancel"
-        confirmBtnText="Unblock User"
-      />
+      
       <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
         <TableCell align="left">{firstName || "-"}</TableCell>
         <TableCell align="center">{lastName || "-"}</TableCell>
@@ -145,7 +82,6 @@ const SingleUser = (userData) => {
                 minWidth={4}
                 onClick={() => setOpenStatusModal(true)}
                 textTransform="capitalize"
-                className="cursor-pointer"
                 fontWeight={500}
               >
                 {isActive}
@@ -153,80 +89,7 @@ const SingleUser = (userData) => {
             </Box>
           </Box>
         </TableCell>
-        <TableCell align="center" sx={{ width: "120px", height: "63px" }}>
-          <Box display="flex" justifyContent="center">
-            {!isBlocked ? (
-              <>
-                <Box
-                  component="img"
-                  src="/icons/dots-vertical.svg"
-                  alt="options"
-                  height="20px"
-                  onClick={handleOpenMenu}
-                  sx={{ cursor: "pointer" }}
-                />
-                <Menu
-                  anchorEl={anchorEl}
-                  open={Boolean(anchorEl)}
-                  onClose={handleCloseMenu}
-                  PaperProps={{
-                    elevation: 1,
-                    sx: {
-                      borderRadius: "8px",
-                      mt: 1,
-                      minWidth: 158,
-                      backgroundColor: "#fff",
-                      boxShadow: "0px 2px 8px rgba(0, 0, 0, 0.1)",
-                      "& .MuiMenuItem-root": {
-                        fontSize: "16px",
-                        color: "#344054",
-                        px: 2,
-                        py: 1.5,
-                      },
-                    },
-                  }}
-                  anchorOrigin={{
-                    vertical: "bottom",
-                    horizontal: "center",
-                  }}
-                  transformOrigin={{
-                    vertical: "top",
-                    horizontal: "right",
-                  }}
-                >
-                  <MenuItem
-                    onClick={() => {
-                      handleCloseMenu();
-                      setOpenBlockDialog(true);
-                    }}
-                  >
-                    Block User
-                  </MenuItem>
-                  <MenuItem onClick={handleCloseMenu}>Send Message</MenuItem>
-                  <MenuItem onClick={handleCloseMenu}>View Profile</MenuItem>
-                </Menu>
-              </>
-            ) : (
-              <>
-                <Box
-                  onClick={() => setOpenUnblockDialog(true)}
-                  sx={{
-                    cursor: "pointer",
-                    color: "#222222",
-                    borderRadius: "4px",
-                    px: 1.5,
-                    py: 0.5,
-                    fontSize: "12px",
-                    fontWeight: 500,
-                    border: "1px solid #EAECEE",
-                  }}
-                >
-                  Unblock
-                </Box>
-              </>
-            )}
-          </Box>
-        </TableCell>
+        
       </TableRow>
     </>
   );

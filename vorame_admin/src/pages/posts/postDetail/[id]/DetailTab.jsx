@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
+import PostApi from "services/api/post";
 import { FilterList, Search as SearchIcon } from "@mui/icons-material";
-import { useParams } from "react-router-dom";
-import Promotions from "./promotion/index";
-import Plans from "./plan/index";
-import AddPromotion from "./promotion/components/AddPromotion";
-import AddPlan from "./plan/components/AddPlan";
+import { useParams, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+
 import {
   Avatar,
   Typography,
@@ -17,73 +16,155 @@ import {
   Box,
   Tabs,
   Tab,
+  Paper,
+  IconButton,
+  InputBase,
 } from "@mui/material";
 import RemoveRedEyeOutlinedIcon from "@mui/icons-material/RemoveRedEyeOutlined";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import ChatOutlinedIcon from "@mui/icons-material/ChatOutlined";
 import ReportProblemOutlinedIcon from "@mui/icons-material/ReportProblemOutlined";
+import CommentsTable from "./CommentsTable";
+import LikesTable from "./LikesTable";
+import ReportsTable from "./ReportsTable";
+import Loader from "components/Loader";
+import Error from "components/Error";
 
-const tabOptions = ["Plan", "Promotions"];
+const tabOptions = ["All Comments", "All Likes", "All Reports"];
 
-const mockPosts = [
-  {
-    id: "1",
-    profileImage: "/avatar.jpg",
-    fullName: "Annette Black",
-    username: "@David Beckham",
-    text: `Wedges and pennants are visual representations of price movements on currency charts. Wedges typically indicate a potential reversal, with converging trend lines suggesting a weakening trend, while pennants often signal a brief consolidation before the prevailing trend resumes, aiding traders in identifying potential entry and exit points in the forex market.`,
-    totalimpressions: 2736,
-    totallikes: 63,
-    totalcomments: 63,
-    report: 2736,
-  },
-  {
-    id: "2",
-    profileImage: "/avatar.jpg",
-    fullName: "Annette Black",
-    username: "@David Beckham",
-    pollData: {
-      options: [
-        { label: "Option 1", percentage: 48, selected: false },
-        { label: "Option 2", percentage: 78, selected: true },
-        { label: "Option 3", percentage: 88, selected: false },
-      ],
-      totalVotes: "1,203",
-      timeLeft: "10 hours 4 minutes",
-    },
-    totalimpressions: 2736,
-    totallikes: 63,
-    totalcomments: 63,
-    report: 2736,
-  },
-];
-
-const DetailTab = ({ searchTerm, setSearchTerm }) => {
+const DetailTab = () => {
   const [selectedTab, setSelectedTab] = useState(0);
   const [anchorEl, setAnchorEl] = useState(null);
   const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedImageIdx, setSelectedImageIdx] = useState(0);
 
   const { id } = useParams();
+  const navigate = useNavigate();
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [isBlocking, setIsBlocking] = useState(false);
+  const [blockStatus, setBlockStatus] = useState(null);
 
   useEffect(() => {
-    const foundPost = mockPosts.find((post) => post.id === id);
-    setData(foundPost);
+    const fetchPost = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const response = await PostApi.getPostDetails(id);
+        const post = response?.data?.messages?.[0];
+        if (!post) {
+          setError("Post not found");
+          setData(null);
+        } else {
+          // Map backend post to UI structure
+          let pollData = undefined;
+          if (post.msgType === "poll") {
+            const totalVotes = post.totalVotes || 0;
+            pollData = {
+              options: (post.pollOptions || []).map((opt, idx) => {
+                const votes = post.votesPerOption && post.votesPerOption[idx]
+                  ? post.votesPerOption[idx].voteCount
+                  : 0;
+                const percentage = totalVotes > 0 ? Math.round((votes / totalVotes) * 100) : 0;
+                return {
+                  label: opt,
+                  percentage,
+                  selected: false,
+                };
+              }),
+              totalVotes,
+              timeLeft: "",
+            };
+          }
+          const mappedData = {
+            id: post._id,
+            profileImage: post.postedBy?.avatar || "/avatar.jpg",
+            fullName: post.postedBy?.name || "-",
+            username: post.postedBy?.email ? `@${post.postedBy.email.split("@")[0]}` : "",
+            text: post.message || post.pollDescription || "",
+            pollData,
+            totalimpressions: post.readBy?.length || 0,
+            totallikes: post.likes || 0,
+            totalcomments: post.comments || 0,
+            report: post.reportBy?.length || 0,
+            files: post.files || [],
+            title: post.title || "",
+            postedBy:post.postedBy,
+          };
+          setData(mappedData);
+          setBlockStatus(post.postedBy?.isBoardroomBlocked || false);
+          setSelectedImageIdx(0); // Reset selected image on new post
+        }
+      } catch (err) {
+        setError("Failed to fetch post");
+        setData(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchPost();
   }, [id]);
 
   const handleCloseMenu = () => setAnchorEl(null);
   const handleOpenMenu = (event) => setAnchorEl(event.currentTarget);
 
+  // Delete post handler
+  const handleDelete = async (event) => {
+    event?.preventDefault && event.preventDefault();
+    setIsDeleting(true);
+    try {
+      const response = await PostApi.deletePost(id);
+      if (response?.statusCode === 200) {
+        toast.success(response.message || "Post deleted successfully");
+        navigate(-1); // Go back to previous page
+      } else {
+        toast.error(response?.message || "Unable to delete post");
+      }
+    } catch (error) {
+      toast.error("Unable to delete post");
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
+  // Block/Unblock user handler
+  const handleBlockUser = async (event) => {
+    event?.preventDefault && event.preventDefault();
+    setIsBlocking(true);
+    try {
+      console.log(data)
+      const response = await PostApi.blockUser(data?.postedBy?._id);
+      if (response?.statusCode === 200) {
+        toast.success(response.message || (blockStatus ? "User unblocked successfully" : "User blocked successfully"));
+        setBlockStatus(!blockStatus); // Toggle local status
+        handleCloseMenu();
+      } else {
+        toast.error(response?.message || "Unable to update block status");
+      }
+    } catch (error) {
+      toast.error("Unable to update block status");
+    } finally {
+      setIsBlocking(false);
+    }
+  };
+
   const renderTabContent = () => {
     switch (selectedTab) {
       case 0:
-        return <Plans />;
+        return <CommentsTable searchTerm={searchTerm} />;
       case 1:
-        return <Promotions />;
+        return <LikesTable searchTerm={searchTerm} />;
+      case 2:
+        return <ReportsTable searchTerm={searchTerm} />;
       default:
         return null;
     }
   };
 
+  if (loading) return <Loader />;
+  if (error) return <Error error={error} />;
   if (!data) {
     return (
       <Box p={3}>
@@ -102,36 +183,88 @@ const DetailTab = ({ searchTerm, setSearchTerm }) => {
       </Typography>
       <Card
         sx={{
-          p: 0,
           borderRadius: 2,
           boxShadow: "none",
           maxWidth: "100%",
           margin: "auto",
           border: "1px solid #EAECEE",
           marginBottom: "16px",
-          display: "flex",
+          display: Array.isArray(data.files) && data.files.length > 0 && data.files[0].url ? "flex" : "block",
           width: "100%",
           overflow: "hidden", // important to prevent overflow
           p: 2,
-          gap: 2,
         }}
       >
-        {/* Left side image (full height) */}
+        {/* Image gallery: show if there are images */}
+        {Array.isArray(data.files) && data.files.length > 0 && data.files[0].url && (
+          <Box display="flex" flexDirection="row" alignItems="flex-start" mr={2}>
+            {/* Large image */}
+            <Box
+              component="img"
+              src={data.files[selectedImageIdx]?.url}
+              alt={data.files[selectedImageIdx]?.name || "Post related"}
+              sx={{
+                width: 304,
+                height: 304,
+                objectFit: "cover",
+                flexShrink: 0,
+                borderRadius: 2,
+                mb: 1,
+              }}
+            />
+            {/* Thumbnails (all, up to 4) */}
+            {data.files.length > 1 && (
+              <Box display="flex" flexDirection="column" gap={1} ml={2}>
+                {data.files.slice(0, 4).map((img, idx) => (
+                  <Box
+                    key={img._id || idx}
+                    component="img"
+                    src={img.url}
+                    alt={img.name || `post-img-${idx}`}
+                    onClick={() => setSelectedImageIdx(idx)}
+                    sx={{
+                      width: 64,
+                      height: 64,
+                      objectFit: "cover",
+                      borderRadius: 2,
+                      border: selectedImageIdx === idx ? "2px solid #1976d2" : "1px solid #EAECEE",
+                      cursor: selectedImageIdx === idx ? "default" : "pointer",
+                      mb: 1,
+                      opacity: selectedImageIdx === idx ? 1 : 0.8,
+                      transition: 'border 0.2s, opacity 0.2s',
+                    }}
+                  />
+                ))}
+              </Box>
+            )}
+          </Box>
+        )}
+        {/* Wrap image and content in a fragment to ensure valid JSX */}
+        <>
+          {/* Show image only if there is at least one file */}
+          {/* This block is now redundant if the gallery is always shown */}
+          {/* {Array.isArray(data.files) && data.files.length > 0 && data.files[0].url && (
         <Box
           component="img"
-          src="/images/post-sample.jpg" // <-- Replace with your actual image path
-          alt="Post related"
+              src={data.files[0].url}
+              alt={data.files[0].name || "Post related"}
           sx={{
             width: 266, // adjust as needed
             height: 266,
             objectFit: "cover",
             flexShrink: 0,
             borderRadius: 2,
+                mr: 2,
           }}
         />
-
+          )} */}
         {/* Right side content */}
-        <Box flex={1}>
+          <Box flex={1} p={1}
+           display={isPoll ? undefined : "flex"}
+           flexDirection={isPoll ? undefined : "column"}
+           justifyContent={isPoll ? undefined : "space-between"}
+           height={isPoll ? undefined : 280}
+          >
           {/* User Info */}
           <Box display="flex" justifyContent="space-between">
             <Box display="flex" alignItems="center" mb={2}>
@@ -147,7 +280,6 @@ const DetailTab = ({ searchTerm, setSearchTerm }) => {
                 </Typography>
               </Box>
             </Box>
-
             {/* More menu */}
             <Box>
               <Box display="flex" justifyContent="center">
@@ -164,13 +296,14 @@ const DetailTab = ({ searchTerm, setSearchTerm }) => {
                   open={Boolean(anchorEl)}
                   onClose={handleCloseMenu}
                   PaperProps={{
-                    elevation: 1,
+                    elevation: 0,
                     sx: {
                       borderRadius: "8px",
                       mt: 1,
                       minWidth: 158,
                       backgroundColor: "#fff",
-                      boxShadow: "0px 2px 8px rgba(0, 0, 0, 0.1)",
+                      boxShadow:
+                        'rgb(255, 255, 255) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px',
                       "& .MuiMenuItem-root": {
                         fontSize: "16px",
                         color: "#344054",
@@ -188,14 +321,16 @@ const DetailTab = ({ searchTerm, setSearchTerm }) => {
                     horizontal: "right",
                   }}
                 >
-                  <MenuItem onClick={handleCloseMenu}>Hide Post</MenuItem>
-                  <MenuItem onClick={handleCloseMenu}>Delete Post</MenuItem>
-                  <MenuItem onClick={handleCloseMenu}>Block This User</MenuItem>
+                    <MenuItem onClick={handleDelete} disabled={isDeleting}>
+                      Delete Post
+                    </MenuItem>
+                    <MenuItem onClick={handleBlockUser} disabled={isBlocking}>
+                      {blockStatus ? "Unblock This User" : "Block This User"}
+                    </MenuItem>
                 </Menu>
+                </Box>
               </Box>
             </Box>
-          </Box>
-
           {/* Content */}
           <Box mb={3}>
             {isPoll ? (
@@ -267,46 +402,88 @@ const DetailTab = ({ searchTerm, setSearchTerm }) => {
                 <Typography fontSize={13} color="gray" mt={1}>
                   {poll.totalVotes} Votes • {poll.timeLeft} left
                 </Typography>
+                  {/* Stats: poll case, render immediately after poll with vertical gap */}
+                  <Grid container spacing={1} gap={1} marginLeft="0px !important" marginRight="0px !important" mt={2}>
+                    <StatBox
+                      icon={<Box component="img" src="/icons/View.png" alt="impressions" width="20px" height="14px" />}
+                      label="Total Impressions"
+                      value={`${data.totalimpressions}`}
+                    />
+                    <StatBox
+                      icon={<Box component="img" src="/icons/Like.png" alt="likes" width="20px" height="17.83px" />}
+                      label="Total Likes"
+                      value={data.totallikes}
+                    />
+                    <StatBox
+                      icon={<Box component="img" src="/icons/comment.png" alt="comments" width="18px" height="18.46px" />}
+                      label="Total Comments"
+                      value={data.totalcomments}
+                    />
+                    <StatBox
+                      icon={<Box component="img" src="/icons/Report.png" alt="reports" width="20px" height="18px" />}
+                      label="Reports On Post"
+                      value={`${data.report}`}
+                    />
+                  </Grid>
               </>
             ) : (
-              <Typography fontSize={16} color="text.primary">
+                <>
+                  <Typography
+                    fontSize={16}
+                    color="text.primary"
+                    sx={{
+                      display: '-webkit-box',
+                      WebkitLineClamp: 3,
+                      WebkitBoxOrient: 'vertical',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      minHeight: '72px', // ensures 3 lines space even if short
+                      mb: 7,
+                    }}
+                  >
                 {data.text}
               </Typography>
-            )}
-          </Box>
-
-          {/* Stats */}
-          <Grid container spacing={1} >
+                  {/* Stats: non-poll, fix at bottom */}
+                  <Box mt="auto">
+          
+          <Grid container spacing={1} gap={1} marginLeft="0px !important" marginRight="0px !important">
             <StatBox
-              icon={<RemoveRedEyeOutlinedIcon />}
+              icon={<Box component="img" src="/icons/View.png" alt="impressions" width="20px" height="14px" />}
               label="Total Impressions"
-              value={`${data.totalimpressions}k`}
+                        value={`${data.totalimpressions}`}
             />
             <StatBox
-              icon={<FavoriteBorderIcon />}
+              icon={<Box component="img" src="/icons/Like.png" alt="likes" width="20px" height="17.83px" />}
               label="Total Likes"
               value={data.totallikes}
             />
             <StatBox
-              icon={<ChatOutlinedIcon />}
+              icon={<Box component="img" src="/icons/comment.png" alt="comments" width="18px" height="18.46px" />}
               label="Total Comments"
               value={data.totalcomments}
             />
             <StatBox
-              icon={<ReportProblemOutlinedIcon />}
+              icon={<Box component="img" src="/icons/Report.png" alt="reports" width="20px" height="18px" />}
               label="Reports On Post"
-              value={`${data.report}k`}
+                        value={`${data.report}`}
             />
           </Grid>
+        
         </Box>
+                </>
+              )}
+            </Box>
+          </Box>
+        </>
       </Card>
 
-      <Box display="flex" justifyContent="space-between" alignItems="center">
+      <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
         <Tabs
           value={selectedTab}
           onChange={(_, newValue) => setSelectedTab(newValue)}
           textColor="primary"
           TabIndicatorProps={{ style: { display: "none" } }}
+          sx={{ minHeight: 40 }}
         >
           {tabOptions.map((label, index) => (
             <Tab
@@ -327,7 +504,33 @@ const DetailTab = ({ searchTerm, setSearchTerm }) => {
             />
           ))}
         </Tabs>
-        {selectedTab === 0 ? <AddPlan /> : <AddPromotion />}
+        <Box display="flex" alignItems="center" gap={2}>
+          <Paper
+            component="form"
+            sx={{
+              p: "2px 8px",
+              display: "flex",
+              alignItems: "center",
+              width: 280,
+              borderRadius: "8px",
+              height: "40px !important",
+              backgroundColor: "#F4F5F6",
+              boxShadow: "none",
+            }}
+            onSubmit={e => e.preventDefault()}
+          >
+            <IconButton type="button" sx={{ p: 0.5 }}>
+              <SearchIcon fontSize="small" />
+            </IconButton>
+            <InputBase
+              sx={{ ml: 1, flex: 1, fontSize: "14px" }}
+              placeholder="Search"
+              value={searchTerm}
+              onChange={e => setSearchTerm(e.target.value)}
+              inputProps={{ "aria-label": "search" }}
+            />
+          </Paper>
+        </Box>
       </Box>
       <Box mt={3}>{renderTabContent()}</Box>
     </Box>
@@ -335,7 +538,7 @@ const DetailTab = ({ searchTerm, setSearchTerm }) => {
 };
 
 const StatBox = ({ icon, label, value }) => (
-  <Grid spacing={2} xs={6} sm={3} >
+  <Box spacing={2} xs={6} sm={3} width="24%" >
     <Box
       display="flex"
       flexDirection="column" // to align in columns
@@ -345,14 +548,17 @@ const StatBox = ({ icon, label, value }) => (
       borderRadius={2}
       paddingY={1}
       paddingX={2}
+      height={94}
     >
       {icon}
-      <Typography fontSize={12} color="gray">
-        {label}
-      </Typography>
-      <Typography fontWeight={600}>{value}</Typography>
+      <Box mt={1}> {/* Add vertical gap between icon and text */}
+        <Typography textColor="#51566C" fontSize={14} weight={500} color="gray" mb={0.5}>
+          {label}
+        </Typography>
+        <Typography fontSize={16} fontStyle="bold" fontWeight={700}>{value}</Typography>
+      </Box>
     </Box>
-  </Grid>
+  </Box>
 );
 
 export default DetailTab;

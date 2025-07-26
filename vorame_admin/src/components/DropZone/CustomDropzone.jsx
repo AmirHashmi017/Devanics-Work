@@ -14,9 +14,10 @@ import {
 const CustomDropZone = ({
   handleFileChange,
   type,
-  name
+  name,
+  files: propFiles = [],
 }) => {
-  const [files, setFiles] = useState([]);
+  const [files, setFiles] = useState(propFiles);
   const accept = type === 'video' ? { "video/*": [] } : type === 'image' || type === 'thumbnail' ? { "image/*": [] } : { "application/pdf": [] }
   const { getRootProps, getInputProps } = useDropzone({
     onDrop: (acceptedFiles) => {
@@ -28,9 +29,15 @@ const CustomDropZone = ({
     accept
   });
 
+  // Sync with propFiles if they change (e.g., on dialog open)
+  React.useEffect(() => {
+    setFiles(propFiles);
+  }, [propFiles]);
+
   const handleRemoveFile = (fileIndex) => {
     const updatedFiles = files.filter((_, i) => i !== fileIndex);
     setFiles(updatedFiles);
+    handleFileChange(updatedFiles);
   };
 
   const getDropzoneText = () => {
@@ -55,30 +62,34 @@ const CustomDropZone = ({
       <input name={name} {...getInputProps()} />
       <Box display='flex' justifyContent='center' gap={2}>
         {
-          files.map((file, i) => (
-            <Box position='relative'>
-              <ImagePreviewWrapper>
-                <Box position='absolute' zIndex={20} top={-12} right={-12}>
-                  <IconButton onClick={(e) => {
-                    e.stopPropagation();
-                    e.preventDefault();
-                    handleRemoveFile(i);
-                  }} sx={{ color: "red" }}>
-                    <Cancel />
-                  </IconButton>
-                </Box>
-                {file.type.includes("pdf") ? (
-                  <IconButtonWrapper>
-                    <PictureAsPdf style={{ fontSize: 100 }} />
-                  </IconButtonWrapper>
-                ) : file.type.includes('video') ? (
-                  <StyledVideo src={URL.createObjectURL(file)} controls />
-                ) : (
-                  <ImagePreview src={URL.createObjectURL(file)} alt="preview" />
-                )}
-              </ImagePreviewWrapper>
-            </Box>
-          ))
+          files.map((file, i) => {
+            const isUrl = !!file.url;
+            const previewUrl = isUrl ? file.url : URL.createObjectURL(file);
+            return (
+              <Box position='relative' key={i}>
+                <ImagePreviewWrapper>
+                  <Box position='absolute' zIndex={20} top={-12} right={-12}>
+                    <IconButton onClick={(e) => {
+                      e.stopPropagation();
+                      e.preventDefault();
+                      handleRemoveFile(i);
+                    }} sx={{ color: "red" }}>
+                      <Cancel />
+                    </IconButton>
+                  </Box>
+                  {file.type && file.type.includes("pdf") ? (
+                    <IconButtonWrapper>
+                      <PictureAsPdf style={{ fontSize: 100 }} />
+                    </IconButtonWrapper>
+                  ) : file.type && file.type.includes('video') ? (
+                    <StyledVideo src={previewUrl} controls />
+                  ) : (
+                    <ImagePreview src={previewUrl} alt="preview" />
+                  )}
+                </ImagePreviewWrapper>
+              </Box>
+            );
+          })
         }
       </Box>
 

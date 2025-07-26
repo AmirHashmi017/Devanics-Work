@@ -4,8 +4,7 @@ import JobsTable from "./components/Table";
 import { Box, IconButton, Pagination, Typography } from "@mui/material";
 import { ArrowBack, ArrowForward } from "@mui/icons-material";
 
-const Jobs = () => {
-  const [searchTerm, setSearchTerm] = useState("");
+const Jobs = ({ searchTerm, setSearchTerm }) => {
   const [limit] = useState(9);
   const [offset, setOffset] = useState(0);
   const [total, setTotal] = useState(0);

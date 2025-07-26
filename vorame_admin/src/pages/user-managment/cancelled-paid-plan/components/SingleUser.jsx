@@ -35,80 +35,29 @@ const SingleUser = (userData) => {
     createdAt,
     isActive,
     plan = {},
+    purchaseHistory={},
+
   } = userData || {};
 
   const { name = "-" } = plan || {};
-  const handleDelete = () => {
-    mutate(
-      { method: "patch", url: USER + `/${_id}`, data: { deleted: true } },
-      {
-        onSuccess: ({ message }) => {
-          handleSuccess(message);
-          setOpenDeleteModal(false);
-        },
-      }
-    );
-  };
-
-  const handleSuccess = (message) => {
-    toast.success(message);
-    fetchUserList();
-  };
-
-  const updateStatusHandler = (status) => {
-    mutate(
-      { method: "patch", url: USER + `/${_id}`, data: { isActive: status } },
-      {
-        onSuccess: ({ message }) => {
-          handleSuccess(message);
-          setOpenStatusModal(false);
-        },
-      }
-    );
-  };
-
-  const handleOpenMenu = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleCloseMenu = () => {
-    setAnchorEl(null);
-  };
-
-  const handleConfirmUnblock = () => {
-    setIsBlocked(false);
-    setOpenUnblockDialog(false);
-  };
+  const {startDate="-"}= purchaseHistory || {};
+  const {updatedAt="-"}= purchaseHistory || {};
+  const {reason="-"}= purchaseHistory || {};
 
   return (
     <>
-      <UpdateStatusDialog
-        open={openStatusModal}
-        onClose={() => setOpenStatusModal(false)}
-        onUpdate={updateStatusHandler}
-        isLoading={isLoading}
-        status={isActive}
-      />
-      <ConfirmDialog
-        title="Delete User ?"
-        dialogContext="Are you sure to delete user ?"
-        open={openDeleteModal}
-        isLoading={isLoading}
-        setOpen={setOpenDeleteModal}
-        onConfirm={handleDelete}
-      />
       <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
         <TableCell align="left">{firstName || "-"}</TableCell>
         <TableCell align="center">{lastName || "-"}</TableCell>
         <TableCell align="center">{email}</TableCell>
         <TableCell align="center">{name}</TableCell>
         <TableCell align="center">
-          {moment(createdAt).format("DD-MM-YYYY")}
+          {moment(startDate).format("DD-MM-YYYY")}
         </TableCell>
         <TableCell align="center">
-          {moment(createdAt).format("DD-MM-YYYY")}
+          {moment(updatedAt).format("DD-MM-YYYY")}
         </TableCell><TableCell align="center">
-          I find the subscription too expensive
+          {reason}
         </TableCell>
         <TableCell align="center">
           <Box width="100%" display="flex" justifyContent="center">
@@ -139,7 +88,6 @@ const SingleUser = (userData) => {
                 minWidth={4}
                 onClick={() => setOpenStatusModal(true)}
                 textTransform="capitalize"
-                className="cursor-pointer"
                 fontWeight={500}
               >
                 {isActive}
@@ -147,90 +95,7 @@ const SingleUser = (userData) => {
             </Box>
           </Box>
         </TableCell>
-        <TableCell align="center" sx={{ width: "120px", height: "63px" }}>
-          <Box display="flex" justifyContent="center">
-            {!isBlocked ? (
-              <>
-                <Box
-                  component="img"
-                  src="/icons/dots-vertical.svg"
-                  alt="options"
-                  height="20px"
-                  onClick={handleOpenMenu}
-                  sx={{ cursor: "pointer" }}
-                />
-                <Menu
-                  anchorEl={anchorEl}
-                  open={Boolean(anchorEl)}
-                  onClose={handleCloseMenu}
-                  PaperProps={{
-                    elevation: 1,
-                    sx: {
-                      borderRadius: "8px",
-                      mt: 1,
-                      minWidth: 158,
-                      backgroundColor: "#fff",
-                      boxShadow: "0px 2px 8px rgba(0, 0, 0, 0.1)",
-                      "& .MuiMenuItem-root": {
-                        fontSize: "16px",
-                        color: "#344054",
-                        px: 2,
-                        py: 1.5,
-                      },
-                    },
-                  }}
-                  anchorOrigin={{
-                    vertical: "bottom",
-                    horizontal: "center",
-                  }}
-                  transformOrigin={{
-                    vertical: "top",
-                    horizontal: "right",
-                  }}
-                >
-                  <MenuItem
-                    onClick={() => {
-                      setIsBlocked(true); // Update UI state only
-                      handleCloseMenu();
-                    }}
-                  >
-                    Block User
-                  </MenuItem>
-                  <MenuItem onClick={handleCloseMenu}>Send Message</MenuItem>
-                  <MenuItem onClick={handleCloseMenu}>View Profile</MenuItem>
-                </Menu>
-              </>
-            ) : (
-              <>
-                <Box
-                  onClick={() => setOpenUnblockDialog(true)}
-                  sx={{
-                    cursor: "pointer",
-                    color: "#222222",
-                    borderRadius: "4px",
-                    px: 1.5,
-                    py: 0.5,
-                    fontSize: "12px",
-                    fontWeight: 500,
-                    border: "1px solid #EAECEE",
-                  }}
-                >
-                  Unblock
-                </Box>
-                <ConfirmationModal
-                  open={openUnblockDialog}
-                  onClose={() => setOpenUnblockDialog(false)}
-                  onConfirm={handleConfirmUnblock}
-                  heading = "Unblock this User?"
-                  text="Are you sure you want to unblock this user? They will be able to access their account and interact with your platform again."
-                  imgSrc="/icons/person-icon.svg"
-                  cancelBtnText="Cancel"
-                  confirmBtnText="Unblock User"
-                />
-              </>
-            )}
-          </Box>
-        </TableCell>
+       
       </TableRow>
     </>
   );

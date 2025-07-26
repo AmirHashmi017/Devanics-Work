@@ -1,3 +1,4 @@
+import React from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -11,7 +12,8 @@ import useApiQuery from "hooks/useApiQuery";
 import { CAREER_LIST, CAREERS } from "services/constants";
 import Loader from "components/Loader";
 import NoData from "components/NoData";
-const JobsTable = () => {
+
+const JobsTable = ({ searchTerm }) => {
   const {
     isLoading,
     isError,
@@ -20,7 +22,9 @@ const JobsTable = () => {
   } = useApiQuery({ queryKey: [CAREERS], url: CAREER_LIST });
 
   const jobList = apiResponse?.data?.careers || [];
-
+  const filteredJobs = jobList.filter(job =>
+    job.title?.toLowerCase().includes((searchTerm || "").toLowerCase())
+  );
 
   if (isLoading) return <Loader />;
   if (isError)
@@ -41,6 +45,7 @@ const JobsTable = () => {
           border: "1px solid #ECECEC",
           borderRadius: "12px !important",
           overflowX: "auto",
+          boxShadow: "none !important"
         }}
       >
         <TableHead sx={{ bgcolor: "#F4F7FA" }}>
@@ -64,8 +69,8 @@ const JobsTable = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {jobList.length > 0 ? (
-            jobList.map((job) => (
+          {filteredJobs.length > 0 ? (
+            filteredJobs.map((job) => (
               <SingleJob key={job._id} {...job} />
             ))
           ) : (
@@ -80,6 +85,5 @@ const JobsTable = () => {
     </TableContainer>
   );
 };
-
 
 export default JobsTable;

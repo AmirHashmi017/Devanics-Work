@@ -13,9 +13,19 @@ import PracticeApi from "services/api/practice";
 const CreatePractice = ({ setOpen, practiceData = null, onSuccess }) => {
   const [loading, setLoading] = useState(false);
 
+  // Ensure file is always an array of objects with a url property for preview
+  const initialFiles = Array.isArray(practiceData?.file)
+    ? practiceData.file.map(f => ({
+        url: f.url,
+        type: f.type,
+        extension: f.extension,
+        name: f.name,
+      }))
+    : [];
+
   const initalValues = {
     description: practiceData?.description || "",
-    file: practiceData?.file?.[0] || [],
+    file: initialFiles,
   };
 
   const validationSchema = yup.object().shape({
@@ -31,14 +41,26 @@ const CreatePractice = ({ setOpen, practiceData = null, onSuccess }) => {
       try {
         setLoading(true);
         for (let i = 0; i < file.length; i++) {
-          const { type, name } = file[i];
-          const url = await new AwsS3(file[i], "images/").getS3URL();
-          fileData.push({
-            url,
-            type,
-            extension: type.split("/")[1],
-            name,
-          });
+          const f = file[i];
+          if (f.url && typeof f.url === "string" && !f.lastModified) {
+            // Already uploaded, just use as-is
+            fileData.push({
+              url: f.url,
+              type: f.type,
+              extension: f.extension,
+              name: f.name,
+            });
+          } else {
+            // New file, upload it
+            const { type, name } = f;
+            const url = await new AwsS3(f, "images/").getS3URL();
+            fileData.push({
+              url,
+              type,
+              extension: type.split("/")[1],
+              name,
+            });
+          }
         }
         const practiceValues = { file: fileData, description };
         let response;
@@ -78,7 +100,7 @@ const CreatePractice = ({ setOpen, practiceData = null, onSuccess }) => {
           <Grid container>
             <Grid item xs={12}>
               <CustomDropZone
-                file={practiceData?.file}
+                files={values.file}
                 type="image"
                 handleFileChange={(files) => setFieldValue("file", files)}
               />

@@ -45,7 +45,7 @@ const MiniTicketDetails = ({ id }) => {
 
     const ticketDetails = apiResponse ? apiResponse.data : {}
 
-    const { category = '', subject = '', createdAt = '', postedBy } = ticketDetails;
+    const { category = '', subject = '', createdAt = '', postedBy, message = '', files = [] } = ticketDetails;
 
     const { firstName = '', lastName = '' } = postedBy || {};
     return (
@@ -76,8 +76,8 @@ const MiniTicketDetails = ({ id }) => {
                                 <MenuItem value="">
                                     Select Status
                                 </MenuItem>
-                                <MenuItem value={1}>Active</MenuItem>
-                                <MenuItem value={0}>InActive</MenuItem>
+                                <MenuItem value={1}>Open</MenuItem>
+                                <MenuItem value={0}>Closed</MenuItem>
                             </Select>
                         </Box>
                     </FormControl>
@@ -92,7 +92,7 @@ const MiniTicketDetails = ({ id }) => {
                             variant="body2"
                             color="#606162"
                             fontSize="14px"
-                            fontWeight={600}
+                            fontWeight={500}
                         >
                             {category}
                         </Typography>
@@ -107,7 +107,7 @@ const MiniTicketDetails = ({ id }) => {
                             variant="body2"
                             color="#606162"
                             fontSize="14px"
-                            fontWeight={600}
+                            fontWeight={500}
                         >
                             {subject}
                         </Typography>
@@ -122,7 +122,7 @@ const MiniTicketDetails = ({ id }) => {
                             variant="body2"
                             color="#606162"
                             fontSize="14px"
-                            fontWeight={600}
+                            fontWeight={500}
                         >
                             {(!firstName && !lastName) ? 'N/A' : null} {firstName} {lastName}
                         </Typography>
@@ -137,10 +137,114 @@ const MiniTicketDetails = ({ id }) => {
                             variant="body2"
                             color="#606162"
                             fontSize="14px"
-                            fontWeight={600}
+                            fontWeight={500}
                         >
                             {moment(createdAt).format('LLL')}
                         </Typography>
+                    </Box>
+                </Box>
+                <Box>
+                    <Typography variant="body1" fontSize="10px" color="#858688">
+                        Message
+                    </Typography>
+                    <Box mt={1}>
+                        <Typography
+                            variant="body2"
+                            color="#222222"
+                            fontSize="12px"
+                            fontWeight={400}
+                        >
+                            {(!message || message==="") ? 'N/A' : null} {message}
+                        </Typography>
+                        {files && files.length > 0 && (
+                          <Box mt={2} display="flex" gap={2}>
+                            {files.slice(0, 4).map((file, idx) => {
+                              const isImage = file.type && file.type.startsWith('image/');
+                              const isPdf = file.type === 'application/pdf';
+                              
+                              return (
+                                <Box
+                                  key={file._id || idx}
+                                  sx={{
+                                    width: 100,
+                                    height: 100,
+                                    borderRadius: 2,
+                                    overflow: 'hidden',
+                                    background: '#F4F4F4',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    cursor: isImage ? 'default' : 'pointer',
+                                    '&:hover': {
+                                      opacity: isImage ? 1 : 0.8,
+                                    }
+                                  }}
+                                  onClick={!isImage ? () => window.open(file.url, '_blank') : undefined}
+                                >
+                                  {isImage ? (
+                                    <img
+                                      src={file.url}
+                                      alt={file.name || 'attachment'}
+                                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                    />
+                                  ) : (
+                                    <Box
+                                      sx={{
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        color: '#666',
+                                        fontSize: '12px',
+                                        textAlign: 'center',
+                                        p: 1,
+                                        height: '100%',
+                                        width: '100%'
+                                      }}
+                                    >
+                                      {isPdf ? (
+                                        <>
+                                          <Box
+                                            component="img"
+                                            src="/icons/file-yellow.svg"
+                                            sx={{ width: 48, height: 48, mb: 1 }}
+                                            alt="PDF"
+                                          />
+                                          <Typography variant="caption" sx={{ fontSize: '12px', fontWeight: 600, color: '#333', maxWidth: '100%', textAlign: 'center', lineHeight: 1.2, wordBreak: 'break-word' }}>
+                                            {file.name}
+                                          </Typography>
+                                        </>
+                                      ) : (
+                                        <>
+                                          <Box
+                                            component="img"
+                                            src="/icons/file.svg"
+                                            sx={{ width: 48, height: 48, mb: 1 }}
+                                            alt="Document"
+                                          />
+                                          <Typography variant="caption" sx={{ fontSize: '12px', fontWeight: 600, color: '#333', maxWidth: '100%', textAlign: 'center', lineHeight: 1.2, wordBreak: 'break-word' }}>
+                                            {file.name}
+                                          </Typography>
+                                        </>
+                                      )}
+                                    </Box>
+                                  )}
+                                </Box>
+                              );
+                            })}
+                            {Array.from({ length: 4 - files.length }).map((_, idx) => (
+                              <Box
+                                key={`empty-${idx}`}
+                                sx={{
+                                  width: 64,
+                                  height: 64,
+                                  borderRadius: 2,
+                                  background: '#F4F4F4',
+                                }}
+                              />
+                            ))}
+                          </Box>
+                        )}
                     </Box>
                 </Box>
             </Box>

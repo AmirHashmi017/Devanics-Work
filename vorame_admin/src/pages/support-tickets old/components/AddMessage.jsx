@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import { Box, CircularProgress, IconButton, InputAdornment, OutlinedInput } from '@mui/material'
 import { CustomButton } from 'components'
 import { useParams } from 'react-router-dom';
@@ -8,7 +8,7 @@ import useApiMutation from 'hooks/useApiMutation';
 import AwsS3 from 'utils/S3Intergration';
 import { toast } from 'react-toastify';
 
-const AddMessage = ({ status }) => {
+const AddMessage = ({ status, onMessageSent }) => {
     const { id } = useParams();
     const [value, setValue] = useState('');
     const [loading, setLoading] = useState(false);
@@ -57,10 +57,18 @@ const AddMessage = ({ status }) => {
                 fetchSingleChat();
                 setValue("");
                 setFiles([]);
+                if (onMessageSent) onMessageSent();
             },
         }
         );
     }
+
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            handleSubmit();
+        }
+    };
 
     // handler to filter image or pdf
     const filterFiles = ({ type }) => type.includes('image') || type.includes('pdf');
@@ -129,6 +137,7 @@ const AddMessage = ({ status }) => {
                     placeholder='Type your message'
                     value={value}
                     onChange={(e) => setValue(e.target.value)}
+                    onKeyDown={handleKeyDown}
                     type={'showPassword' ? 'text' : 'password'}
                     inputProps={{
                         style: {

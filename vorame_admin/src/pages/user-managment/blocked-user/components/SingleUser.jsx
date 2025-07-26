@@ -15,6 +15,7 @@ import { toast } from "react-toastify";
 import { USER } from "constants";
 import { ConfirmDialog } from "components";
 import ConfirmationModal from "../../../../components/Modal/ConfirmationModal";
+import PostApi from "services/api/post";
 
 const SingleUser = (userData) => {
   const [openStatusModal, setOpenStatusModal] = useState(false);
@@ -55,17 +56,7 @@ const SingleUser = (userData) => {
     fetchUserList();
   };
 
-  const updateStatusHandler = (status) => {
-    mutate(
-      { method: "patch", url: USER + `/${_id}`, data: { isActive: status } },
-      {
-        onSuccess: ({ message }) => {
-          handleSuccess(message);
-          setOpenStatusModal(false);
-        },
-      }
-    );
-  };
+
 
   const handleOpenMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -78,17 +69,42 @@ const SingleUser = (userData) => {
   const handleConfirmUnblock = () => {
     setIsBlocked(false);
     setOpenUnblockDialog(false);
+    handleBlockUser()
+    fetchUserList()
+  };
+
+  const handleBlockUser = async () => {
+    try {
+      const response = await PostApi.blockUser(_id);
+      if (response && response.message) {
+        toast.success(response.message);
+        setIsBlocked(true);
+        fetchUserList();
+      } else {
+        toast.error("Failed to block user");
+      }
+    } catch (error) {
+      toast.error("Failed to block user");
+    }
+  };
+
+  const handleUnblockUser = async () => {
+    try {
+      const response = await PostApi.blockUser(_id);
+      if (response && response.message) {
+        toast.success(response.message);
+        setIsBlocked(false);
+        fetchUserList();
+      } else {
+        toast.error("Failed to unblock user");
+      }
+    } catch (error) {
+      toast.error("Failed to unblock user");
+    }
   };
 
   return (
     <>
-      <UpdateStatusDialog
-        open={openStatusModal}
-        onClose={() => setOpenStatusModal(false)}
-        onUpdate={updateStatusHandler}
-        isLoading={isLoading}
-        status={isActive}
-      />
       <ConfirmDialog
         title="Delete User ?"
         dialogContext="Are you sure to delete user ?"
@@ -134,7 +150,6 @@ const SingleUser = (userData) => {
                 minWidth={4}
                 onClick={() => setOpenStatusModal(true)}
                 textTransform="capitalize"
-                className="cursor-pointer"
                 fontWeight={500}
               >
                 Block
@@ -176,15 +191,13 @@ const SingleUser = (userData) => {
                   }}
                 >
                   <MenuItem
-                    onClick={() => {
-                      setIsBlocked(true); // Update UI state only
+                    onClick={async () => {
+                      handleConfirmUnblock();
                       handleCloseMenu();
                     }}
                   >
                     Block User
                   </MenuItem>
-                  <MenuItem onClick={handleCloseMenu}>Send Message</MenuItem>
-                  <MenuItem onClick={handleCloseMenu}>View Profile</MenuItem>
                 </Menu>
               </>
               <>
@@ -206,7 +219,7 @@ const SingleUser = (userData) => {
                 <ConfirmationModal
                   open={openUnblockDialog}
                   onClose={() => setOpenUnblockDialog(false)}
-                  onConfirm={handleConfirmUnblock}
+                  onConfirm={handleUnblockUser}
                   heading = "Unblock this User?"
                   text="Are you sure you want to unblock this user? They will be able to access their account and interact with your platform again."
                   imgSrc="/icons/person-icon.svg"

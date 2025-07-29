@@ -3,11 +3,17 @@ import { Dialog, DialogContent, DialogTitle, IconButton } from "@mui/material";
 import { styled, useTheme } from "@mui/material/styles";
 import { Close } from "@mui/icons-material";
 
-const CustomDialog = ({ title, open, onClose, children }) => {
+const CustomDialog = ({ title, open, onClose, children, maxWidth }) => {
   const theme = useTheme();
 
   return (
-    <StyledDialog open={open} onClose={onClose}>
+    <Dialog open={open} onClose={onClose} maxWidth={false} PaperProps={{
+      sx: {
+        width: '100%',
+        maxWidth: maxWidth ? (typeof maxWidth === 'number' ? `${maxWidth}px` : maxWidth) : '650px',
+        borderRadius: '12px',
+      }
+    }}>
       <StyledDialogTitle sx={{
               fontWeight: 600,
               fontSize: 20,
@@ -27,7 +33,7 @@ const CustomDialog = ({ title, open, onClose, children }) => {
         </IconButton>
       </StyledDialogTitle>
       <DialogContent dividers>{children}</DialogContent>
-    </StyledDialog>
+    </Dialog>
   );
 };
 

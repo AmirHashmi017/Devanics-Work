@@ -1,5 +1,6 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState,useEffect } from "react";
 import { Box, Typography, IconButton } from "@mui/material";
+import { grey } from "@mui/material/colors";
 import { ConfirmDialog } from "components";
 import { useQueryClient } from "react-query";
 import TranquilityApi from "services/api/tranquility";
@@ -8,11 +9,11 @@ import CustomDialog from "components/Modal";
 import CreateTranquility from "./CreateTap";
 import CustomDescriptionParser from "components/DescriptionParser";
 import FixedBox from "components/FixedBox";
-import { StyledCard } from "theme/styles";
 import { StyledCardMedia, StyledVideo, StyledMediaIcon } from "../../../content-manager/clips/style";
 
 const CARD_HEIGHT = 442;
 const CARD_WIDTH = 300;
+
 
 const SingleTranquility = (tranquilityData) => {
   const { _id, title, description, video, thumbnail } = tranquilityData;
@@ -50,8 +51,29 @@ const SingleTranquility = (tranquilityData) => {
     }
   };
 
+  useEffect(() => {
+  if (videoRef.current && video && video.length > 0) {
+    videoRef.current.load(); // This forces the video to reload its source
+  }
+}, [video]);
+
   return (
-    <StyledCard sx={{ height: `${CARD_HEIGHT}px`, width: `${CARD_WIDTH}px`, margin: 'auto', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+    <Box
+      sx={{
+        height: `${CARD_HEIGHT}px`,
+        width: `${CARD_WIDTH}px`,
+        margin: 'auto',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        borderRadius: "12px",
+        py: "12px",
+        px: 2,
+        border: 1,
+        borderColor: grey[200],
+        bgcolor: "white"
+      }}
+    >
       <ConfirmDialog
         title="Delete Tranquility?"
         dialogContext="Are you sure to delete this tranquility?"
@@ -63,6 +85,7 @@ const SingleTranquility = (tranquilityData) => {
         title="Update Tranquility"
         open={openUpdateModal}
         onClose={() => setOpenUpdateModal(false)}
+        maxWidth="md"
       >
         <CreateTranquility tranquilityData={tranquilityData} setOpen={setOpenUpdateModal} />
       </CustomDialog>
@@ -104,7 +127,7 @@ const SingleTranquility = (tranquilityData) => {
           </Box>
         </Box>
       </Box>
-    </StyledCard>
+    </Box>
   );
 };
 

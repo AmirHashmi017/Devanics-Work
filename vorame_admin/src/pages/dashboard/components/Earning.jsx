@@ -71,6 +71,9 @@ const Earning = ({ duration, totalUsers, paidUsers, freeUsers }) => {
     return <Loader />;
   }
 
+  // Duration label
+  const durationLabel = duration === 'month' ? 'Last month' : 'Last year';
+
   return (
     <Box
       sx={{
@@ -111,9 +114,14 @@ const Earning = ({ duration, totalUsers, paidUsers, freeUsers }) => {
             justifyContent="space-between"
             mb={2}
           >
-            <Typography variant="subtitle1" fontWeight={600} color="#1e293b">
-              Users
-            </Typography>
+            <Box>
+              <Typography variant="subtitle1" fontWeight={600} color="#1e293b">
+                Users
+              </Typography>
+              <Typography variant="body2" color="#858688">
+                {durationLabel}
+              </Typography>
+            </Box>
 
             {/* User Type Filter */}
 
@@ -221,14 +229,19 @@ const Earning = ({ duration, totalUsers, paidUsers, freeUsers }) => {
           }}
         >
           {/* Header */}
-          <Typography
-            variant="subtitle1"
-            fontWeight={600}
-            color="#1a202c"
-            mb={3}
-          >
-            Total Earning
-          </Typography>
+          <Box>
+            <Typography
+              variant="subtitle1"
+              fontWeight={600}
+              color="#1a202c"
+              mb={1}
+            >
+              Total Earning
+            </Typography>
+            <Typography variant="body2" color="#858688" mb={3}>
+              {durationLabel}
+            </Typography>
+          </Box>
 
           {/* Radial Chart Container */}
           <Box

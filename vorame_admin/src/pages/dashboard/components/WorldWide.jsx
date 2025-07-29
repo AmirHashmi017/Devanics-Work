@@ -1,34 +1,49 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Box,
   Button,
   Divider,
-  Grid,
   LinearProgress,
   Typography,
-  Select,
-  MenuItem,
-  FormControl,
 } from "@mui/material";
 
-const WorldWide = () => {
-  const countriesData = [
-    { name: "America", percent: 20, color: "#5655D7" },
-    { name: "Netherlands", percent: 25, color: "#00997E" },
-    { name: "France", percent: 30, color: "#FF414B" },
-    { name: "Spain", percent: 35, color: "#FFAE41" },
-    { name: "India", percent: 45, color: "#4ABDE8" },
-    { name: "Indonesia", percent: 65, color: "#7C8091" },
-    { name: "Romania", percent: 85, color: "#465762" },
+const WorldWide = ({ statsData, duration }) => {
+  // Extract data from API response
+  const totalUsers = statsData?.data?.totalUsers || 0;
+  const countryStats = statsData?.data?.countryStats || [];
+
+  // Colors for different countries
+  const colors = [
+    "#5655D7", "#00997E", "#FF414B", "#FFAE41", "#4ABDE8", 
+    "#7C8091", "#465762", "#A8ABB5", "#51566C", "#3A4856"
   ];
 
-  const worldwideCountriesData = [
-    { name: "United Kingdom", count: "200", color: "#A8ABB5" },
-    { name: "United States", count: "200", color: "#7C8091" },
-    { name: "China", count: "200", color: "#51566C" },
-    { name: "France", count: "200", color: "#3A4856" },
-    { name: "Spain", count: "200", color: "#222222" },
-  ];
+  // Sort countries by total users (descending)
+  const sortedCountries = countryStats
+    .slice() // avoid mutating original
+    .sort((a, b) => b.totalUsers - a.totalUsers);
+
+  // Calculate percentages for each country
+  const countriesWithPercentages = sortedCountries.map((country, index) => {
+    const percentage = totalUsers > 0 ? Math.round((country.totalUsers / totalUsers) * 100) : 0;
+    return {
+      ...country,
+      percent: percentage,
+      color: colors[index % colors.length]
+    };
+  });
+
+  // State for load more
+  const [showAll, setShowAll] = useState(false);
+  const top7 = countriesWithPercentages.slice(0, 7);
+  const rest = countriesWithPercentages.slice(7);
+  const countriesToShow = showAll ? countriesWithPercentages : top7;
+
+  // Take top 5 for the map section
+  const top5Countries = countriesWithPercentages.slice(0, 5);
+
+  // Duration label
+  const durationLabel = duration === 'month' ? 'Last month' : 'Last year';
 
   return (
     <Box
@@ -63,13 +78,18 @@ const WorldWide = () => {
             height: "full",
           }}
         >
-          <Typography
-            variant="h5"
-            fontWeight={600}
-            sx={{ mb: 3, color: "#2D3436" }}
-          >
-            Users
-          </Typography>
+          <Box display="flex" alignItems="center" justifyContent="space-between" mb={3}>
+            <Typography
+              variant="h5"
+              fontWeight={600}
+              sx={{ color: "#2D3436" }}
+            >
+              Users
+            </Typography>
+            <Typography variant="body2" color="#858688">
+              {durationLabel}
+            </Typography>
+          </Box>
 
           {/* Country Stats */}
           <Box
@@ -82,7 +102,7 @@ const WorldWide = () => {
               gap: 2,
             }}
           >
-            {worldwideCountriesData.map(({ name, count, color }, i) => (
+            {top5Countries.map(({ countryName, totalUsers: countryUsers, color }, i) => (
               <Box
                 key={i}
                 sx={{
@@ -112,7 +132,7 @@ const WorldWide = () => {
                     variant="body2"
                     sx={{ color: "#606162", fontSize: "13px" }}
                   >
-                    {name}
+                    {countryName}
                   </Typography>
                 </Box>
                 <Typography
@@ -123,7 +143,7 @@ const WorldWide = () => {
                     color: "#606162",
                   }}
                 >
-                  {count}
+                  {countryUsers}
                 </Typography>
               </Box>
             ))}
@@ -178,15 +198,18 @@ const WorldWide = () => {
               alignItems: "center",
             }}
           >
-            <Typography  fontWeight={500} sx={{ color: "#2D3436", fontSize:"20px"}}>
+            <Typography fontWeight={500} sx={{ color: "#2D3436", fontSize: "20px" }}>
               Users from Countries
+            </Typography>
+            <Typography variant="body2" color="#858688">
+              {durationLabel}
             </Typography>
           </Box>
 
           <Divider sx={{ mb: 3, backgroundColor: "1px solid #EAECEE" }} />
 
           {/* Countries List */}
-          {countriesData.map(({ name, percent, color }, i) => (
+          {countriesToShow.map(({ countryName, percent, color, totalUsers: countryUsers }, i) => (
             <Box key={i} sx={{ mb: 3 }}>
               <Box
                 sx={{
@@ -201,7 +224,7 @@ const WorldWide = () => {
                   fontWeight={500}
                   sx={{ color: "#2D3436" }}
                 >
-                  {name}
+                  {countryName}
                 </Typography>
                 <Button
                   size="small"
@@ -235,6 +258,24 @@ const WorldWide = () => {
               />
             </Box>
           ))}
+
+          {/* Load More Button */}
+          {rest.length > 0 && !showAll && (
+            <Box textAlign="center" mt={2}>
+              <Button variant="outlined" onClick={() => setShowAll(true)}>
+                Load More
+              </Button>
+            </Box>
+          )}
+          {rest.length > 0 && showAll && (
+            <Box textAlign="center" mt={2}>
+              <Button variant="outlined" onClick={() => setShowAll(false)}>
+                Show Less
+              </Button>
+            </Box>
+          )}
+
+          
         </Box>
       </Box>
     </Box>

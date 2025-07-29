@@ -4,10 +4,10 @@ import LinearProgress from "@mui/material/LinearProgress";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 
-const LinearProgressWithLabel = (props) => {
+const LinearProgressWithLabel = ({ label = "File is uploading", ...props }) => {
   return (
     <Box sx={{ width: "100%" }}>
-      <Typography sx={{ mb: 1 }}>File is uploading</Typography>{" "}
+      <Typography sx={{ mb: 1 }}>{label}</Typography>{" "}
       <LinearProgress variant="determinate" {...props} />
       <Typography
         variant="body2"

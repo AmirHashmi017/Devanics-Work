@@ -14,7 +14,13 @@ const Headbar = ({ searchTerm, setSearchTerm }) => {
 
   return (
     <>
-      <CustomDialog open={open} onClose={() => setOpen(false)} title='Add Tranquility'>
+      <CustomDialog 
+        open={open} 
+        onClose={() => setOpen(false)} 
+        title='Add Tranquility'
+        maxWidth="md"
+        fullWidth={true}
+      >
         <CreateTap setOpen={setOpen} />
       </CustomDialog>
       <Box

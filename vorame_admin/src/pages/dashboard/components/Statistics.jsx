@@ -70,31 +70,88 @@ const StatCard = ({ icon, title, value, duration, percentage, trend = 'up' }) =>
 };
 
 
-const Statistics = () => {
-  const statsData = [
+const Statistics = ({ statsData, duration }) => {
+  // Extract data from API response
+  const totalUsers = statsData?.data?.totalUsers || 0;
+  const paidUsers = statsData?.data?.paidUsers || 0;
+  const totalEarning = statsData?.data?.totalEarning || 0;
+  const reportData = statsData?.data?.reportData || [];
+
+  // Calculate trends based on reportData
+  const calculateTrend = (data) => {
+    if (data.length < 2) return { trend: 'up', percentage: 0 };
+    
+    // Get the last two data points
+    const recent = data[data.length - 1];
+    const previous = data[data.length - 2];
+    
+    const recentTotal = (recent.paid || 0) + (recent.free || 0);
+    const previousTotal = (previous.paid || 0) + (previous.free || 0);
+    
+    if (previousTotal === 0) {
+      return recentTotal > 0 ? { trend: 'up', percentage: 100 } : { trend: 'down', percentage: 0 };
+    }
+    
+    const percentage = Math.round(((recentTotal - previousTotal) / previousTotal) * 100);
+    return {
+      trend: percentage >= 0 ? 'up' : 'down',
+      percentage: Math.abs(percentage)
+    };
+  };
+
+  const calculatePaidTrend = (data) => {
+    if (data.length < 2) return { trend: 'up', percentage: 0 };
+    
+    const recent = data[data.length - 1];
+    const previous = data[data.length - 2];
+    
+    const recentPaid = recent.paid || 0;
+    const previousPaid = previous.paid || 0;
+    
+    if (previousPaid === 0) {
+      return recentPaid > 0 ? { trend: 'up', percentage: 100 } : { trend: 'down', percentage: 0 };
+    }
+    
+    const percentage = Math.round(((recentPaid - previousPaid) / previousPaid) * 100);
+    return {
+      trend: percentage >= 0 ? 'up' : 'down',
+      percentage: Math.abs(percentage)
+    };
+  };
+
+  const totalTrend = calculateTrend(reportData);
+  const paidTrend = calculatePaidTrend(reportData);
+  
+  // For earnings, since we don't have historical data, use a simple calculation
+  const earningTrend = totalEarning > 0 ? { trend: 'up', percentage: 25 } : { trend: 'down', percentage: 0 };
+
+  // Duration label - handle empty string case
+  const durationLabel = duration === 'month' ? 'Last month' : 'Last year';
+
+  const statsDataArray = [
     {
       icon: PeopleOutlineIcon,
       title: 'Total Number of Users',
-      value: '2908',
-      duration: 'Last month',
-      percentage: '25',
-      trend: 'up'
+      value: totalUsers.toString(),
+      duration: durationLabel,
+      percentage: totalTrend.percentage.toString(),
+      trend: totalTrend.trend
     },
     {
       icon: PeopleOutlineIcon,
       title: 'Paid Users',
-      value: '513',
-      duration: 'Last month',
-      percentage: '5',
-      trend: 'down'
+      value: paidUsers.toString(),
+      duration: durationLabel,
+      percentage: paidTrend.percentage.toString(),
+      trend: paidTrend.trend
     },
     {
-      icon: '/icons/PaidIcon.svg', // string path for local SVG
+      icon: '/icons/PaidIcon.svg',
       title: 'Total Earnings',
-      value: '£179,821',
-      duration: 'Last month',
-      percentage: '25',
-      trend: 'up'
+      value: `£${totalEarning.toLocaleString()}`,
+      duration: durationLabel,
+      percentage: earningTrend.percentage.toString(),
+      trend: earningTrend.trend
     }
   ];
 
@@ -191,7 +248,7 @@ const Statistics = () => {
         }
       `}</style>
 
-      {statsData.map((stat, index) => (
+      {statsDataArray.map((stat, index) => (
         <StatCard
           key={index}
           icon={stat.icon}

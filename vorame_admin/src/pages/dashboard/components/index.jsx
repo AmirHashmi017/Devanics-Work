@@ -14,7 +14,7 @@ const DashboardComponents = ({ apiResponse, duration }) => {
         <Box>
             <Statistics duration={duration} statsData={apiResponse} />
             <Earning duration={duration} totalUsers={totalUsers} paidUsers={paidUsers} freeUsers={freeUsers} />
-            <WorldWide duration={duration} />
+            <WorldWide duration={duration} statsData={apiResponse} />
         </Box>
     )
 }

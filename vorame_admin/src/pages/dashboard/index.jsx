@@ -57,7 +57,7 @@ const StyledMenuItem = styled(MenuItem)(({ theme }) => ({
 }));
 
 const Dashboard = () => {
-    const [duration, setDuration] = useState('');
+    const [duration, setDuration] = useState('month'); // Set default to 'month'
 
     const {
         isLoading,

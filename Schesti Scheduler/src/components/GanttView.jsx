@@ -156,6 +156,8 @@ const GanttChart = ({ project }) => {
   const [isSaving, setIsSaving] = useState(false);
   const isInitializedRef = useRef(false);
   const saveTimeoutRef = useRef(null);
+  const actualLayerIdRef = useRef(null);
+  const plannedLayerIdRef = useRef(null);
 
   const zoomLevels = {
     hour: { unit: "hour", format: "%H:%i", min_column_width: 60 },
@@ -317,6 +319,67 @@ const GanttChart = ({ project }) => {
 
     gantt.init(ganttContainer.current);
     
+    // Inject styles for Primavera-like visualization (once)
+    const existing = document.querySelector("style[data-gantt-primavera]");
+    if (!existing) {
+      const style = document.createElement("style");
+      style.setAttribute("data-gantt-primavera", "true");
+      style.textContent = `
+        .actual-dates-bar {
+          position: absolute;
+          background: rgba(255, 77, 79, 0.35);
+          border: 2px solid #ff4d4f;
+          border-radius: 2px;
+          pointer-events: none;
+          z-index: 2;
+        }
+        .planned-dates-bar {
+          position: absolute;
+          height: 4px;
+          background: #595959;
+          border-radius: 2px;
+          pointer-events: none;
+          z-index: 1;
+        }
+      `;
+      document.head.appendChild(style);
+    }
+
+    // Add task layers for baseline (planned) and actual bars
+    const drawPlannedLayer = function(task) {
+      if (!task.start_date || !task.end_date) return false;
+      const sizes = gantt.getTaskPosition(task, task.start_date, task.end_date);
+      if (!sizes || sizes.width <= 0) return false;
+      const el = document.createElement('div');
+      el.className = 'planned-dates-bar';
+      el.style.left = sizes.left + 'px';
+      el.style.width = sizes.width + 'px';
+      // place thin baseline at bottom of the task row
+      const bottomOffset = 6; // px from bottom of row
+      el.style.top = (sizes.top + gantt.config.task_height - bottomOffset) + 'px';
+      return el;
+    };
+
+    const drawActualLayer = function(task) {
+      const start = task.actualStart ? new Date(task.actualStart) : task.start_date;
+      const end = task.actualFinish ? new Date(task.actualFinish) : task.end_date;
+      if (!start || !end) return false;
+      const sizes = gantt.getTaskPosition(task, start, end);
+      if (!sizes || sizes.width <= 0) return false;
+      const el = document.createElement('div');
+      el.className = 'actual-dates-bar';
+      el.style.left = sizes.left + 'px';
+      el.style.width = sizes.width + 'px';
+      // inset inside task row
+      const verticalPadding = 2;
+      el.style.top = (sizes.top + verticalPadding) + 'px';
+      el.style.height = (gantt.config.task_height - verticalPadding * 2) + 'px';
+      return el;
+    };
+
+    plannedLayerIdRef.current = gantt.addTaskLayer(drawPlannedLayer);
+    actualLayerIdRef.current = gantt.addTaskLayer(drawActualLayer);
+    
     // Ensure proper sizing and prevent overflow
     gantt.config.autosize = "y";
     gantt.config.fit_tasks = true;
@@ -337,6 +400,16 @@ const GanttChart = ({ project }) => {
       if (saveTimeoutRef.current) {
         clearTimeout(saveTimeoutRef.current);
       }
+      if (plannedLayerIdRef.current) {
+        gantt.removeTaskLayer(plannedLayerIdRef.current);
+        plannedLayerIdRef.current = null;
+      }
+      if (actualLayerIdRef.current) {
+        gantt.removeTaskLayer(actualLayerIdRef.current);
+        actualLayerIdRef.current = null;
+      }
+      const styleTag = document.querySelector("style[data-gantt-primavera]");
+      if (styleTag) styleTag.remove();
     };
   }, []);
 

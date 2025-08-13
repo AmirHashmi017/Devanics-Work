@@ -26,10 +26,6 @@ const Plan = (planData) => {
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [openUpdateModal, setOpenUpdateModal] = useState(false);
   const [openStatusModal, setOpenStatusModal] = useState(false);
-  const [trashIconIndex, setTrashIconIndex] = useState(0);
-  const [editIconIndex, setEditIconIndex] = useState(0);
-  const editIcon = ["/icons/edit.svg", "/icons/edit-01.svg"];
-  const trashIcon = ["/icons/trash.svg", "/icons/trash-01.svg"];
   const { mutate, isLoading } = useApiMutation();
 
   const fetchPlanList = () =>
@@ -114,25 +110,12 @@ const Plan = (planData) => {
         gap={3}
         p={3}
         position="relative"
-        borderRadius="10px"
+        borderRadius="12px"
         bgcolor="white"
-        boxShadow="0px 0px 34px 0px #2632381F"
+        border={1}
+        borderColor="grey.200"
         height="100%"
-        onMouseOver={() => {
-          setTrashIconIndex(1);
-          setEditIconIndex(1);
-        }}
-        onMouseLeave={() => {
-          setTrashIconIndex(0);
-          setEditIconIndex(0);
-        }}
-        sx={{
-          ":hover": {
-            bgcolor: "#222222",
-            color: "white",
-            cursor: "pointer",
-          },
-        }}
+
       >
         <Typography variant="h6" fontWeight={500} fontSize="20px">
           {name}
@@ -171,7 +154,7 @@ const Plan = (planData) => {
               height="20px"
               width="20px"
               color="red"
-              src={editIcon[editIconIndex]}
+              src="/icons/edit.svg"
               onClick={() => setOpenUpdateModal(true)}
               alt="edit"
             />
@@ -180,7 +163,7 @@ const Plan = (planData) => {
               height="20px"
               width="20px"
               onClick={() => setOpenDeleteModal(true)}
-              src={trashIcon[trashIconIndex]}
+              src="/icons/trash.svg"
               alt="trash"
             />
           </Box>

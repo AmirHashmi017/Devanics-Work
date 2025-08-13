@@ -79,6 +79,7 @@ const SinglePromoRow = (promoData) => {
             anchorEl={anchorEl}
             open={openMenu}
             onClose={handleMenuClose}
+            disableScrollLock
             anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
             transformOrigin={{ vertical: 'top', horizontal: 'center' }}
           >

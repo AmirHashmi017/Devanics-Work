@@ -24,7 +24,7 @@ const JobDetails = () => {
 
     return (
         <div>
-            <Typography variant="body1" fontWeight={600} fontSize={24}>
+            <Typography variant="body1" fontWeight={600} fontSize={24} sx={{ mt: 3 }}> {/* 24px spacing from header */}
                 Job Details
             </Typography>
             {/* Job Detail Description */}

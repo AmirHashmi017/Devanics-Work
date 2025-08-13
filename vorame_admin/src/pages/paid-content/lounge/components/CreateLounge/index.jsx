@@ -283,6 +283,7 @@ const formik = useFormik({
                 setPreview={setImagePreview}
                 element={loungeFileElement}
                 fieldName={loungeFileElement.fieldName}
+                disabled={imageProgress > 0 && imageProgress < 100}
               />
             </Grid>
           </Grid>

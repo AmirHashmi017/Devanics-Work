@@ -148,12 +148,7 @@ const SingleEvent = (eventData) => {
           display: 'flex',
           flexDirection: 'column',
           position: 'relative',
-          border: '1px solid #E5E7EB',
-          transition: 'all 0.2s ease-in-out',
-          '&:hover': {
-            boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.15)',
-            transform: 'translateY(-2px)'
-          }
+          border: '1px solid #E5E7EB'
         }}
         onClick={handleCardClick}
       >

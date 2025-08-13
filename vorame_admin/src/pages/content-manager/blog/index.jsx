@@ -243,7 +243,7 @@ const Blogs = () => {
         <Box
         
           key={index}
-          flexBasis={{ xs: "100%", md: "33.5%" }}
+          flexBasis={{ xs: "100%", sm: "48%", md: "24%" }}
           borderRadius="12px"
           py="12px"
           px={2}

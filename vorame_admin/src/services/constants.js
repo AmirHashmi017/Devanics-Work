@@ -104,7 +104,7 @@ export const GET_CAREER = `${CAREER}/`;
 export const CAREER_APPLICANT = `${CAREER}/applicant/`;
 export const CAREER_APPLICANTS = `${CAREER}/applicants/`;
 export const UPDATE_CAREER_STATUS = `${CAREER}/status`;
-export const DELETE_CAREER = `${CAREER}/delete`;
+export const DELETE_CAREER = `${CAREER}`;
 
 // Support
 
@@ -140,6 +140,7 @@ export const DASHBOARD_EARNING_REPORT = `${DASHBOARD}/earning-report`;
 export const GET_TRANQUILITIES = `${TRANQUILITY}/list`;
 export const CREATE_TRANQUILITY = `${TRANQUILITY}/create`;
 export const UPDATE_TRANQUILITY = `${TRANQUILITY}/update`;
+export const UPDATE_TRANQUILITY_STATUS = `${TRANQUILITY}/update-status`;
 export const DELETE_TRANQUILITY = `${TRANQUILITY}/delete`;
 export const GET_ONE_TRANQUILITY = `${TRANQUILITY}/list`;
 

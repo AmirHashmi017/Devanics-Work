@@ -2,6 +2,7 @@ import api from "../../utils/axios";
 import {
   CREATE_TRANQUILITY,
   UPDATE_TRANQUILITY,
+  UPDATE_TRANQUILITY_STATUS,
   DELETE_TRANQUILITY,
   GET_TRANQUILITIES,
   GET_ONE_TRANQUILITY,
@@ -64,6 +65,16 @@ class TranquilityApi {
   async deleteTranquility(id) {
     try {
       const response = await api.delete(`${DELETE_TRANQUILITY}/${id}`);
+      return response.data;
+    } catch (error) {
+      return error.response.data;
+    }
+  }
+
+  // Update tranquility status
+  async updateTranquilityStatus(body) {
+    try {
+      const response = await api.post(UPDATE_TRANQUILITY_STATUS, body);
       return response.data;
     } catch (error) {
       return error.response.data;

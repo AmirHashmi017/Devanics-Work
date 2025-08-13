@@ -103,6 +103,7 @@ const CreatePractice = ({ setOpen, practiceData = null, onSuccess }) => {
                 files={values.file}
                 type="image"
                 handleFileChange={(files) => setFieldValue("file", files)}
+                disabled={loading}
               />
             </Grid>
           </Grid>

@@ -41,6 +41,7 @@ const DummyNav = () => {
                     anchorEl={menu === "managerContent" ? anchorEl : null}
                     open={menu === "managerContent"}
                     onClose={handleMenuClose}
+                    disableScrollLock
                 >
                     <MenuItem onClick={handleMenuClose}>Content 1</MenuItem>
                     <MenuItem onClick={handleMenuClose}>Content 2</MenuItem>
@@ -58,6 +59,7 @@ const DummyNav = () => {
                     anchorEl={menu === "manageUser" ? anchorEl : null}
                     open={menu === "manageUser"}
                     onClose={handleMenuClose}
+                    disableScrollLock
                 >
                     <MenuItem onClick={handleMenuClose}>User 1</MenuItem>
                     <MenuItem onClick={handleMenuClose}>User 2</MenuItem>
@@ -75,6 +77,7 @@ const DummyNav = () => {
                     anchorEl={menu === "payments" ? anchorEl : null}
                     open={menu === "payments"}
                     onClose={handleMenuClose}
+                    disableScrollLock
                 >
                     <MenuItem onClick={handleMenuClose}>Payment 1</MenuItem>
                     <MenuItem onClick={handleMenuClose}>Payment 2</MenuItem>

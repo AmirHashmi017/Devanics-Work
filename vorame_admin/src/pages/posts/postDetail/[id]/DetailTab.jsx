@@ -295,6 +295,7 @@ const DetailTab = () => {
                   anchorEl={anchorEl}
                   open={Boolean(anchorEl)}
                   onClose={handleCloseMenu}
+                  disableScrollLock
                   PaperProps={{
                     elevation: 0,
                     sx: {

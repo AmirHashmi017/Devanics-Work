@@ -24,19 +24,23 @@ const CustomDatePicker = ({
   return (
     <Box width={1}>
       <StyledLabel htmlFor={name} id={id || name}>{label}</StyledLabel>
-      <Field name="lastName">
+      <Field name={name}>
         {({
           field,
           form: { setFieldValue },
           meta,
         }) => {
           const hasError = meta.touched && meta.error;
+          const fieldValue = field.value ? dayjs(field.value) : null;
+          
           return (
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DatePicker
-                value={value ? dayjs(value) : null}
-                {...field}
-                onChange={(value) => setFieldValue(name, value)}
+                value={fieldValue}
+                onChange={(value) => {
+                  const dateString = value ? value.format('YYYY-MM-DD') : '';
+                  setFieldValue(name, dateString);
+                }}
                 slotProps={{
                   textField: {
                     name,
@@ -44,6 +48,7 @@ const CustomDatePicker = ({
                     variant,
                     fullWidth: true,
                     placeholder: "dd/mm/yyyy",
+                    required: true,
                     InputProps: {
                       sx: { borderRadius: 1, mt: 1 },
                       error: hasError

@@ -61,6 +61,9 @@ const JobsTable = ({ searchTerm }) => {
               End Date
             </TableCell>
             <TableCell align="center" sx={{ fontWeight: 400, p: 1.3 }}>
+              Status
+            </TableCell>
+            <TableCell align="center" sx={{ fontWeight: 400, p: 1.3 }}>
               Total Applicants
             </TableCell>
             <TableCell align="center" sx={{ fontWeight: 400, p: 1.3 }}>
@@ -75,7 +78,7 @@ const JobsTable = ({ searchTerm }) => {
             ))
           ) : (
             <TableRow>
-              <TableCell colSpan={6} align="center">
+              <TableCell colSpan={7} align="center">
                 <NoData />
               </TableCell>
             </TableRow>

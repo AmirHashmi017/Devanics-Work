@@ -238,6 +238,7 @@ const SingleUser = (userData) => {
           anchorEl={optionsMenuAnchor}
           open={isOptionsMenuOpen}
           onClose={handleOptionsMenuClose}
+          disableScrollLock
           PaperProps={{
             elevation: 1,
             sx: {

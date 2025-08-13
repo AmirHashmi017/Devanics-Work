@@ -25,8 +25,26 @@ const AddJob = ({ searchTerm, setSearchTerm }) => {
         <Typography variant="body1" fontWeight={600} fontSize={24}>
           Careers
         </Typography>
-        <CustomButton sx={{ p: 1, borderRadius: '8px' }} startIcon={<Add />} onClick={() => setOpen(true)}>
-          Create New Job
+        <CustomButton 
+          sx={{ 
+            p: 1, 
+            borderRadius: '8px',
+            "& .MuiButton-label": {
+              fontFamily: "Work Sans",
+              fontWeight: 600,
+              fontSize: "18px",
+              fontStyle: "normal"
+            },
+            "& .MuiSvgIcon-root": {
+              fontFamily: "Work Sans",
+              fontWeight: 600,
+              fontSize: "18px"
+            }
+          }} 
+          startIcon={<Add />} 
+          onClick={() => setOpen(true)}
+        >
+          Add New Job
         </CustomButton>
       </Box>
     </div>

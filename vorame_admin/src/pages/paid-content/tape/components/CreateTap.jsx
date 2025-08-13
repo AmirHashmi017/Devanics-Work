@@ -39,7 +39,8 @@ const getVideoDurationString = (file) => {
 
 const CreateTranquility = ({ setOpen, tranquilityData = null }) => {
     const queryClient = useQueryClient();
-    const [uploading, setUploading] = useState(false);
+    const [uploadingVideo, setUploadingVideo] = useState(false);
+    const [uploadingThumbnail, setUploadingThumbnail] = useState(false);
     const [submitting, setSubmitting] = useState(false);
     const [videoProgress, setVideoProgress] = useState(0);
     const [thumbnailProgress, setThumbnailProgress] = useState(0);
@@ -53,6 +54,7 @@ const CreateTranquility = ({ setOpen, tranquilityData = null }) => {
         toast.success(message);
         setOpen(false);
     };
+    
     const initalValues = {
         title: tranquilityData?.title || "",
         description: tranquilityData?.description || "",
@@ -105,85 +107,131 @@ const CreateTranquility = ({ setOpen, tranquilityData = null }) => {
             }
         },
     });
+    
     const { title, description, thumbnail, video } = values;
 
-    // Auto-upload when files are selected
+    // Separate useEffect for video uploads
     useEffect(() => {
-        const handleAutoUpload = async () => {
+        const handleVideoUpload = async () => {
             const videoFiles = values.video.filter(file => file instanceof File);
-            const thumbnailFiles = values.thumbnail.filter(file => file instanceof File);
+            if (videoFiles.length === 0) return;
             
-            if (videoFiles.length === 0 && thumbnailFiles.length === 0) return;
-            
-            setUploading(true);
+            setUploadingVideo(true);
+            setVideoProgress(0);
             
             try {
-                // Upload videos
-                if (videoFiles.length > 0) {
-                    const uploadedVideos = await Promise.all(videoFiles.map(async (file) => {
-                        const { type, name } = file;
-                        const url = await new AwsS3(file, "images/").getS3URLWithProgress(
-                            (progress) => {
-                                const percent = Math.round((progress.loaded / progress.total) * 100);
-                                setVideoProgress(percent);
-                            }
-                        );
-                        setVideoProgress(0);
-                        return {
-                            url,
-                            type,
-                            extension: type.split('/')[1],
-                            name,
-                        };
-                    }));
-                    
-                    // Update existing videos with uploaded ones
-                    const existingVideos = values.video.filter(file => !(file instanceof File));
-                    setFieldValue('video', [...existingVideos, ...uploadedVideos], false);
-                }
+                const uploadedVideos = await Promise.all(videoFiles.map(async (file) => {
+                    const { type, name } = file;
+                    const url = await new AwsS3(file, "images/").getS3URLWithProgress(
+                        (progress) => {
+                            const percent = Math.round((progress.loaded / progress.total) * 100);
+                            setVideoProgress(percent);
+                        }
+                    );
+                    return {
+                        url,
+                        type,
+                        extension: type.split('/')[1],
+                        name,
+                    };
+                }));
                 
-                // Upload thumbnails
-                if (thumbnailFiles.length > 0) {
-                    const uploadedThumbnails = await Promise.all(thumbnailFiles.map(async (file) => {
-                        const { type, name } = file;
-                        const url = await new AwsS3(file, "images/").getS3URLWithProgress(
-                            (progress) => {
-                                const percent = Math.round((progress.loaded / progress.total) * 100);
-                                setThumbnailProgress(percent);
-                            }
-                        );
-                        setThumbnailProgress(0);
-                        return {
-                            url,
-                            type,
-                            extension: type.split('/')[1],
-                            name,
-                        };
-                    }));
-                    
-                    // Update existing thumbnails with uploaded ones
-                    const existingThumbnails = values.thumbnail.filter(file => !(file instanceof File));
-                    setFieldValue('thumbnail', [...existingThumbnails, ...uploadedThumbnails], false);
-                }
+                // Update existing videos with uploaded ones
+                const existingVideos = values.video.filter(file => !(file instanceof File));
+                setFieldValue('video', [...existingVideos, ...uploadedVideos], false);
             } catch (error) {
-                console.log('Upload error:', error);
-                toast.error('Upload failed');
+                console.log('Video upload error:', error);
+                toast.error('Video upload failed');
             } finally {
-                setUploading(false);
+                setUploadingVideo(false);
+                setVideoProgress(0);
             }
         };
         
-        handleAutoUpload();
-    }, [values.video, values.thumbnail, setFieldValue]);
+        handleVideoUpload();
+    }, [values.video, setFieldValue]);
+
+    // Separate useEffect for thumbnail uploads
+    useEffect(() => {
+        const handleThumbnailUpload = async () => {
+            const thumbnailFiles = values.thumbnail.filter(file => file instanceof File);
+            if (thumbnailFiles.length === 0) return;
+            
+            setUploadingThumbnail(true);
+            setThumbnailProgress(0);
+            
+            try {
+                const uploadedThumbnails = await Promise.all(thumbnailFiles.map(async (file) => {
+                    const { type, name } = file;
+                    const url = await new AwsS3(file, "images/").getS3URLWithProgress(
+                        (progress) => {
+                            const percent = Math.round((progress.loaded / progress.total) * 100);
+                            setThumbnailProgress(percent);
+                        }
+                    );
+                    return {
+                        url,
+                        type,
+                        extension: type.split('/')[1],
+                        name,
+                    };
+                }));
+                
+                // Update existing thumbnails with uploaded ones
+                const existingThumbnails = values.thumbnail.filter(file => !(file instanceof File));
+                setFieldValue('thumbnail', [...existingThumbnails, ...uploadedThumbnails], false);
+            } catch (error) {
+                console.log('Thumbnail upload error:', error);
+                toast.error('Thumbnail upload failed');
+            } finally {
+                setUploadingThumbnail(false);
+                setThumbnailProgress(0);
+            }
+        };
+        
+        handleThumbnailUpload();
+    }, [values.thumbnail, setFieldValue]);
+
+    // Reset upload states when files are removed
+    useEffect(() => {
+        const videoFiles = values.video.filter(file => file instanceof File);
+        if (videoFiles.length === 0 && uploadingVideo) {
+            setUploadingVideo(false);
+            setVideoProgress(0);
+        }
+    }, [values.video, uploadingVideo]);
+
+    useEffect(() => {
+        const thumbnailFiles = values.thumbnail.filter(file => file instanceof File);
+        if (thumbnailFiles.length === 0 && uploadingThumbnail) {
+            setUploadingThumbnail(false);
+            setThumbnailProgress(0);
+        }
+    }, [values.thumbnail, uploadingThumbnail]);
+
+    const isUploading = uploadingVideo || uploadingThumbnail;
 
     return (
         <form onSubmit={handleSubmit}>
-            {uploading && videoProgress > 0 && videoProgress < 100 && (
-                <UploadProgress value={videoProgress} label="Video is uploading..." />
-            )}
-            <CustomDropZone name='video' type='video' files={video} handleFileChange={(files) => setFieldValue('video', files)} />
-            {errors.video && <ErrorMsg error={errors.video} />}
-            <Box display="flex" flexDirection="column" gap="12px">
+            {/* Video Section with its own progress */}
+            <Box>
+                {uploadingVideo && videoProgress > 0 && videoProgress < 100 && (
+                    <Box mb={2}>
+                        <UploadProgress value={videoProgress} label="Video is uploading..." />
+                    </Box>
+                )}
+                
+                <CustomDropZone 
+                    name='video' 
+                    type='video' 
+                    files={video} 
+                    handleFileChange={(files) => setFieldValue('video', files)}
+                    disabled={uploadingVideo}
+                />
+                {errors.video && <ErrorMsg error={errors.video} />}
+            </Box>
+            
+            <Box display="flex" flexDirection="column" gap="12px" mt={2}>
                 <div>
                     <Box
                         component="label"
@@ -206,6 +254,7 @@ const CreateTranquility = ({ setOpen, tranquilityData = null }) => {
                     </Box>
                     {errors.title && <ErrorMsg error={errors.title} />}
                 </div>
+                
                 <Box>
                     <QuillEditor
                         name="description"
@@ -214,23 +263,39 @@ const CreateTranquility = ({ setOpen, tranquilityData = null }) => {
                     />
                     {errors.description && <ErrorMsg error={errors.description} />}
                 </Box>
+                
+                {/* Thumbnail Section with its own progress */}
                 <Box>
                     <Grid container>
                         <Grid item sm={6} md={4} spacing={2}>
-                            {uploading && thumbnailProgress > 0 && thumbnailProgress < 100 && (
-                                <UploadProgress value={thumbnailProgress} />
-                            )}
-                            <CustomDropZone type='thumbnail' files={thumbnail} handleFileChange={(files) => setFieldValue('thumbnail', files)} />
+                            <Box>
+                                {uploadingThumbnail && thumbnailProgress > 0 && thumbnailProgress < 100 && (
+                                    <Box mb={2}>
+                                        <UploadProgress value={thumbnailProgress} label="Thumbnail is uploading..." />
+                                    </Box>
+                                )}
+                                
+                                <CustomDropZone 
+                                    type='thumbnail' 
+                                    files={thumbnail} 
+                                    handleFileChange={(files) => setFieldValue('thumbnail', files)}
+                                    disabled={uploadingThumbnail}
+                                />
+                            </Box>
                         </Grid>
                     </Grid>
                     {errors.thumbnail && <ErrorMsg error={errors.thumbnail} />}
                 </Box>
+                
                 <Box display="flex" justifyContent="space-between">
-                    <CustomButton disabled={uploading || submitting} onClick={() => setOpen(false)}>
+                    <CustomButton disabled={isUploading || submitting} onClick={() => setOpen(false)}>
                         Cancel
                     </CustomButton>
-                    <CustomButton disabled={uploading || submitting} type="submit">
-                        {uploading ? "Uploading..." : submitting ? "Saving..." : (tranquilityData ? "Update" : "Add")}
+                    <CustomButton disabled={isUploading || submitting} type="submit">
+                        {uploadingVideo ? "Uploading Video..." : 
+                         uploadingThumbnail ? "Uploading Thumbnail..." : 
+                         submitting ? "Saving..." : 
+                         (tranquilityData ? "Update" : "Add")}
                     </CustomButton>
                 </Box>
             </Box>

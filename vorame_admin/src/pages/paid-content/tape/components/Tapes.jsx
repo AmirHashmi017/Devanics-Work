@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Box, Grid, Button } from "@mui/material";
+import { Grid, Typography, IconButton, Box } from "@mui/material";
+import { Add } from "@mui/icons-material";
+import { Button } from "@mui/material";
 import SingleTranquility from "../components/SingleTape";
 import TranquilityApi from "services/api/tranquility";
-import NoData from "components/NoData";
-import Loader from "components/Loader";
-import Error from "components/Error";
 import { useQuery } from "react-query";
 
 const LIMIT = 25;
@@ -13,7 +12,7 @@ const Tapes = ({ searchTerm }) => {
   const [offset, setOffset] = useState(0);
   const [hasMore, setHasMore] = useState(true);
 
-  const { data: apiResponse, isLoading, isError, error, refetch } = useQuery(
+  const { data: apiResponse, isLoading, refetch } = useQuery(
     ["tranquilities", offset],
     () => TranquilityApi.getTranquilities(offset, LIMIT),
     {
@@ -46,44 +45,70 @@ const Tapes = ({ searchTerm }) => {
     // eslint-disable-next-line
   }, [searchTerm, refetch]);
 
-  if (isLoading && offset === 0) return <Loader />;
-  if (isError) return <Error error={error} />;
-
   return (
-    <Box>
-      <Grid container rowSpacing={2} sx={{ marginLeft: 0, marginRight: 0 }}>
-        {filteredList && filteredList.length > 0 ? (
-          filteredList.map((tranquilityData) => (
-            <Grid 
-              key={tranquilityData._id} 
-              item 
-              xs={12} 
-              sm={6} 
-              md={3}
-              sx={{ 
-                flex: '0 0 auto'
-              }}
-            >
-              <SingleTranquility {...tranquilityData} />
+    <>
+      {isLoading ? (
+        <div>Loading...</div>
+      ) : (
+        <>
+          <Grid container mt={3}>
+            <Grid item xs={6}>
+              <Typography sx={{ fontSize: "24px", fontWeight: 600 }}>
+                Tranquility
+              </Typography>
             </Grid>
-          ))
-        ) : (
-          <NoData />
-        )}
-      </Grid>
-      {hasMore && !isLoading && (
-        <Box display="flex" justifyContent="center" mt={4}>
-          <Button variant="contained" onClick={() => setOffset(prev => prev + LIMIT)}>
-            Show More
-          </Button>
-        </Box>
+            <Grid item xs={6} textAlign="right">
+              <Button
+                variant="contained"
+                startIcon={<Add />}
+                onClick={() => {}} // Add your add functionality here
+                sx={{
+                  backgroundColor: "#010D19",
+                  color: "#fff",
+                  textTransform: "none",
+                  borderRadius: "8px",
+                  boxShadow: "none",
+                  px: 2.5,
+                  fontSize: "16px",
+                  "&:hover": {
+                    backgroundColor: "#010D19",
+                  },
+                }}
+              >
+                Add
+              </Button>
+            </Grid>
+          </Grid>
+          {filteredList && filteredList.length > 0 ? (
+            <Grid container spacing="10px" sx={{ overflowY: "auto", mt: 1 }}>
+              {filteredList.map((tranquilityData, index) => (
+                <Grid item xs={12} sm={6} md={3} key={index}>
+                  <SingleTranquility {...tranquilityData} />
+                </Grid>
+              ))}
+            </Grid>
+          ) : (
+            <Grid>
+              <Typography variant="subtitle1">
+                Currently tranquilities not exists.
+              </Typography>
+            </Grid>
+          )}
+          {hasMore && !isLoading && (
+            <Box display="flex" justifyContent="center" mt={4}>
+              <Button variant="contained" onClick={() => setOffset(prev => prev + LIMIT)}>
+                Show More
+              </Button>
+            </Box>
+          )}
+          {isLoading && offset > 0 && (
+            <Box display="flex" justifyContent="center" mt={4}>
+              <div>Loading more...</div>
+            </Box>
+          )}
+        </>
       )}
-      {isLoading && offset > 0 && (
-        <Box display="flex" justifyContent="center" mt={4}>
-          <Loader />
-        </Box>
-      )}
-    </Box>
+    </>
   );
 };
 

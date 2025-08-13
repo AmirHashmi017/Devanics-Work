@@ -58,7 +58,7 @@ const Chat = ({ setStatus }) => {
     return (
         <Box
             ref={chatContainerRef}
-            height='62vh'
+            height='56vh'
             overflow='auto'
             p={2}
             display='flex'

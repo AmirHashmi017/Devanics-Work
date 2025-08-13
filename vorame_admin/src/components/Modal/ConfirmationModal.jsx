@@ -10,8 +10,9 @@ import {
   Box,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
-const ConfirmationModal = ({ open, onClose, onConfirm, heading, text, imgSrc, cancelBtnText, confirmBtnText }) => {
+const ConfirmationModal = ({ open, onClose, onConfirm, heading, text, imgSrc, cancelBtnText, confirmBtnText, icon, iconBgColor = "#D1FADF", iconColor = "#027A48" }) => {
   return (
     <Dialog
       open={open}
@@ -30,19 +31,25 @@ const ConfirmationModal = ({ open, onClose, onConfirm, heading, text, imgSrc, ca
         alignItems="center"
         mb={2}
       >
-        {/* User Icon */}
+        {/* Icon */}
         <Box
           sx={{
             width: 40,
             height: 40,
             borderRadius: "50%",
-            backgroundColor: "#D1FADF",
+            backgroundColor: iconBgColor,
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
           }}
         >
-            <img src={imgSrc} alt="person-icon" className="block-user-icon" />
+            {icon ? (
+              icon
+            ) : imgSrc ? (
+              <img src={imgSrc} alt="modal-icon" className="block-user-icon" />
+            ) : (
+              <CheckCircleIcon sx={{ color: iconColor }} />
+            )}
         </Box>
 
         {/* Close Button */}

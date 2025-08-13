@@ -163,6 +163,7 @@ const CommentsTable = ({ searchTerm }) => {
                         anchorEl={menuAnchor[row._id]}
                         open={Boolean(menuAnchor[row._id])}
                         onClose={() => handleCloseMenu(row._id)}
+                        disableScrollLock
                         PaperProps={{
                           elevation: 1,
                           sx: {

@@ -261,6 +261,7 @@ const SingleUser = (report) => {
                   anchorEl={anchorEl}
                   open={Boolean(anchorEl)}
                   onClose={handleCloseMenu}
+                  disableScrollLock
                   PaperProps={{
                     elevation: 1,
                     sx: {

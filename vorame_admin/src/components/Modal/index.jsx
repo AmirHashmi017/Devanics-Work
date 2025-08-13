@@ -51,7 +51,8 @@ const StyledDialog = styled(Dialog)(({ theme }) => ({
 }));
 
 const StyledDialogTitle = styled(DialogTitle)(({ theme }) => ({
-  background: "#F4F7FA",
+  background: "white",
+  borderBottom: "0.5px solid #EAECEE",
   color: theme.palette.common.dark,
   display: "flex",
   justifyContent: "space-between",

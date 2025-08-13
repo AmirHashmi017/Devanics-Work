@@ -16,7 +16,19 @@ const SingleApplicant = (applicantData) => {
                     <ProfileDetails {...applicantData} closeDetails={() => setOpenDetails(false)} />
                 </Box>
             </Drawer>
-            <Box key={_id} bgcolor='#EAECEE !important' py='10px' borderRadius={1} px={2} display='flex' gap={2} justifyContent='space-between' alignItems='center'>
+            <Box 
+                key={_id} 
+                bgcolor='white' 
+                py='10px' 
+                borderRadius={1} 
+                px={2} 
+                display='flex' 
+                gap={2} 
+                justifyContent='space-between' 
+                alignItems='center'
+                border="1px solid #EAECEE"
+                boxShadow="none"
+            >
                 <Stack direction='row' alignItems='center' gap={1}>
                     <Box
                         height='36px'

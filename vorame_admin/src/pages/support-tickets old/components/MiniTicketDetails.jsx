@@ -49,7 +49,13 @@ const MiniTicketDetails = ({ id }) => {
 
     const { firstName = '', lastName = '' } = postedBy || {};
     return (
-        <Box height='100%' borderLeft='1px solid #EAECEE'>
+        <Box
+            sx={{
+                height: '82vh',
+                overflowY: 'auto',
+                borderLeft: '1px solid #EAECEE',
+            }}
+        >
             <Box p='22px' borderBottom='1px solid #EAECEE'>
                 <Typography variant='h6'>Ticket Details</Typography>
             </Box>
@@ -73,9 +79,6 @@ const MiniTicketDetails = ({ id }) => {
                                 onChange={updateStatusHandler}
                                 placeholder="Status"
                             >
-                                <MenuItem value="">
-                                    Select Status
-                                </MenuItem>
                                 <MenuItem value={1}>Open</MenuItem>
                                 <MenuItem value={0}>Closed</MenuItem>
                             </Select>

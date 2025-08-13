@@ -1,15 +1,11 @@
 import React, { useEffect } from "react";
-import { Box, Grid } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import SinglePractice from "./SinglePractice";
 import NoData from "components/NoData";
 import Loader from "components/Loader";
 import Error from "components/Error";
 import PracticeApi from "services/api/practice";
 import { useQuery } from "react-query";
-
-const CARD_WIDTH = 280;
-const CARD_HEIGHT = 370; // Adjust as needed for your content
-const CARD_GAP = 24;
 
 const Practices = ({ searchTerm, setRefetch }) => {
     const {
@@ -37,24 +33,23 @@ const Practices = ({ searchTerm, setRefetch }) => {
     );
 
     return (
-        <Grid container rowSpacing={2} sx={{ marginLeft: 0, marginRight: 0 }}>
-            {filteredPractices.length > 0 ? (
-                filteredPractices.map((practiceData) => (
-                    <Grid
-                        key={practiceData._id}
-                        item
-                        xs={12}
-                        sm={6}
-                        md={3}
-                        sx={{ flex: '0 0 auto' }}
-                    >
-                        <SinglePractice practiceData={practiceData} onAction={handleAction} />
-                    </Grid>
-                ))
+        <>
+            {filteredPractices && filteredPractices.length > 0 ? (
+                <Box display="flex" flexWrap="wrap" gap={2}>
+                    {filteredPractices.map((practiceData) => (
+                        <Box
+                            key={practiceData._id}
+                            flexBasis={{ xs: "100%", sm: "48%", md: "24%" }}
+                            maxWidth="320px"
+                        >
+                            <SinglePractice practiceData={practiceData} onAction={handleAction} />
+                        </Box>
+                    ))}
+                </Box>
             ) : (
-                <NoData />
+                <Typography variant="subtitle1">Currently concepts not exists.</Typography>
             )}
-        </Grid>
+        </>
     );
 };
 

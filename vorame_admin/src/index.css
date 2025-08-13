@@ -49,3 +49,13 @@ body {
 .css-1got4ro-MuiPaper-root-MuiCard-root{
   box-shadow: none;
 }
+
+/* Prevent scroll jumping when menus open */
+body {
+  overflow-x: hidden;
+}
+
+/* Ensure smooth menu transitions */
+.MuiMenu-root {
+  transition: none !important;
+}

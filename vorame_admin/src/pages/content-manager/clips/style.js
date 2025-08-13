@@ -4,27 +4,33 @@ import { CardMedia, Card, IconButton } from "@mui/material";
 export const StyledCard = styled(Card)(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
-  // justifyContent: "space-between", // Ensures content is spaced with Grid at the bottom
-  borderRadius: theme.spacing(3),
-
-  height: 500,
+  borderRadius: "12px",
+  minHeight: 442,
   marginBottom: 2,
+  boxShadow: "none",
+  backgroundColor: "white",
+  border: `1px solid #EAECEE`,
   [theme.breakpoints.down("md")]: {
-    borderRadius: theme.spacing(2),
-    height: 520,
+    borderRadius: "12px",
+    minHeight: 442,
   },
 }));
 
 export const StyledCardMedia = styled(CardMedia)(({ theme }) => ({
   position: "relative",
   cursor: "pointer",
+  border: "none",
+  borderRadius: "12px 12px 0 0",
+  overflow: "hidden",
 }));
 
 export const StyledVideo = styled("video")(({ theme }) => ({
   objectFit: "cover",
   backgroundRepeat: "no-repeat",
   width: "100%",
-  height: "300px",
+  height: "270px",
+  border: "none",
+  borderRadius: "12px 12px 0 0",
 }));
 
 export const StyledMediaIcon = styled(IconButton)(({ theme }) => ({

@@ -18,8 +18,7 @@ import {
 import { clipInitialValues, addClipFormElements } from "../../../constants";
 import { clipValidationSchema } from "../../../utils/validation";
 
-import { StyledVideo, StyledCardMedia, StyledMediaIcon } from "./style";
-import { StyledCard } from "theme/styles";
+import { StyledVideo, StyledCardMedia, StyledMediaIcon, StyledCard } from "./style";
 import CustomDescriptionParser from "components/DescriptionParser";
 import FixedBox from "components/FixedBox";
 
@@ -313,92 +312,80 @@ const Clips = () => {
           {clipList && clipList.length > 0 ? (
             <Grid container spacing="10px" sx={{ overflowY: "auto", mt: 1 }}>
               {clipList.map((clip, index) => (
-                <Grid item lg={3.5} md={6} key={index}>
-                  <StyledCard>
-                    <Box sx={{ flexGrow: 1 }}>
-                      <StyledCardMedia>
-                        {/* Video */}
-                        <StyledVideo
-                          key={clip?.video[0]?.url}
-                          ref={(el) => (videoRefs.current[index] = el)}
-                          onClick={() => handleVideoClick(index)}
-                          controls
-                        >
-                          <source src={clip?.video[0]?.url} type="video/mp4" />
-                        </StyledVideo>
+                                 <Grid item xs={12} sm={6} md={3} key={index}>
+                   <StyledCard>
+                     <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+                       <StyledCardMedia>
+                         {/* Video */}
+                         <StyledVideo
+                           key={clip?.video[0]?.url}
+                           ref={(el) => (videoRefs.current[index] = el)}
+                           onClick={() => handleVideoClick(index)}
+                           controls
+                         >
+                           <source src={clip?.video[0]?.url} type="video/mp4" />
+                         </StyledVideo>
 
-                        {/* Play/Pause Icon Overlay */}
-                        <StyledMediaIcon
-                          onClick={() => handleVideoClick(index)}
-                        >
-                          {playingIndex === index ? (
-                            <img src={`icons/pause.svg`} alt="Play" />
-                          ) : (
-                            <img src={`icons/play.svg`} alt="Pause" />
-                          )}
-                        </StyledMediaIcon>
-                      </StyledCardMedia>
-                      <Box p={1.5}>
-                        <FixedBox>
-                          <Typography
-                            overflow="hidden"
-                            sx={{
-                              fontSize: "13px",
-                              fontWeight: 500,
-                            }}
-                          >
-                            {clip.title}
-                          </Typography>
-                        </FixedBox>
-
-                        <FixedBox>
-                          <CustomDescriptionParser
-                            description={clip?.description}
-                            limit={2}
-                          />
-                        </FixedBox>
-                        <Box
-                          display="flex"
-                          gap={2}
-                          alignItems="center"
-                          justifyContent="space-between"
-                        >
-                          <CustomBadge
-                            badgeContent={clip?.status}
-                            onClick={() => handleBadgeClick(clip)}
-                          />
-                          <Box display="flex">
-                            <IconButton
-                              aria-label="start"
-                              onClick={() => handleFavoriteUpdate(clip)}
-                            >
-                              {clip?.favourite === true ? (
-                                <img
-                                  src={`icons/star-active.svg`}
-                                  alt="star-active"
-                                />
-                              ) : (
-                                <img src={`icons/star.svg`} alt="star" />
-                              )}
-                            </IconButton>
-                            <IconButton
-                              aria-label="edit"
-                              onClick={() => handleClickOpen(clip?._id)}
-                            >
-                              <img src={`icons/edit.svg`} alt="edit" />
-                            </IconButton>
-                            <IconButton
-                              aria-label="delete"
-                              onClick={() => handleConfirmOpen(clip?._id)}
-                              sx={{ marginRight: 1 }}
-                            >
-                              <img src={`icons/trash.svg`} alt="delete" />
-                            </IconButton>
-                          </Box>
-                        </Box>
-                      </Box>
-                    </Box>
-                  </StyledCard>
+                         {/* Play/Pause Icon Overlay */}
+                         <StyledMediaIcon
+                           onClick={() => handleVideoClick(index)}
+                         >
+                           {playingIndex === index ? (
+                             <img src={`icons/pause.svg`} alt="Play" />
+                           ) : (
+                             <img src={`icons/play.svg`} alt="Pause" />
+                           )}
+                         </StyledMediaIcon>
+                       </StyledCardMedia>
+                       <Box p={0.5} pl={1.5} sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+                         <Box sx={{ maxWidth: 220, textAlign: 'left', flexGrow: 1 }}>
+                           <Typography
+                             overflow="hidden"
+                             sx={{ fontSize: "13px", fontWeight: 500, mb: 0, mt: 0 }}
+                           >
+                             {clip.title}
+                           </Typography>
+                           <CustomDescriptionParser
+                             description={clip?.description}
+                             limit={2}
+                           />
+                         </Box>
+                         <Box display="flex" justifyContent="space-between" alignItems="center" mt={2} sx={{ marginTop: 'auto' }}>
+                           <CustomBadge
+                             badgeContent={clip?.status}
+                             onClick={() => handleBadgeClick(clip)}
+                           />
+                           <Box display="flex" gap={1} alignItems="center">
+                             <IconButton
+                               aria-label="start"
+                               onClick={() => handleFavoriteUpdate(clip)}
+                             >
+                               {clip?.favourite === true ? (
+                                 <img
+                                   src={`icons/star-active.svg`}
+                                   alt="star-active"
+                                 />
+                               ) : (
+                                 <img src={`icons/star.svg`} alt="star" />
+                               )}
+                             </IconButton>
+                             <IconButton
+                               aria-label="edit"
+                               onClick={() => handleClickOpen(clip?._id)}
+                             >
+                               <img src={`icons/edit.svg`} alt="edit" />
+                             </IconButton>
+                             <IconButton
+                               aria-label="delete"
+                               onClick={() => handleConfirmOpen(clip?._id)}
+                             >
+                               <img src={`icons/trash.svg`} alt="delete" />
+                             </IconButton>
+                           </Box>
+                         </Box>
+                       </Box>
+                     </Box>
+                   </StyledCard>
                 </Grid>
               ))}
             </Grid>

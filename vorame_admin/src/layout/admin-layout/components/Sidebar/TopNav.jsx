@@ -29,7 +29,6 @@ const TopNav = () => {
       { text: "After the Whistle", path: "/whistle" },
       { text: "A-Z", path: "/library" },
       { text: "Blogs", path: "/blogs" },
-      { text: "BluePrint", path: "/blueprint" },
       { text: "BookClub", path: "/bookclub" },
       { text: "Clips", path: "/clips" },
       { text: "Concepts", path: "/concepts" },
@@ -122,6 +121,7 @@ const TopNav = () => {
               anchorEl={anchorEl}
               open={Boolean(anchorEl)}
               onClose={handleMenuClose}
+              disableScrollLock
               slotProps={{
                 paper: {
                   sx: { maxWidth: "180px", width: "100%" },

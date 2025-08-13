@@ -26,6 +26,7 @@ const CustomDropZone = ({
   setPreview,
   element,
   fieldName,
+  disabled = false,
   accept = {
     "image/*": [],
     "video/*": [],
@@ -33,11 +34,17 @@ const CustomDropZone = ({
   }
 }) => {
   const { getRootProps, getInputProps } = useDropzone({
-    onDrop: (acceptedFiles) => handleFileChange(acceptedFiles),
-    accept
+    onDrop: (acceptedFiles) => {
+      if (!disabled) {
+        handleFileChange(acceptedFiles);
+      }
+    },
+    accept,
+    disabled: disabled
   });
 
   const handleCancelClick = (e) => {
+    if (disabled) return;
     e.stopPropagation();
     formik.setFieldValue(fieldName, []);
     setPreview(null);
@@ -63,7 +70,13 @@ const CustomDropZone = ({
 
   return (
     <>
-      <DragDropArea {...getRootProps()}>
+      <DragDropArea 
+        {...getRootProps()} 
+        sx={{
+          opacity: disabled ? 0.6 : 1,
+          pointerEvents: disabled ? 'none' : 'auto'
+        }}
+      >
         <input {...getInputProps()} accept={accept} />
         {/* Show preview image */}
 
@@ -77,7 +90,15 @@ const CustomDropZone = ({
             {element.inputType === "video" ? (
               <>
                 <CancelVideoWrapper>
-                  <IconButton onClick={handleCancelClick} sx={{ color: "red" }}>
+                  <IconButton 
+                    onClick={handleCancelClick} 
+                    disabled={disabled}
+                    sx={{ 
+                      color: disabled ? "grey" : "red",
+                      opacity: disabled ? 0.5 : 1,
+                      cursor: disabled ? "not-allowed" : "pointer"
+                    }}
+                  >
                     <Cancel />
                   </IconButton>
                 </CancelVideoWrapper>
@@ -85,7 +106,15 @@ const CustomDropZone = ({
             ) : element.inputType === "smallFile" ? (
               <>
                 <SmallCancelButton>
-                  <IconButton onClick={handleCancelClick} sx={{ color: "red" }}>
+                  <IconButton 
+                    onClick={handleCancelClick} 
+                    disabled={disabled}
+                    sx={{ 
+                      color: disabled ? "grey" : "red",
+                      opacity: disabled ? 0.5 : 1,
+                      cursor: disabled ? "not-allowed" : "pointer"
+                    }}
+                  >
                     <Cancel />
                   </IconButton>
                 </SmallCancelButton>
@@ -93,7 +122,15 @@ const CustomDropZone = ({
             ) : (
               <>
                 <CancelButtonWrapper>
-                  <IconButton onClick={handleCancelClick} sx={{ color: "red" }}>
+                  <IconButton 
+                    onClick={handleCancelClick} 
+                    disabled={disabled}
+                    sx={{ 
+                      color: disabled ? "grey" : "red",
+                      opacity: disabled ? 0.5 : 1,
+                      cursor: disabled ? "not-allowed" : "pointer"
+                    }}
+                  >
                     <Cancel />
                   </IconButton>
                 </CancelButtonWrapper>

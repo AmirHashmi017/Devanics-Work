@@ -126,6 +126,10 @@ const CustomFormDialog = ({
                         }
                         element={element}
                         fieldName={element.name}
+                        disabled={
+                          (element.name === "video" && videoProgress > 0 && videoProgress < 100) ||
+                          (element.name !== "video" && imageProgress > 0 && imageProgress < 100)
+                        }
                       />
                     </Grid>
                   );

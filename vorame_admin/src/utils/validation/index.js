@@ -144,11 +144,7 @@ export const libraryValidationSchema = yup.object().shape({
 });
 
 export const whistleValidationSchema = yup.object().shape({
-  description: yup.string().required(libraryValidation.description),
-  date: yup
-    .date()
-    .typeError(whistleValidation.dateTypeError)
-    .required(whistleValidation.date),
+  description: yup.string().required(whistleValidation.description),
 });
 
 export const bluePrintValidationSchema = yup.object().shape({

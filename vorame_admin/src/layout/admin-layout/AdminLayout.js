@@ -53,7 +53,7 @@ function AdminLayout(props) {
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
-      <AppBar elevation={0} sx={{ p: 0, }} position="fixed">
+      <AppBar elevation={0} sx={{ p: 0, zIndex: 1200 }} position="fixed">
         <Topbar handleDrawerToggle={handleDrawerToggle} />
       </AppBar>
       <Box

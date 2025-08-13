@@ -9,10 +9,11 @@ const ProfileDetails = ({ firstName, lastName, country, createdAt, files, crimin
             {/* Profile Detail */}
             <Box
                 bgcolor="white"
-                boxShadow="0px 0px 34px 0px #2632381F">
+                border="1px solid #EAECEE"
+                boxShadow="none">
                 <Box maxWidth='850px'>
 
-                    <Box boxShadow='0px 0px 37px 0px #38425021' py={2} px={3}>
+                    <Box py={2} px={3} borderBottom="1px solid #EAECEE">
                         <Box width='100%' display='flex' justifyContent='space-between' alignItems='center' gap={2} borderRadius={1}>
                             <Box py='10px' display='flex' gap={0.5} alignItems='center'>
                                 <Box

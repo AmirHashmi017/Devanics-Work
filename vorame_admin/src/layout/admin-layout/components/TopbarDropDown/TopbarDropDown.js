@@ -25,6 +25,7 @@ const TopbarDropDown = () => {
           horizontal: "right",
         }}
         keepMounted
+        disableScrollLock
         transformOrigin={{
           vertical: "top",
           horizontal: "right",

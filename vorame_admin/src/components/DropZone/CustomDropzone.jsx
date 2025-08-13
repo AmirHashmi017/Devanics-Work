@@ -16,17 +16,21 @@ const CustomDropZone = ({
   type,
   name,
   files: propFiles = [],
+  disabled = false,
 }) => {
   const [files, setFiles] = useState(propFiles);
   const accept = type === 'video' ? { "video/*": [] } : type === 'image' || type === 'thumbnail' ? { "image/*": [] } : { "application/pdf": [] }
   const { getRootProps, getInputProps } = useDropzone({
     onDrop: (acceptedFiles) => {
-      setFiles(acceptedFiles)
-      handleFileChange(acceptedFiles);
+      if (!disabled) {
+        setFiles(acceptedFiles)
+        handleFileChange(acceptedFiles);
+      }
     },
     multiple: false,
     maxFiles: 1,
-    accept
+    accept,
+    disabled: disabled
   });
 
   // Sync with propFiles if they change (e.g., on dialog open)
@@ -58,7 +62,13 @@ const CustomDropZone = ({
   };
 
   return (
-    <DragDropArea  {...getRootProps()}>
+    <DragDropArea  
+      {...getRootProps()} 
+      sx={{
+        opacity: disabled ? 0.6 : 1,
+        pointerEvents: disabled ? 'none' : 'auto'
+      }}
+    >
       <input name={name} {...getInputProps()} />
       <Box display='flex' justifyContent='center' gap={2}>
         {
@@ -69,11 +79,19 @@ const CustomDropZone = ({
               <Box position='relative' key={i}>
                 <ImagePreviewWrapper>
                   <Box position='absolute' zIndex={20} top={-12} right={-12}>
-                    <IconButton onClick={(e) => {
-                      e.stopPropagation();
-                      e.preventDefault();
-                      handleRemoveFile(i);
-                    }} sx={{ color: "red" }}>
+                    <IconButton 
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        handleRemoveFile(i);
+                      }} 
+                      disabled={disabled}
+                      sx={{ 
+                        color: disabled ? "grey" : "red",
+                        opacity: disabled ? 0.5 : 1,
+                        cursor: disabled ? "not-allowed" : "pointer"
+                      }}
+                    >
                       <Cancel />
                     </IconButton>
                   </Box>

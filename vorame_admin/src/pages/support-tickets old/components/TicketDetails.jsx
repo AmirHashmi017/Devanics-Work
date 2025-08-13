@@ -30,7 +30,7 @@ const TicketDetails = () => {
     const [status, setStatus] = useState(0);
 
     return (
-        <Grid container bgcolor='white' height='100%' border='1px solid #EAECEE' borderRadius={2}>
+        <Grid container bgcolor='white' height='82.8vh' overflow='hidden' border='1px solid #EAECEE' borderRadius={2}>
             <Grid lg={8} item>
                 <Box height='100%'>
                     <Box borderBottom='1px solid #EAECEE' width='100%' display='flex' justifyContent='space-between' alignItems='center' gap={2} borderRadius={1}>

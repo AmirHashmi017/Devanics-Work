@@ -57,6 +57,7 @@ export default function PrimarySearchAppBar({ handleDrawerToggle }) {
       }}
       id={menuId}
       keepMounted
+      disableScrollLock
       transformOrigin={{
         vertical: "top",
         horizontal: "right",

@@ -1,16 +1,14 @@
 import React, { useState } from "react";
-import { Box, Button } from "@mui/material";
-import { ConfirmDialog } from "components";
+import { Box, Typography, IconButton } from "@mui/material";
+import { ConfirmDialog, CustomBadge } from "components";
 import { toast } from "react-toastify";
 import CustomDialog from "components/Modal";
 import UpdateStatusDialog from "components/StatusDialog/StatusDialog";
 import CreatePractice from "./CreatePractice";
 import CustomDescriptionParser from "components/DescriptionParser";
 import { vorameColors } from "theme/constants";
+import { grey } from "@mui/material/colors";
 import PracticeApi from "services/api/practice";
-
-const IMAGE_HEIGHT = 229;
-const CARD_MAX_WIDTH = 290;
 
 const SinglePractice = ({ practiceData, onAction }) => {
   const { _id, description, file, status } = practiceData;
@@ -58,15 +56,19 @@ const SinglePractice = ({ practiceData, onAction }) => {
     }
   };
 
+  const handleBadgeClick = () => {
+    setOpenStatusModal(true);
+  };
+
   return (
     <Box
       borderRadius="12px"
+      py="12px"
+      px={2}
+      border={1}
+      borderColor={grey[200]}
       bgcolor="white"
-      border="1px solid #EAECEE"
-      maxWidth={`${CARD_MAX_WIDTH}px`}
-      width="100%"
-      p="12px"
-      m={1}
+      maxWidth="320px"
       display="flex"
       flexDirection="column"
       justifyContent="space-between"
@@ -98,6 +100,7 @@ const SinglePractice = ({ practiceData, onAction }) => {
         status={currentStatus}
         isLoading={loading}
       />
+      
       <Box display="flex" justifyContent="center">
         {file && file.length > 0 ? (
           <Box
@@ -106,7 +109,7 @@ const SinglePractice = ({ practiceData, onAction }) => {
             alt="concept-img"
             sx={{
               width: "100%",
-              height: `${IMAGE_HEIGHT}px`,
+              height: "229px",
               objectFit: "cover",
               borderRadius: "4px",
               background: "#f0f0f0",
@@ -116,53 +119,40 @@ const SinglePractice = ({ practiceData, onAction }) => {
           <Box
             sx={{
               width: "100%",
-              height: `${IMAGE_HEIGHT}px`,
+              height: "229px",
               background: "#f0f0f0",
               borderRadius: "4px",
             }}
           />
         )}
       </Box>
-      <Box flex={1} mt={3} display="flex" flexDirection="column" justifyContent="space-between">
+      
+      <Box className="practice-details" mt={3}>
         <CustomDescriptionParser
           description={description || ""}
           limit={2}
           color={vorameColors.lightSlateGrey}
           onExpandChange={setDescExpanded}
         />
+
         <Box display="flex" justifyContent="space-between" mt={2}>
-          <Button
-            sx={{
-              textTransform: "capitalize",
-              bgcolor: "#2E8852",
-              borderRadius: "17px",
-              color: "white",
-              fontWeight: 400,
-              py: "1px",
-              px: "6px",
-              fontSize: "12px",
-            }}
-            onClick={() => setOpenStatusModal(true)}
-          >
-            {currentStatus}
-          </Button>
-          <Box display="flex" gap={2}>
-            <Box
-              component="img"
-              height="20px"
-              width="20px"
-              src="/icons/edit.svg"
+          <CustomBadge
+            badgeContent={currentStatus}
+            onClick={handleBadgeClick}
+          />
+          <Box>
+            <IconButton
+              aria-label="edit"
               onClick={() => setOpenUpdateModal(true)}
-              alt="edit"
-            />
-            <Box
-              component="img"
-              height="20px"
-              width="20px"
-              src="/icons/trash.svg"
+            >
+              <img src={`icons/edit.svg`} alt="edit" />
+            </IconButton>
+            <IconButton
+              aria-label="delete"
               onClick={() => setOpenDeleteModal(true)}
-              alt="trash"
-            />
+            >
+              <img src={`icons/trash.svg`} alt="delete" />
+            </IconButton>
           </Box>
         </Box>
       </Box>

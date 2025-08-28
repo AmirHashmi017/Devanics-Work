@@ -52,7 +52,7 @@ class BoardroomService {
   };
 
   // add new message
- async addBoardroomMessage({ payload, body }: Request) {
+  async addBoardroomMessage({ payload, body }: Request) {
     const { _id = '' } = payload || {};
     const postedBy = await Users.findById(_id);
 
@@ -62,6 +62,8 @@ class BoardroomService {
       likes: 0,
       userReaction: null,
       comments: 0,
+      reposts: 0,
+      userReposted: false,
     }
 
     const reactionsDataWithPoll = {
@@ -75,19 +77,18 @@ class BoardroomService {
     };
 
     if (msgType === boardMsgTypes.poll) {
-
       let pollTime;
       const currentTime = new Date();
 
       switch (duration) {
         case '24h':
-          pollTime = new Date(currentTime.getTime() + 24 * 60 * 60 * 1000); // 24 hours
+          pollTime = new Date(currentTime.getTime() + 24 * 60 * 60 * 1000);
           break;
         case '3d':
-          pollTime = new Date(currentTime.getTime() + 3 * 24 * 60 * 60 * 1000); // 3 days
+          pollTime = new Date(currentTime.getTime() + 3 * 24 * 60 * 60 * 1000);
           break;
         case '7d':
-          pollTime = new Date(currentTime.getTime() + 7 * 24 * 60 * 60 * 1000); // 7 days
+          pollTime = new Date(currentTime.getTime() + 7 * 24 * 60 * 60 * 1000);
           break;
         default:
           throw new Error("Invalid duration specified");
@@ -135,7 +136,7 @@ class BoardroomService {
   }
 
   // edit or hide message 
-  async updateBoardroomMessage({ payload, body, params }: Request) {
+   async updateBoardroomMessage({ payload, body, params }: Request) {
     const { _id } = payload;
     const { id: messageId } = params;
     const { type = 'hide', content } = body;
@@ -153,6 +154,8 @@ class BoardroomService {
       );
 
       const comments = await BoardroomComment.find({ messageId });
+      const repostCount = await BoardroomRepost.countDocuments({ post: messageId });
+      const userReposted = await BoardroomRepost.findOne({ post: messageId, repostedBy: _id });
       
       // Get likes directly from the message
       const { likedBy = [] } = updateMessage?.toObject() || {};
@@ -181,7 +184,9 @@ class BoardroomService {
         ...(pollVotesData && pollVotesData), 
         likes: likedBy.length, 
         comments: comments.length, 
-        userReaction: isLiked ? 'like' : null 
+        reposts: repostCount,
+        userReaction: isLiked ? 'like' : null,
+        userReposted: userReposted ? true : false
       };
 
       io.emit(BOARDROOM_EVENTS.updatedMsg, boardroomUpdateMessage);
@@ -279,8 +284,6 @@ class BoardroomService {
   // get boardroom message
   async boardroomMessages({ payload, query }: Request) {
     const { _id } = payload;
-
-
     const userId = objectId(_id);
 
     const userData = await Users.findById(userId);
@@ -377,26 +380,56 @@ class BoardroomService {
           }
         }
       }
-    }, {
+    }, 
+    {
       $lookup: {
         from: 'boardroomcomments',
         as: 'boardroomMessage',
         foreignField: "messageId",
-        localField: '_id', pipeline: [
+        localField: '_id', 
+        pipeline: [
           {
             $count: 'comments'
           },
         ]
       }
     },
+    // Add repost lookup
+    {
+      $lookup: {
+        from: 'boardroomreposts',
+        localField: '_id',
+        foreignField: 'post',
+        as: 'repostData'
+      }
+    },
     {
       $addFields: {
         likes: { $size: { $ifNull: ["$likedBy", []] } },
+        reposts: { $size: { $ifNull: ["$repostData", []] } },
         userReaction: {
           $cond: [
             { $in: [userId, { $ifNull: ["$likedBy", []] }] },
             "like",
             null
+          ]
+        },
+        userReposted: {
+          $cond: [
+            { 
+              $in: [
+                userId, 
+                {
+                  $map: {
+                    input: { $ifNull: ["$repostData", []] },
+                    as: "repost",
+                    in: "$$repost.repostedBy"
+                  }
+                }
+              ]
+            },
+            true,
+            false
           ]
         }
       }
@@ -464,10 +497,9 @@ class BoardroomService {
         }
       },
       // poll results
-      // Aggregation pipeline
       {
         $lookup: {
-          from: 'boardroompolls', // Assuming this is the poll collection
+          from: 'boardroompolls',
           as: 'pollData',
           foreignField: 'messageId',
           localField: '_id'
@@ -477,55 +509,55 @@ class BoardroomService {
         $addFields: {
           totalVotes: {
             $cond: {
-              if: { $and: [{ $eq: ['$msgType', 'poll'] }, { $gt: [{ $size: '$pollData' }, 0] }] }, // Only count votes for polls
-              then: { $size: { $ifNull: [{ $arrayElemAt: ['$pollData.votes', 0] }, []] } }, // Safeguard with $ifNull
+              if: { $and: [{ $eq: ['$msgType', 'poll'] }, { $gt: [{ $size: '$pollData' }, 0] }] },
+              then: { $size: { $ifNull: [{ $arrayElemAt: ['$pollData.votes', 0] }, []] } },
               else: 0
             }
           },
           pollOptions: {
             $cond: {
-              if: { $eq: ['$msgType', 'poll'] }, // Only fetch pollOptions if msgType is 'poll'
-              then: "$pollOptions", // Fetch pollOptions directly from message
-              else: [] // Return empty if not poll type
+              if: { $eq: ['$msgType', 'poll'] },
+              then: "$pollOptions",
+              else: []
             }
           },
           votesPerOption: {
             $cond: {
-              if: { $and: [{ $eq: ['$msgType', 'poll'] }, { $gt: [{ $size: '$pollOptions' }, 0] }] }, // Ensure pollOptions exist and msgType is 'poll'
+              if: { $and: [{ $eq: ['$msgType', 'poll'] }, { $gt: [{ $size: '$pollOptions' }, 0] }] },
               then: {
                 $map: {
-                  input: { $range: [0, { $size: '$pollOptions' }] }, // Loop through the index range of pollOptions
+                  input: { $range: [0, { $size: '$pollOptions' }] },
                   as: 'index',
                   in: {
-                    index: '$$index', // Add the index to the object
+                    index: '$$index',
                     voteCount: {
                       $size: {
                         $filter: {
-                          input: { $ifNull: [{ $arrayElemAt: ['$pollData.votes', 0] }, []] }, // Ensure votes array is not null
+                          input: { $ifNull: [{ $arrayElemAt: ['$pollData.votes', 0] }, []] },
                           as: 'vote',
-                          cond: { $eq: ['$$vote.selectedOption', '$$index'] } // Match the index with selectedOption
+                          cond: { $eq: ['$$vote.selectedOption', '$$index'] }
                         }
                       }
                     }
                   }
                 }
               },
-              else: [] // Return empty array if no pollOptions or msgType is not 'poll'
+              else: []
             }
           },
           userSelectedOption: {
             $cond: [
               {
-                $and: [{ $eq: ['$msgType', 'poll'] }, { $gt: [{ $size: { $ifNull: ['$pollData', []] } }, 0] }] // Only check user selection for polls
+                $and: [{ $eq: ['$msgType', 'poll'] }, { $gt: [{ $size: { $ifNull: ['$pollData', []] } }, 0] }]
               },
               {
                 $cond: [
                   {
                     $in: [
-                      objectId(_id), // User ID
+                      objectId(_id),
                       {
                         $map: {
-                          input: { $ifNull: [{ $arrayElemAt: ['$pollData.votes', 0] }, []] }, // Ensure votes array is not null
+                          input: { $ifNull: [{ $arrayElemAt: ['$pollData.votes', 0] }, []] },
                           as: 'vote',
                           in: '$$vote.user'
                         }
@@ -555,7 +587,9 @@ class BoardroomService {
         $project: {
           boardroomMessage: 0,
           reactions: 0,
-          pollData: 0, blockedUserDetails: 0
+          pollData: 0, 
+          blockedUserDetails: 0,
+          repostData: 0
         }
       }
     );
@@ -616,18 +650,46 @@ class BoardroomService {
         ]
       }
     },
+    // Add repost lookup
     {
-  $addFields: {
-    likes: { $size: { $ifNull: ["$likedBy", []] } },
-    userReaction: {
-      $cond: [
-        { $in: [userId, { $ifNull: ["$likedBy", []] }] },
-        "like",
-        null
-      ]
-    }
-  }
-},
+      $lookup: {
+        from: 'boardroomreposts',
+        localField: '_id',
+        foreignField: 'post',
+        as: 'repostData'
+      }
+    },
+    {
+      $addFields: {
+        likes: { $size: { $ifNull: ["$likedBy", []] } },
+        reposts: { $size: { $ifNull: ["$repostData", []] } },
+        userReaction: {
+          $cond: [
+            { $in: [userId, { $ifNull: ["$likedBy", []] }] },
+            "like",
+            null
+          ]
+        },
+        userReposted: {
+          $cond: [
+            { 
+              $in: [
+                userId, 
+                {
+                  $map: {
+                    input: { $ifNull: ["$repostData", []] },
+                    as: "repost",
+                    in: "$$repost.repostedBy"
+                  }
+                }
+              ]
+            },
+            true,
+            false
+          ]
+        }
+      }
+    },
     {
       $lookup: {
         from: 'users',
@@ -678,11 +740,9 @@ class BoardroomService {
       }
     },
     // poll results
-    // Aggregation pipeline
-
     {
       $lookup: {
-        from: 'boardroompolls', // Assuming this is the poll collection
+        from: 'boardroompolls',
         as: 'pollData',
         foreignField: 'messageId',
         localField: '_id'
@@ -692,55 +752,55 @@ class BoardroomService {
       $addFields: {
         totalVotes: {
           $cond: {
-            if: { $and: [{ $eq: ['$msgType', 'poll'] }, { $gt: [{ $size: '$pollData' }, 0] }] }, // Only count votes for polls
-            then: { $size: { $ifNull: [{ $arrayElemAt: ['$pollData.votes', 0] }, []] } }, // Safeguard with $ifNull
+            if: { $and: [{ $eq: ['$msgType', 'poll'] }, { $gt: [{ $size: '$pollData' }, 0] }] },
+            then: { $size: { $ifNull: [{ $arrayElemAt: ['$pollData.votes', 0] }, []] } },
             else: 0
           }
         },
         pollOptions: {
           $cond: {
-            if: { $eq: ['$msgType', 'poll'] }, // Only fetch pollOptions if msgType is 'poll'
-            then: "$pollOptions", // Fetch pollOptions directly from message
-            else: [] // Return empty if not poll type
+            if: { $eq: ['$msgType', 'poll'] },
+            then: "$pollOptions",
+            else: []
           }
         },
         votesPerOption: {
           $cond: {
-            if: { $and: [{ $eq: ['$msgType', 'poll'] }, { $gt: [{ $size: '$pollOptions' }, 0] }] }, // Ensure pollOptions exist and msgType is 'poll'
+            if: { $and: [{ $eq: ['$msgType', 'poll'] }, { $gt: [{ $size: '$pollOptions' }, 0] }] },
             then: {
               $map: {
-                input: { $range: [0, { $size: '$pollOptions' }] }, // Loop through the index range of pollOptions
+                input: { $range: [0, { $size: '$pollOptions' }] },
                 as: 'index',
                 in: {
-                  index: '$$index', // Add the index to the object
+                  index: '$$index',
                   voteCount: {
                     $size: {
                       $filter: {
-                        input: { $ifNull: [{ $arrayElemAt: ['$pollData.votes', 0] }, []] }, // Ensure votes array is not null
+                        input: { $ifNull: [{ $arrayElemAt: ['$pollData.votes', 0] }, []] },
                         as: 'vote',
-                        cond: { $eq: ['$$vote.selectedOption', '$$index'] } // Match the index with selectedOption
+                        cond: { $eq: ['$$vote.selectedOption', '$$index'] }
                       }
                     }
                   }
                 }
               }
             },
-            else: [] // Return empty array if no pollOptions or msgType is not 'poll'
+            else: []
           }
         },
         userSelectedOption: {
           $cond: [
             {
-              $and: [{ $eq: ['$msgType', 'poll'] }, { $gt: [{ $size: { $ifNull: ['$pollData', []] } }, 0] }] // Only check user selection for polls
+              $and: [{ $eq: ['$msgType', 'poll'] }, { $gt: [{ $size: { $ifNull: ['$pollData', []] } }, 0] }]
             },
             {
               $cond: [
                 {
                   $in: [
-                    objectId(_id), // User ID
+                    objectId(_id),
                     {
                       $map: {
-                        input: { $ifNull: [{ $arrayElemAt: ['$pollData.votes', 0] }, []] }, // Ensure votes array is not null
+                        input: { $ifNull: [{ $arrayElemAt: ['$pollData.votes', 0] }, []] },
                         as: 'vote',
                         in: '$$vote.user'
                       }
@@ -770,7 +830,9 @@ class BoardroomService {
       $project: {
         boardroomMessage: 0,
         reactions: 0,
-        pollData: 0, blockedUserDetails: 0
+        pollData: 0, 
+        blockedUserDetails: 0,
+        repostData: 0
       }
     },
     ])
@@ -1773,49 +1835,55 @@ async likedBoardroomMessages({ params, query }: Request) {
     };
   }
 
- async repostPost({ payload, params }: Request) {
-  const userId = payload._id;
-  const { id: postId } = params;
+  async repostPost({ payload, params }: Request) {
+    const userId = payload._id;
+    const { id: postId } = params;
 
-  const repost= await BoardroomRepost.findOne({
-    repostedBy:userId,
-    post:postId
-  })
-  if(repost)
-  {
-    return{
-      statusCode: EHttpStatus.BAD_REQUEST,
-      ResponseMessage: ResponseMessage.ALREADY_REPOSTED
-    }
-  }
+    const existingRepost = await BoardroomRepost.findOne({
+      repostedBy: userId,
+      post: postId
+    });
 
-  const repostedPost = await BoardroomRepost.create({
-    repostedBy: userId,
-    post: postId,
-  });
+    let repostCount;
+    let userReposted;
+    let repostedPost
 
-  await repostedPost.populate([
+    if (existingRepost) {
+      await BoardroomRepost.findOneAndDelete({
+        repostedBy: userId,
+        post: postId
+      });
+      repostCount = await BoardroomRepost.countDocuments({ post: postId });
+      userReposted = false;
+    } else {
+      repostedPost = await(await BoardroomRepost.create({
+        repostedBy: userId,
+        post: postId,
+      })).populate([
     { path: "repostedBy" },
-    { path: "post", populate: { path: "postedBy" } },
+    { path: "post", populate: { path: "postedBy" } } 
   ]);
+      repostCount = await BoardroomRepost.countDocuments({ post: postId });
+      userReposted = true;
+    }
 
-  const repostCount = await BoardroomRepost.countDocuments({ post: postId });
+    io.emit(BOARDROOM_EVENTS.msgReactions, {
+      messageId: postId,
+      reposts: repostCount,
+      userId,
+      userReposted
+    });
 
-  const postDoc = repostedPost.post as unknown as any; 
-  const responseData = {
-    ...repostedPost.toObject(),
-    post: {
-      ...postDoc.toObject(),
-      repostCount: repostCount,
-    },
-  };
-
-  return {
-    statusCode: EHttpStatus.CREATED,
-    ResponseMessage: ResponseMessage.REPOST_CREATED,
-    data: responseData,
-  };
-}
+    return {
+      statusCode: EHttpStatus.OK,
+      message: userReposted ? ResponseMessage.REPOST_CREATED : ResponseMessage.REPOST_DELETED,
+      data: { 
+        repostedPost: userReposted?repostedPost:null,
+        reposted: userReposted,
+        repostCount 
+      },
+    };
+  }
 
 
   async getRepostsOfPost({params}:Request)
@@ -1835,33 +1903,33 @@ async likedBoardroomMessages({ params, query }: Request) {
   }
   }
 
-  async deleteRepost({payload,params}:Request)
-  {
-    const userId= payload._id
-    const {id:repostId}= params
+  // async deleteRepost({payload,params}:Request)
+  // {
+  //   const userId= payload._id
+  //   const {id:repostId}= params
 
-    const repost=await BoardroomRepost.findOne({
-      _id: repostId,
-      repostedBy: userId
-    })
-    if(!repost)
-    {
-      return{
-        statusCode:EHttpStatus.NOT_FOUND,
-        ResponseMessage: ResponseMessage.NOT_FOUND
-      }
-    }
-    await BoardroomRepost.findOneAndDelete(
-      {
-      _id: repostId,
-      repostedBy: userId
-      }
-    )
-    return{
-      statusCode: EHttpStatus.OK,
-      ResponseMessage: ResponseMessage.REPOST_DELETED
-    }
-  }
+  //   const repost=await BoardroomRepost.findOne({
+  //     _id: repostId,
+  //     repostedBy: userId
+  //   })
+  //   if(!repost)
+  //   {
+  //     return{
+  //       statusCode:EHttpStatus.NOT_FOUND,
+  //       ResponseMessage: ResponseMessage.NOT_FOUND
+  //     }
+  //   }
+  //   await BoardroomRepost.findOneAndDelete(
+  //     {
+  //     _id: repostId,
+  //     repostedBy: userId
+  //     }
+  //   )
+  //   return{
+  //     statusCode: EHttpStatus.OK,
+  //     ResponseMessage: ResponseMessage.REPOST_DELETED
+  //   }
+  // }
 
 
 }

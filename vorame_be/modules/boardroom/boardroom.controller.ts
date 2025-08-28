@@ -266,7 +266,7 @@ export class BoardroomController {
    //Delete boardroom reposts
   async deleteRepost(req: Request, res: Response) {
     try {
-      const messages = await BoardroomService.deleteRepost(req);
+      const messages = await BoardroomService.repostPost(req);
       return res.status(messages.statusCode).json(messages);
     } catch (error) {
       let errorMessage = generateErrorResponse(error);

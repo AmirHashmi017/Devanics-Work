@@ -1,7 +1,7 @@
 import { io } from "../../index";
 import { EHttpStatus } from "../../enums/httpStatus.enum";
 import { ResponseMessage } from "../../enums/resMessage.enum";
-import { Boardroom, BoardroomComment, BoardroomPoll, BoardroomReaction, BoardroomReport } from "./boardroom.model";
+import { Boardroom, BoardroomComment, BoardroomPoll, BoardroomReaction, BoardroomReport, BoardroomRepost } from "./boardroom.model";
 import { Request } from "express";
 import { CustomError } from "../../errors/custom.error";
 import Users, { BlockedUser, Follow } from "../user/user.model";
@@ -285,27 +285,300 @@ class BoardroomService {
 
     const userData = await Users.findById(userId);
 
-    const { createdAt = new Date() } = userData || {};
-
-    const { limit = '25', offset = '0' } = query;
+    const { limit = '25', offset = '0', searchTerm = '' } = query;
 
     const chatOffset = parseInt(offset as string);
     const chatLimit = parseInt(limit as string);
 
-    const total = await Boardroom.find({
-      reportBy: { $nin: [userId] },
-      hideBy: { $nin: [userId] },
-      postedBy: {
-        $nin: await BlockedUser.find({ userId }).distinct('blockedUserId')
-      },
-      createdAt: { $gte: createdAt }
-    }).countDocuments()
+    // Ensure searchTermStr is always a string
+    let searchTermStr = '';
+    if (typeof searchTerm === 'string') searchTermStr = searchTerm;
+    else if (Array.isArray(searchTerm) && typeof searchTerm[0] === 'string') searchTermStr = searchTerm[0];
 
-    const messages = await Boardroom.aggregate([{
+    // Build total count pipeline
+    const totalPipeline: any[] = [
+      {
+        $match: {
+          reportBy: { $nin: [userId] },
+          hideBy: { $nin: [userId] }
+        }
+      },
+      {
+        $lookup: {
+          from: 'blockedusers',
+          localField: 'postedBy',
+          foreignField: 'blockedUserId',
+          as: 'blockedUserDetails'
+        }
+      },
+      {
+        $match: {
+          $expr: {
+            $not: {
+              $in: [userId, '$blockedUserDetails.userId']
+            }
+          }
+        }
+      },
+      {
+        $lookup: {
+          from: 'users',
+          as: 'postedBy',
+          foreignField: '_id',
+          localField: 'postedBy'
+        }
+      },
+      {
+        $addFields: {
+          postedBy: { $arrayElemAt: ["$postedBy", 0] }
+        }
+      }
+    ];
+    if (searchTermStr) {
+      totalPipeline.push({
+        $match: {
+          $or: [
+            { message: { $regex: new RegExp(searchTermStr, 'i') } },
+             { pollDescription: { $regex: new RegExp(searchTermStr, 'i') }},
+          ]
+        }
+      });
+    }
+    totalPipeline.push({ $count: "total" });
+    const totalResult = await Boardroom.aggregate(totalPipeline);
+    const total = totalResult[0]?.total || 0;
+
+    const pipeline: any[] = [{
       $match: {
         reportBy: { $nin: [userId] },
-        hideBy: { $nin: [userId] },
-        createdAt: { $gte: createdAt }
+        hideBy: { $nin: [userId] }
+      }
+    }, {
+      $lookup: {
+        from: 'blockedusers',
+        localField: 'postedBy',
+        foreignField: 'blockedUserId',
+        as: 'blockedUserDetails'
+      }
+    },
+    {
+      $lookup: {
+        from: 'follows',
+        localField: 'postedBy',
+        foreignField: 'user',
+        as: 'followings'
+      }
+    },
+    {
+      $match: {
+        $expr: {
+          $not: {
+            $in: [userId, '$blockedUserDetails.userId']
+          }
+        }
+      }
+    }, {
+      $lookup: {
+        from: 'boardroomcomments',
+        as: 'boardroomMessage',
+        foreignField: "messageId",
+        localField: '_id', pipeline: [
+          {
+            $count: 'comments'
+          },
+        ]
+      }
+    },
+    {
+      $addFields: {
+        likes: { $size: { $ifNull: ["$likedBy", []] } },
+        userReaction: {
+          $cond: [
+            { $in: [userId, { $ifNull: ["$likedBy", []] }] },
+            "like",
+            null
+          ]
+        }
+      }
+    },
+    {
+      $lookup: {
+        from: 'users',
+        as: 'postedBy',
+        foreignField: "_id",
+        localField: 'postedBy'
+      }
+    },
+    {
+      $addFields: {
+        postedBy: { $arrayElemAt: ["$postedBy", 0] }
+      },
+    }];
+
+    if (searchTermStr) {
+      pipeline.push({
+        $match: {
+          $or: [
+            { message: { $regex: new RegExp(searchTermStr, 'i') } },
+            { pollDescription: { $regex: new RegExp(searchTermStr, 'i') }},
+          ]
+        }
+      });
+    }
+
+    pipeline.push(
+      {
+        $addFields: {
+          isFollowing: {
+            $cond: {
+              if: {
+                $anyElementTrue: {
+                  $map: {
+                    input: "$followings",
+                    as: "f",
+                    in: {
+                      $and: [
+                        { $eq: ["$$f.following", userId] },
+                        { $eq: ["$$f.user", "$postedBy._id"] }
+                      ]
+                    }
+                  }
+                }
+              },
+              then: true,
+              else: false
+            }
+          }
+        }
+      },
+      {
+        $addFields: {
+          comments: {
+            $ifNull: [{ $arrayElemAt: ["$boardroomMessage.comments", 0] }, 0],
+          },
+        },
+      },
+      {
+        $sort: {
+          createdAt: -1
+        }
+      },
+      // poll results
+      // Aggregation pipeline
+      {
+        $lookup: {
+          from: 'boardroompolls', // Assuming this is the poll collection
+          as: 'pollData',
+          foreignField: 'messageId',
+          localField: '_id'
+        }
+      },
+      {
+        $addFields: {
+          totalVotes: {
+            $cond: {
+              if: { $and: [{ $eq: ['$msgType', 'poll'] }, { $gt: [{ $size: '$pollData' }, 0] }] }, // Only count votes for polls
+              then: { $size: { $ifNull: [{ $arrayElemAt: ['$pollData.votes', 0] }, []] } }, // Safeguard with $ifNull
+              else: 0
+            }
+          },
+          pollOptions: {
+            $cond: {
+              if: { $eq: ['$msgType', 'poll'] }, // Only fetch pollOptions if msgType is 'poll'
+              then: "$pollOptions", // Fetch pollOptions directly from message
+              else: [] // Return empty if not poll type
+            }
+          },
+          votesPerOption: {
+            $cond: {
+              if: { $and: [{ $eq: ['$msgType', 'poll'] }, { $gt: [{ $size: '$pollOptions' }, 0] }] }, // Ensure pollOptions exist and msgType is 'poll'
+              then: {
+                $map: {
+                  input: { $range: [0, { $size: '$pollOptions' }] }, // Loop through the index range of pollOptions
+                  as: 'index',
+                  in: {
+                    index: '$$index', // Add the index to the object
+                    voteCount: {
+                      $size: {
+                        $filter: {
+                          input: { $ifNull: [{ $arrayElemAt: ['$pollData.votes', 0] }, []] }, // Ensure votes array is not null
+                          as: 'vote',
+                          cond: { $eq: ['$$vote.selectedOption', '$$index'] } // Match the index with selectedOption
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              else: [] // Return empty array if no pollOptions or msgType is not 'poll'
+            }
+          },
+          userSelectedOption: {
+            $cond: [
+              {
+                $and: [{ $eq: ['$msgType', 'poll'] }, { $gt: [{ $size: { $ifNull: ['$pollData', []] } }, 0] }] // Only check user selection for polls
+              },
+              {
+                $cond: [
+                  {
+                    $in: [
+                      objectId(_id), // User ID
+                      {
+                        $map: {
+                          input: { $ifNull: [{ $arrayElemAt: ['$pollData.votes', 0] }, []] }, // Ensure votes array is not null
+                          as: 'vote',
+                          in: '$$vote.user'
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    $arrayElemAt: [
+                      {
+                        $map: {
+                          input: { $filter: { input: { $ifNull: [{ $arrayElemAt: ['$pollData.votes', 0] }, []] }, as: 'vote', cond: { $eq: ['$$vote.user', objectId(_id)] } } },
+                          as: 'vote',
+                          in: '$$vote.selectedOption'
+                        }
+                      },
+                      0
+                    ]
+                  },
+                  null
+                ]
+              },
+              null
+            ]
+          }
+        }
+      }, {
+        $project: {
+          boardroomMessage: 0,
+          reactions: 0,
+          pollData: 0, blockedUserDetails: 0
+        }
+      }
+    );
+
+    const messages = await Boardroom.aggregate(pipeline).skip(chatOffset).limit(chatLimit)
+
+    return {
+      message: ResponseMessage.SUCCESSFUL,
+      statusCode: EHttpStatus.OK,
+      data: { total, messages },
+    };
+  }
+
+  //get boardroom message by ID
+  async boardroomMessagebyId({params,payload}: Request) {
+    const { id: messageId}=params
+    const { _id } = payload;
+    const userId = objectId(_id);
+
+    // get message 
+    const messages = await Boardroom.aggregate([{
+      $match: {
+        _id: objectId(messageId)
       }
     }, {
       $lookup: {
@@ -500,15 +773,14 @@ class BoardroomService {
         pollData: 0, blockedUserDetails: 0
       }
     },
-    ]).skip(chatOffset).limit(chatLimit)
+    ])
 
     return {
       message: ResponseMessage.SUCCESSFUL,
       statusCode: EHttpStatus.OK,
-      data: { total, messages },
+      data: { messages },
     };
   }
-
 
   //post liked by specific user
 async likedBoardroomMessages({ params, query }: Request) {
@@ -950,6 +1222,46 @@ async likedBoardroomMessages({ params, query }: Request) {
       message: ResponseMessage.SUCCESSFUL,
       statusCode: EHttpStatus.OK,
       data: deletingMessage,
+    };
+  }
+
+  //Delete Message by Admin
+  async deleteMessagebyAdmin({ payload, params }: Request) {
+    const { id: messageId } = params;
+    const deletingMessage = await this.checkBoardroomHandler(messageId);
+
+    if (deletingMessage) {
+      await Boardroom.findByIdAndDelete(messageId);
+      await BoardroomReaction.findOneAndDelete({ messageId });
+      await BoardroomPoll.findOneAndDelete({ messageId });
+      await BoardroomComment.deleteMany({ messageId });
+      await BoardroomReport.deleteMany({ messageId });
+    } else {
+      throw new CustomError(EHttpStatus.BAD_REQUEST, ResponseMessage.BOARDROOM_MESSAGE_NOT_DELETE)
+    }
+
+    return {
+      message: ResponseMessage.SUCCESSFUL,
+      statusCode: EHttpStatus.OK,
+      data: deletingMessage,
+    };
+  }
+
+  //Delete comment by admin
+  async deleteCommentByAdmin({ payload, params }: Request) {
+    const { id: commentId } = params;
+    const deletingComment= await BoardroomComment.findById(commentId)
+
+    if (deletingComment) {
+      await BoardroomComment.findByIdAndDelete(commentId);
+    } else {
+      throw new CustomError(EHttpStatus.BAD_REQUEST, ResponseMessage.BOARDROOM_MESSAGE_NOT_DELETE)
+    }
+
+    return {
+      message: ResponseMessage.SUCCESSFUL,
+      statusCode: EHttpStatus.OK,
+      data: deletingComment,
     };
   }
 
@@ -1415,7 +1727,7 @@ async likedBoardroomMessages({ params, query }: Request) {
   // report messages list
   async reportList({ }: Request) {
     const reports = await BoardroomReport.find().populate([
-      { path: "messageId", model: "Boardroom" },
+      { path: "messageId", model: "boardroom" },
       { path: "reportedBy", model: "users" },
       { path: "reportedUser", model: "users" },
     ]);
@@ -1424,6 +1736,134 @@ async likedBoardroomMessages({ params, query }: Request) {
       data: { reports },
     };
   }
+
+  //Get report messages list of a specific post
+  async reportListPost({ params}: Request) {
+    const {id:postId}=params
+    const reports = await BoardroomReport.find({messageId:postId}).populate([
+      { path: "messageId", model: "boardroom" },
+      { path: "reportedBy", model: "users" },
+      { path: "reportedUser", model: "users" },
+    ]);
+    return {
+      statusCode: EHttpStatus.OK,
+      data: { reports },
+    };
+  }
+
+  // Get all users who liked a specific boardroom message
+  async likedUsersOfMessage({ params }: Request) {
+    const { id: messageId } = params;
+    // Find the boardroom message and populate likedBy
+    const message = await Boardroom.findById(messageId).populate({
+      path: 'likedBy',
+      model: 'users',
+      // Removed select to return all user fields
+    });
+    if (!message) {
+      throw new CustomError(
+        EHttpStatus.NOT_FOUND,
+        ResponseMessage.MESSAGE_NOT_FOUND
+      );
+    }
+    return {
+      message: ResponseMessage.SUCCESSFUL,
+      statusCode: EHttpStatus.OK,
+      data: message.likedBy || [],
+    };
+  }
+
+ async repostPost({ payload, params }: Request) {
+  const userId = payload._id;
+  const { id: postId } = params;
+
+  const repost= await BoardroomRepost.findOne({
+    repostedBy:userId,
+    post:postId
+  })
+  if(repost)
+  {
+    return{
+      statusCode: EHttpStatus.BAD_REQUEST,
+      ResponseMessage: ResponseMessage.ALREADY_REPOSTED
+    }
+  }
+
+  const repostedPost = await BoardroomRepost.create({
+    repostedBy: userId,
+    post: postId,
+  });
+
+  await repostedPost.populate([
+    { path: "repostedBy" },
+    { path: "post", populate: { path: "postedBy" } },
+  ]);
+
+  const repostCount = await BoardroomRepost.countDocuments({ post: postId });
+
+  const postDoc = repostedPost.post as unknown as any; 
+  const responseData = {
+    ...repostedPost.toObject(),
+    post: {
+      ...postDoc.toObject(),
+      repostCount: repostCount,
+    },
+  };
+
+  return {
+    statusCode: EHttpStatus.CREATED,
+    ResponseMessage: ResponseMessage.REPOST_CREATED,
+    data: responseData,
+  };
+}
+
+
+  async getRepostsOfPost({params}:Request)
+  {
+    const {id:postId}= params
+     const reposts = await BoardroomRepost.find({ post: postId }).populate([
+    { path: "repostedBy" },
+    { path: "post", populate: { path: "postedBy" } } 
+  ]);
+    return{
+      statusCode: EHttpStatus.OK,
+      ResponseMessage: ResponseMessage.SUCCESSFUL,
+      data:{
+        reposts:reposts,
+        repostcount: reposts.length
+    }
+  }
+  }
+
+  async deleteRepost({payload,params}:Request)
+  {
+    const userId= payload._id
+    const {id:repostId}= params
+
+    const repost=await BoardroomRepost.findOne({
+      _id: repostId,
+      repostedBy: userId
+    })
+    if(!repost)
+    {
+      return{
+        statusCode:EHttpStatus.NOT_FOUND,
+        ResponseMessage: ResponseMessage.NOT_FOUND
+      }
+    }
+    await BoardroomRepost.findOneAndDelete(
+      {
+      _id: repostId,
+      repostedBy: userId
+      }
+    )
+    return{
+      statusCode: EHttpStatus.OK,
+      ResponseMessage: ResponseMessage.REPOST_DELETED
+    }
+  }
+
+
 }
 
 export default new BoardroomService();

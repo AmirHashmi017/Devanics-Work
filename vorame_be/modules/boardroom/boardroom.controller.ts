@@ -90,6 +90,26 @@ export class BoardroomController {
     }
   }
 
+   async deleteMessagebyAdmin(req: Request, res: Response) {
+    try {
+      const boardroom = await BoardroomService.deleteMessagebyAdmin(req);
+      return res.status(boardroom.statusCode).json(boardroom);
+    } catch (error) {
+      let errorMessage = generateErrorResponse(error);
+      return res.status(errorMessage.statusCode).json(errorMessage);
+    }
+  }
+
+   async deleteCommentByAdmin(req: Request, res: Response) {
+    try {
+      const boardroom = await BoardroomService.deleteCommentByAdmin(req);
+      return res.status(boardroom.statusCode).json(boardroom);
+    } catch (error) {
+      let errorMessage = generateErrorResponse(error);
+      return res.status(errorMessage.statusCode).json(errorMessage);
+    }
+  }
+
   // add reaction
   async messageReaction(req: Request, res: Response) {
     try {
@@ -183,6 +203,71 @@ export class BoardroomController {
     try {
       const boardroomReports = await BoardroomService.reportList(req);
       return res.status(boardroomReports.statusCode).json(boardroomReports);
+    } catch (error) {
+      let errorMessage = generateErrorResponse(error);
+      return res.status(errorMessage.statusCode).json(errorMessage);
+    }
+  }
+
+  //Get reports of a post
+  async reportListPost(req: Request, res: Response) {
+    try {
+      const boardroomReports = await BoardroomService.reportListPost(req);
+      return res.status(boardroomReports.statusCode).json(boardroomReports);
+    } catch (error) {
+      let errorMessage = generateErrorResponse(error);
+      return res.status(errorMessage.statusCode).json(errorMessage);
+    }
+  }
+
+  // Get all users who liked a specific boardroom message
+  async likedUsersOfMessage(req: Request, res: Response) {
+    try {
+      const users = await BoardroomService.likedUsersOfMessage(req);
+      return res.status(users.statusCode).json(users);
+    } catch (error) {
+      let errorMessage = generateErrorResponse(error);
+      return res.status(errorMessage.statusCode).json(errorMessage);
+    }
+  }
+
+  // get single boardroom message by id
+  async boardroomMessagebyId(req: Request, res: Response) {
+    try {
+      const message = await BoardroomService.boardroomMessagebyId(req);
+      return res.status(message.statusCode).json(message);
+    } catch (error) {
+      let errorMessage = generateErrorResponse(error);
+      return res.status(errorMessage.statusCode).json(errorMessage);
+    }
+  }
+
+  //Create boardroom reposts
+  async repostPost(req: Request, res: Response) {
+    try {
+      const messages = await BoardroomService.repostPost(req);
+      return res.status(messages.statusCode).json(messages);
+    } catch (error) {
+      let errorMessage = generateErrorResponse(error);
+      return res.status(errorMessage.statusCode).json(errorMessage);
+    }
+  }
+
+   async getRepostsOfPost(req: Request, res: Response) {
+    try {
+      const messages = await BoardroomService.getRepostsOfPost(req);
+      return res.status(messages.statusCode).json(messages);
+    } catch (error) {
+      let errorMessage = generateErrorResponse(error);
+      return res.status(errorMessage.statusCode).json(errorMessage);
+    }
+  }
+
+   //Delete boardroom reposts
+  async deleteRepost(req: Request, res: Response) {
+    try {
+      const messages = await BoardroomService.deleteRepost(req);
+      return res.status(messages.statusCode).json(messages);
     } catch (error) {
       let errorMessage = generateErrorResponse(error);
       return res.status(errorMessage.statusCode).json(errorMessage);

@@ -6,6 +6,7 @@ import {
   IBoardroomReaction,
   IBoardroomPoll,
   IBoardroomReport,
+  IBoardroomRepost,
 } from "./interfaces/boardroom.interface";
 
 const FileSchema = new Schema<FileInterface>({
@@ -97,10 +98,17 @@ const boardroomCommentSchema = new mongoose.Schema<IBoardroomComment>(
 
   }, { timestamps: true }
 );
+const boardroomRepostSchema= new mongoose.Schema<IBoardroomRepost>(
+  {
+    repostedBy: {type:mongoose.Schema.Types.ObjectId,ref:"users"},
+    post:{type:mongoose.Schema.Types.ObjectId,ref:"boardroom"}
+  },{timestamps:true}
+)
 
 const BoardroomReaction = mongoose.model<IBoardroomReaction>("boardroomreaction", boardroomReactionSchema);
 const BoardroomPoll = mongoose.model<IBoardroomPoll>("boardroompoll", boardroomPollSchema);
 const BoardroomComment = mongoose.model<IBoardroomComment>("boardroomcomment", boardroomCommentSchema);
+const BoardroomRepost= mongoose.model<IBoardroomRepost>("repost",boardroomRepostSchema)
 
 const boardroomReportSchema = new Schema<IBoardroomReport>(
   {
@@ -141,4 +149,4 @@ const BoardroomReport = mongoose.model<IBoardroomReport>(
   boardroomReportSchema
 );
 
-export { Boardroom, BoardroomReaction, BoardroomPoll, BoardroomComment, BoardroomReport };
+export { Boardroom, BoardroomReaction, BoardroomPoll, BoardroomComment, BoardroomReport, BoardroomRepost };

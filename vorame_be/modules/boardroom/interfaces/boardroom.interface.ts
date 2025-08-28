@@ -47,7 +47,12 @@ interface IBoardroomReport extends Document {
   reportType: string;
 }
 
-export { IBoardroom, IBoardroomReaction, IBoardroomComment, IBoardroomPoll, IBoardroomReport };
+interface IBoardroomRepost extends Document{
+  repostedBy: ObjectId;
+  post: ObjectId;
+}
+
+export { IBoardroom, IBoardroomReaction, IBoardroomComment, IBoardroomPoll, IBoardroomReport, IBoardroomRepost };
 
 
 export const boardMsgTypes = {

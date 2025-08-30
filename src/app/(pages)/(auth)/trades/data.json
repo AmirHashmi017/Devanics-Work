@@ -1,0 +1,111 @@
+[
+  {
+    "heading": "Reconstruction, Planning and Supervision",
+    "tabs": [
+      {
+        "id": 1,
+        "name": "Energy Consulting"
+      },
+      {
+        "id": 2,
+        "name": "Material Estimating"
+      },
+      {
+        "id": 3,
+        "name": "Surveying"
+      },
+      {
+        "id": 4,
+        "name": "Engineering"
+      },
+      {
+        "id": 5,
+        "name": "Engineering"
+      },
+      {
+        "id": 6,
+        "name": "Safety Oversight, Support and Training"
+      },
+      {
+        "id": 7,
+        "name": "Architect"
+      },
+      {
+        "id": 8,
+        "name": "Energy Consulting"
+      },
+      {
+        "id": 9,
+        "name": "Energy Consulting"
+      },
+      {
+        "id": 10,
+        "name": "Reprographics"
+      },
+      {
+        "id": 11,
+        "name": "Commissioning"
+      },
+      {
+        "id": 12,
+        "name": "Site Supervisor"
+      },
+      {
+        "id": 13,
+        "name": "Steel Detailing"
+      }
+    ]
+  },
+  {
+    "heading": "Masonry Construction",
+    "tabs": [
+      {
+        "id": 1,
+        "name": "Energy Consulting"
+      },
+      {
+        "id": 2,
+        "name": "Material Estimating"
+      }
+    ]
+  },
+  {
+    "heading": "Concrete Construction",
+    "tabs": [
+      {
+        "id": 1,
+        "name": "Safety Oversight, Support and Training"
+      },
+      {
+        "id": 2,
+        "name": "Architect"
+      }
+    ]
+  },
+  {
+    "heading": "Demolition and Site Construction",
+    "tabs": [
+      {
+        "id": 1,
+        "name": "Material Estimating"
+      },
+      {
+        "id": 2,
+        "name": "Surveying"
+      }
+    ]
+  },
+  {
+    "heading": "Doors, Glass and Windows",
+    "tabs": [
+      {
+        "id": 1,
+        "name": "Site Supervisor"
+      },
+      {
+        "id": 2,
+        "name": "Steel Detailing"
+      }
+    ]
+  }
+]

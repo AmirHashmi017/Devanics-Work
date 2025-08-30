@@ -1,0 +1,9 @@
+.estimateTable_container .ant-table-thead .ant-table-cell {
+  background-color: #f9f5ff;
+  color: var(--Gray-700, #344054);
+  text-align: center;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}

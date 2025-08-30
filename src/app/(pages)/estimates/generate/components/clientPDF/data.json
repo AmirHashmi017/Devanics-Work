@@ -1,0 +1,69 @@
+{
+  "proposalID": "PR248568",
+  "recipient": "Angel Torff",
+  "jobSite": "2 W. Marsh Street Brooklyn, New York 11237",
+  "propertyName": "Michael James Property",
+  "companyName": "Michael Company Name",
+  "projectName": "2 W. Marsh Street Brooklyn, NY 11237",
+
+  "scope": "This is note that add during estimation ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content.",
+  "items": [
+    {
+      "description": "Skid Steer Brickman",
+      "quantity": "12",
+      "totalPrice": "$234"
+    },
+    {
+      "description": "Skid Steer Brickman",
+      "quantity": "02",
+      "totalPrice": "$200"
+    },
+    { "description": "Achillae m", "quantity": "08", "totalPrice": "$200" },
+    { "description": "Chainsaw", "quantity": "02", "totalPrice": "$200" },
+    { "description": "Chainsaw", "quantity": "08", "totalPrice": "$200" },
+    { "description": "Supervision", "quantity": "02", "totalPrice": "$200" },
+    { "description": "Technology", "quantity": "08", "totalPrice": "$200" },
+    { "description": "Technology", "quantity": "02", "totalPrice": "$200" },
+    { "description": "Michael James", "quantity": "08", "totalPrice": "$200" },
+    {
+      "description": "Skid Steer Brickman",
+      "quantity": "12",
+      "totalPrice": "$234"
+    },
+    {
+      "description": "Skid Steer Brickman",
+      "quantity": "02",
+      "totalPrice": "$200"
+    },
+    { "description": "Achillae m", "quantity": "08", "totalPrice": "$200" },
+    { "description": "Chainsaw", "quantity": "02", "totalPrice": "$200" },
+    { "description": "Chainsaw", "quantity": "08", "totalPrice": "$200" },
+    { "description": "Supervision", "quantity": "02", "totalPrice": "$200" },
+    { "description": "Technology", "quantity": "08", "totalPrice": "$200" },
+    { "description": "Technology", "quantity": "02", "totalPrice": "$200" },
+    { "description": "Michael James", "quantity": "08", "totalPrice": "$200" },
+    {
+      "description": "Skid Steer Brickman",
+      "quantity": "02",
+      "totalPrice": "$200"
+    },
+    { "description": "Achillae m", "quantity": "08", "totalPrice": "$200" },
+    { "description": "Chainsaw", "quantity": "02", "totalPrice": "$200" },
+    { "description": "Chainsaw", "quantity": "08", "totalPrice": "$200" },
+    { "description": "Supervision", "quantity": "02", "totalPrice": "$200" },
+    { "description": "Technology", "quantity": "08", "totalPrice": "$200" },
+    { "description": "Technology", "quantity": "02", "totalPrice": "$200" },
+    { "description": "Michael James", "quantity": "08", "totalPrice": "$200" }
+  ],
+  "clientApproval": {
+    "signature": "",
+    "date": ""
+  },
+
+  "companyApproval": {
+    "signature": "",
+    "date": ""
+  },
+
+  "totalAmount": 5500
+}

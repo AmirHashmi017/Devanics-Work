@@ -1,0 +1,6 @@
+.create_project_input_selection .ant-input-wrapper .ant-input {
+  padding: 10px 14px;
+  /* border-radius: 8px; */
+  border: 1px solid var(--Gray-300, #d0d5dd);
+  background: var(--Base-White, #fff);
+}

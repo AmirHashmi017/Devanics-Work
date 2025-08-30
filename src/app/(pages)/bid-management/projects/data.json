@@ -1,0 +1,42 @@
+[
+  {
+    "project": "Alex Roman",
+    "bid-date": "2019-01-01",
+    "location": "San Francisco, CA",
+    "bids": "3",
+    "stage": "GC and Sub-Bidding",
+    "status": "active"
+  },
+  {
+    "project": "Alex Roman",
+    "bid-date": "2019-01-01",
+    "location": "San Francisco, CA",
+    "bids": "3",
+    "stage": "GC and Sub-Bidding",
+    "status": "active"
+  },
+  {
+    "project": "Alex Roman",
+    "bid-date": "2019-01-01",
+    "location": "San Francisco, CA",
+    "bids": "3",
+    "stage": "GC and Sub-Bidding",
+    "status": "expired"
+  },
+  {
+    "project": "Alex Roman",
+    "bid-date": "2019-01-01",
+    "location": "San Francisco, CA",
+    "bids": "3",
+    "stage": "GC and Sub-Bidding",
+    "status": "draft"
+  },
+  {
+    "project": "Alex Roman",
+    "bid-date": "2019-01-01",
+    "location": "San Francisco, CA",
+    "bids": "3",
+    "stage": "GC and Sub-Bidding",
+    "status": "draft"
+  }
+]

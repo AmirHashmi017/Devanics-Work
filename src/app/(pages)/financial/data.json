@@ -1,0 +1,5033 @@
+[
+  {
+    "code": 999,
+    "description": "OH Operational Cost",
+    "division": "Miscellaneous"
+  },
+  {
+    "code": 1000,
+    "description": "General Contractor Fee",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1000.001,
+    "description": "CM Fee",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1001,
+    "description": "LEED Commissioning",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1002,
+    "description": "Additional Savings",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1003,
+    "description": "Sales Tax",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1004,
+    "description": "Legal Fees",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1005,
+    "description": "General Contractors Fee",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1006,
+    "description": "Project Reserve",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1007,
+    "description": "Perdium Travel",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1008,
+    "description": "CM Contingency",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1008.001,
+    "description": "CM Alternate Contingency",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1009,
+    "description": "Change Order Profit",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1010,
+    "description": "General Conditions",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1010.001,
+    "description": "CM Fee",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1011,
+    "description": "DPI Plotter",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1012,
+    "description": "General Requirements",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1013,
+    "description": "Computer IT Expense",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1014,
+    "description": "CM Contingency for Owner Chngs",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1015,
+    "description": "Pre Construction Services",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1015.999,
+    "description": "Pre Con Allowance Reconciliation",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1016,
+    "description": "Interest",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1017,
+    "description": "General Requirements",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1018,
+    "description": "Value Engineering",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1019,
+    "description": "Supplemental Improvements",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1020,
+    "description": "General Contingency",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1021,
+    "description": "PIB - Bonus Pool",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1022,
+    "description": "Design Services",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1023,
+    "description": "Owner Contingency",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1024,
+    "description": "Misc. Contingency",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1025,
+    "description": "Design Contingency",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1026,
+    "description": "ASI's Combined",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1030,
+    "description": "General Trades",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1039,
+    "description": "Engineer Consultants",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1040,
+    "description": "Architectural Design",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1040.1,
+    "description": "Structural & MEP Design",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1040.2,
+    "description": "Fire Sprinkler Design",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1041,
+    "description": "Real Estate Fee",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1042,
+    "description": "O H 3%",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1043,
+    "description": "Profit",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1045,
+    "description": "O H & Profit",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1046,
+    "description": "Security",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1047,
+    "description": "Project Executive",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1048,
+    "description": "SUPERINTENDENT TRUCK ALLOW",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1049,
+    "description": "Accounting",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1049.001,
+    "description": "Labor Burden",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1049.002,
+    "description": "Office Rent",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1050,
+    "description": "Supervision",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1050.05,
+    "description": "Vice President",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1051,
+    "description": "Assistant Supervisor",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1052,
+    "description": "Project Management",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1052.001,
+    "description": "Asst. Project Management",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1052.002,
+    "description": "SR. Project Manager",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1053,
+    "description": "Project Engineer",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1054,
+    "description": "Field Personnel",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1055,
+    "description": "Field Office Staff",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1056,
+    "description": "Postage",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1057,
+    "description": "Technology Fee",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1058,
+    "description": "Office  - Misc",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1059,
+    "description": "Vehicle",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1059.001,
+    "description": "Truck",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1060,
+    "description": "Fuel",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1062,
+    "description": "Fuel Asst. Superintendent",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1063,
+    "description": "Superintendent",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1064,
+    "description": "Assistant Superintendent",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1065,
+    "description": "General Superintendent",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1066,
+    "description": "Punch Labor",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1070,
+    "description": "Submittal Exchange",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1080,
+    "description": "Plant Cost",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1090,
+    "description": "Commissioning",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1091,
+    "description": "FF&E Allowance",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1092,
+    "description": "Technology Allowances",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1093,
+    "description": "Geotechnical Rep",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1094,
+    "description": "Construction Testing",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1095,
+    "description": "Warranty Work",
+    "division": "Warranty Work"
+  },
+  {
+    "code": 1100,
+    "description": "Allowances",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1100.001,
+    "description": "Repair Existing Media Allow.",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1100.002,
+    "description": "Wastewater Treatment - Allow.",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1100.003,
+    "description": "Hwy Turn Lane - Allow.",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1100.004,
+    "description": "Asbestos Abatement Allow.",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1100.005,
+    "description": "Unit Price Allowances",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1100.006,
+    "description": "Sitework Soils Allowance",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1100.007,
+    "description": "Pre-GMP",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1100.008,
+    "description": "GMP",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1100.009,
+    "description": "Allowances - Holds CMS",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1100.01,
+    "description": "Allowance - Playground Equipment",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1100.011,
+    "description": "Allowance - Community Antenna",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1100.012,
+    "description": "Allowance - Attic Stock for Hardware",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1100.013,
+    "description": "Allowance - Masonry Lintel Change",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1100.016,
+    "description": "Unallocated  Owner Allowance",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1100.02,
+    "description": "Holds - Wheel Wash",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1100.021,
+    "description": "Holds - Slab Moisture Mitigation",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1100.022,
+    "description": "Holds - Signage",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1100.023,
+    "description": "Holds - Visual Display Boards",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1100.024,
+    "description": "Holds - Temp Heat",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1101,
+    "description": "Grate Replace Allowance",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1102,
+    "description": "Allowance - Sewer liftstation",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1103,
+    "description": "Accounting Fee",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1104,
+    "description": "Accepted Cost Reduction",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1113,
+    "description": "Advertising Marketing",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1113.01,
+    "description": "Groundbreaking Ceremony",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1114,
+    "description": "Cost of Work",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1115,
+    "description": "Vendor Contingency Cost",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1140,
+    "description": "Estimating Labor Dept - General",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1195,
+    "description": "COVID 19 Related",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1199,
+    "description": "CM General Contingency",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1208,
+    "description": "Hardware (Misc. Tools)",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1209,
+    "description": "Testing Allowance",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1210,
+    "description": "Allowances",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1210.001,
+    "description": "Traffic Control",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1210.002,
+    "description": "Snow & Ice Removal",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1210.003,
+    "description": "Power code - temp",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1210.004,
+    "description": "Power code - Perm",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1210.005,
+    "description": "Temp Water Service",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1210.006,
+    "description": "Temp Heat - Nat Gas Service",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1210.007,
+    "description": "Temporary Roads",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1210.008,
+    "description": "Sign Permits",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1210.009,
+    "description": "Zoning Fees - Owner",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1210.01,
+    "description": "Utility Impact Fees",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1210.011,
+    "description": "Building Permit Fees - Owner",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1212,
+    "description": "Jobsite Camera",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1213,
+    "description": "Drone Photos",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1230,
+    "description": "Alternates",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1231,
+    "description": "Accelaration Cost",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1232,
+    "description": "Light Weight Concrete",
+    "division": "Concrete"
+  },
+  {
+    "code": 1233,
+    "description": "Grease Trap",
+    "division": "Finishes"
+  },
+  {
+    "code": 1234,
+    "description": "Pre Cast Coping",
+    "division": "Concrete"
+  },
+  {
+    "code": 1305,
+    "description": "Business License",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1310,
+    "description": "Permits",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1311,
+    "description": "Record Retention",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1320,
+    "description": "Insurance",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1321,
+    "description": "SubGuard Insurance",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1322,
+    "description": "Construction Progress Docs",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1323,
+    "description": "AS-BUILT DRAWINGS",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1324,
+    "description": "POST BID BUUETON & CO DOCS",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1325,
+    "description": "CM's Bonds and Insurance",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1326,
+    "description": "Payment & Performance Bond",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1327,
+    "description": "Encroachment Bond",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1328,
+    "description": "GL Umbrella PL Pollution WC",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1329,
+    "description": "Builders Risk",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1450,
+    "description": "Quality Control",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1500,
+    "description": "Mechanical-HVAC",
+    "division": "Mechanical"
+  },
+  {
+    "code": 1501,
+    "description": "Scaffolding",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1502,
+    "description": "Construction Signs",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1503,
+    "description": "Temp. Roads",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1504,
+    "description": "Break Area",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1505,
+    "description": "Temp. Heat",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1506,
+    "description": "Temp. Power",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1507,
+    "description": "Permanent Power",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1508,
+    "description": "Temp. Water Service",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1509,
+    "description": "Drinking Water   Ice",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1510,
+    "description": "Temp. Utilities",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1511,
+    "description": "Port. Toilets",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1512,
+    "description": "Job Phone",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1513,
+    "description": "Temp. Fencing",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1514,
+    "description": "Rental Equipment",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1515,
+    "description": "Jobsite Office",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1516,
+    "description": "Conex",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1517,
+    "description": "Contract Closeout",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1518,
+    "description": "Job Office Equipment",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1519,
+    "description": "Job Office Supplies",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1520,
+    "description": "Field Office & Sheds",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1521,
+    "description": "Private Locates",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1522,
+    "description": "IT Support",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1523,
+    "description": "Aerial-Drone Photography",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1524,
+    "description": "Fire Extinguisher",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1540,
+    "description": "Mobilization",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1545,
+    "description": "Equipment Installation",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1546,
+    "description": "Small Tools",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1547,
+    "description": "Equipment, Fuel, and Repair",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1550,
+    "description": "Punch List",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1551,
+    "description": "Warranty Period Labor",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1552,
+    "description": "Printing of Drawings & Specs",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1553,
+    "description": "Startup & Testing",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1554,
+    "description": "Job Site Signage",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1555,
+    "description": "Progress Photos",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1558,
+    "description": "Clean Road",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1559,
+    "description": "Daily Clean",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1560,
+    "description": "Clean-up Continuous",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1561,
+    "description": "Clean Up Final",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1562,
+    "description": "Pressure Washing",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1565,
+    "description": "Dumpsters",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1566,
+    "description": "Recycle Scrap Metal",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1567,
+    "description": "First Aid Supplies",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1568,
+    "description": "Safety",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1568.1,
+    "description": "COVID-19 Measures",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1569,
+    "description": "Safety Manager",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1570,
+    "description": "Construction Signs",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1571,
+    "description": "Impact Fees",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1572,
+    "description": "Employee Badges",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1573,
+    "description": "Misc. Safety",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1600,
+    "description": "Electrical-Sub-L",
+    "division": "Electrical"
+  },
+  {
+    "code": 1601,
+    "description": "Lighting Material",
+    "division": "Electrical"
+  },
+  {
+    "code": 1640,
+    "description": "Owner - Furnished Products",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1700,
+    "description": "Schedule",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1701,
+    "description": "Schedule Updates",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1732,
+    "description": "Selective Demolition",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1733,
+    "description": "Demolition Allowance",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1740,
+    "description": "Selective Demolition- L",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1741,
+    "description": "Temp Roof Weather Protection",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1750,
+    "description": "Starting aand Adjusting",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1780,
+    "description": "Close Out Submittals",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1781,
+    "description": "Warranty Work",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1800,
+    "description": "Surveying",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1801,
+    "description": "Layout Control",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1802,
+    "description": "As-Built Surveys",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1805,
+    "description": "Lodging   Hotels",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1810,
+    "description": "Commissioning",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1900,
+    "description": "Land Acquisition",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1950,
+    "description": "General Trades",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1951,
+    "description": "Metcon (General Trades)",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1952,
+    "description": "Hurricane Repairs",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1990,
+    "description": "CM Fee   General Conditions",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1991,
+    "description": "Utility Locates",
+    "division": "General Requirements"
+  },
+  {
+    "code": 1992,
+    "description": "General Trades",
+    "division": "General Requirements"
+  },
+  {
+    "code": 2000.1,
+    "description": "Site Work",
+    "division": "Site Work"
+  },
+  {
+    "code": 2001,
+    "description": "Site Work from Contingency",
+    "division": "Site Work"
+  },
+  {
+    "code": 2002,
+    "description": "Site Work Contingency Balance",
+    "division": "Site Work"
+  },
+  {
+    "code": 2003,
+    "description": "Site Work- Materials",
+    "division": "Site Work"
+  },
+  {
+    "code": 2004,
+    "description": "Site Work - Labors",
+    "division": "Site Work"
+  },
+  {
+    "code": 2005,
+    "description": "Unsuitable Soil Allowance",
+    "division": "Site Work"
+  },
+  {
+    "code": 2006,
+    "description": "Unsuitable Soil Remove Replace",
+    "division": "Site Work"
+  },
+  {
+    "code": 2009,
+    "description": "Support Braces",
+    "division": "Site Work"
+  },
+  {
+    "code": 2010,
+    "description": "Timber Piles",
+    "division": "Site Work"
+  },
+  {
+    "code": 2011,
+    "description": "Geo Piers",
+    "division": "Site Work"
+  },
+  {
+    "code": 2012,
+    "description": "Pipe Bollards",
+    "division": "Site Work"
+  },
+  {
+    "code": 2013,
+    "description": "Anchor Bolts",
+    "division": "Site Work"
+  },
+  {
+    "code": 2014,
+    "description": "CSX Allowance",
+    "division": "Site Work"
+  },
+  {
+    "code": 2015,
+    "description": "Sign Allowance",
+    "division": "Site Work"
+  },
+  {
+    "code": 2016,
+    "description": "Control Allowance",
+    "division": "Site Work"
+  },
+  {
+    "code": 2017,
+    "description": "Contigency Allowance",
+    "division": "Site Work"
+  },
+  {
+    "code": 2018,
+    "description": "Testing Allowance",
+    "division": "Site Work"
+  },
+  {
+    "code": 2066,
+    "description": "Contaminated Soils Removal",
+    "division": "Site Work"
+  },
+  {
+    "code": 2067,
+    "description": "Abatement Survey",
+    "division": "Site Work"
+  },
+  {
+    "code": 2068,
+    "description": "Abatement & Demolition Phase I",
+    "division": "Site Work"
+  },
+  {
+    "code": 2069,
+    "description": "Asbestos Abatement",
+    "division": "Site Work"
+  },
+  {
+    "code": 2070,
+    "description": "Site Demolition",
+    "division": "Site Work"
+  },
+  {
+    "code": 2071,
+    "description": "Demo concrete slabs",
+    "division": "Site Work"
+  },
+  {
+    "code": 2072,
+    "description": "Demo concrete curbing",
+    "division": "Site Work"
+  },
+  {
+    "code": 2073,
+    "description": "Demo concrete sidewalks",
+    "division": "Site Work"
+  },
+  {
+    "code": 2074,
+    "description": "Demo asphalt",
+    "division": "Site Work"
+  },
+  {
+    "code": 2075,
+    "description": "Demo brick sidewalk",
+    "division": "Site Work"
+  },
+  {
+    "code": 2076,
+    "description": "Demo trees",
+    "division": "Site Work"
+  },
+  {
+    "code": 2077,
+    "description": "Demo sanitary sewer",
+    "division": "Site Work"
+  },
+  {
+    "code": 2078,
+    "description": "Demo storm drain",
+    "division": "Site Work"
+  },
+  {
+    "code": 2079,
+    "description": "Demo site structures",
+    "division": "Site Work"
+  },
+  {
+    "code": 2080,
+    "description": "Demo lab building",
+    "division": "Site Work"
+  },
+  {
+    "code": 2081,
+    "description": "Demo water line",
+    "division": "Site Work"
+  },
+  {
+    "code": 2082,
+    "description": "Demo Fenciing",
+    "division": "Site Work"
+  },
+  {
+    "code": 2083,
+    "description": "Demo existing wet well",
+    "division": "Site Work"
+  },
+  {
+    "code": 2084,
+    "description": "Reinstall fencing",
+    "division": "Site Work"
+  },
+  {
+    "code": 2085,
+    "description": "Traffic Control",
+    "division": "Site Work"
+  },
+  {
+    "code": 2086,
+    "description": "Demolition General",
+    "division": "Site Work"
+  },
+  {
+    "code": 2087,
+    "description": "Demo Wood Floors",
+    "division": "Site Work"
+  },
+  {
+    "code": 2090,
+    "description": "Abatement Allowance",
+    "division": "Site Work"
+  },
+  {
+    "code": 2091,
+    "description": "Demolition Allowance",
+    "division": "Site Work"
+  },
+  {
+    "code": 2095,
+    "description": "Concrete Driveway -M",
+    "division": "Site Work"
+  },
+  {
+    "code": 2096,
+    "description": "Concrete Driveway - L",
+    "division": "Site Work"
+  },
+  {
+    "code": 2097,
+    "description": "Driveway",
+    "division": "Site Work"
+  },
+  {
+    "code": 2100,
+    "description": "Foundation footing - Material",
+    "division": "Site Work"
+  },
+  {
+    "code": 2101,
+    "description": "Foundation footing - Labor",
+    "division": "Site Work"
+  },
+  {
+    "code": 2110,
+    "description": "Site Clearing",
+    "division": "Site Work"
+  },
+  {
+    "code": 2111,
+    "description": "Clear and grub",
+    "division": "Site Work"
+  },
+  {
+    "code": 2112,
+    "description": "Strip topsoil",
+    "division": "Site Work"
+  },
+  {
+    "code": 2200,
+    "description": "Earthwork",
+    "division": "Site Work"
+  },
+  {
+    "code": 2201,
+    "description": "Borrow for bldg pads - M",
+    "division": "Site Work"
+  },
+  {
+    "code": 2201.5,
+    "description": "Borrow for bldg pads - L",
+    "division": "Site Work"
+  },
+  {
+    "code": 2202,
+    "description": "Grade bldg pads",
+    "division": "Site Work"
+  },
+  {
+    "code": 2203,
+    "description": "Compact bldg pads",
+    "division": "Site Work"
+  },
+  {
+    "code": 2282,
+    "description": "Termite Control",
+    "division": "Site Work"
+  },
+  {
+    "code": 2298,
+    "description": "Compact soils",
+    "division": "Site Work"
+  },
+  {
+    "code": 2299,
+    "description": "Rough Grade",
+    "division": "Site Work"
+  },
+  {
+    "code": 2300,
+    "description": "Excavation Export Fill",
+    "division": "Site Work"
+  },
+  {
+    "code": 2301,
+    "description": "Wet well excavation",
+    "division": "Site Work"
+  },
+  {
+    "code": 2302,
+    "description": "Wet well stonebase",
+    "division": "Site Work"
+  },
+  {
+    "code": 2303,
+    "description": "Wet well Precast material",
+    "division": "Site Work"
+  },
+  {
+    "code": 2304,
+    "description": "Wetwell Precast Labor",
+    "division": "Site Work"
+  },
+  {
+    "code": 2305,
+    "description": "Wet well Pumps & Controls mate",
+    "division": "Site Work"
+  },
+  {
+    "code": 2306,
+    "description": "Wet well Pumps & Controls Labo",
+    "division": "Site Work"
+  },
+  {
+    "code": 2307,
+    "description": "Wet Taps",
+    "division": "Site Work"
+  },
+  {
+    "code": 2308,
+    "description": "Concrete Vaults - L",
+    "division": "Site Work"
+  },
+  {
+    "code": 2309,
+    "description": "Concrete Vaults - M",
+    "division": "Site Work"
+  },
+  {
+    "code": 2310,
+    "description": "Grade around bldg",
+    "division": "Site Work"
+  },
+  {
+    "code": 2320,
+    "description": "Backfill to bldg - M",
+    "division": "Site Work"
+  },
+  {
+    "code": 2321,
+    "description": "Backfill to bldg - L",
+    "division": "Site Work"
+  },
+  {
+    "code": 2360,
+    "description": "Surge Stone",
+    "division": "Site Work"
+  },
+  {
+    "code": 2368,
+    "description": "Erosion Control",
+    "division": "Site Work"
+  },
+  {
+    "code": 2369,
+    "description": "Erosion Control Material",
+    "division": "Site Work"
+  },
+  {
+    "code": 2370,
+    "description": "Erosion Control Labor",
+    "division": "Site Work"
+  },
+  {
+    "code": 2371,
+    "description": "(EC) silt fence",
+    "division": "Site Work"
+  },
+  {
+    "code": 2372,
+    "description": "(EC)  inlet protection",
+    "division": "Site Work"
+  },
+  {
+    "code": 2373,
+    "description": "(EC) Install gravel entracnces",
+    "division": "Site Work"
+  },
+  {
+    "code": 2374,
+    "description": "(EC) Temp Seeding",
+    "division": "Site Work"
+  },
+  {
+    "code": 2375,
+    "description": "(EC) Sediment Traps",
+    "division": "Site Work"
+  },
+  {
+    "code": 2376,
+    "description": "(EC) Diversion berms",
+    "division": "Site Work"
+  },
+  {
+    "code": 2377,
+    "description": "(EC) Straw Matting",
+    "division": "Site Work"
+  },
+  {
+    "code": 2378,
+    "description": "(EC) Check Dam",
+    "division": "Site Work"
+  },
+  {
+    "code": 2379,
+    "description": "Micropiles",
+    "division": "Site Work"
+  },
+  {
+    "code": 2400,
+    "description": "Hauling",
+    "division": "Site Work"
+  },
+  {
+    "code": 2410,
+    "description": "Sand",
+    "division": "Site Work"
+  },
+  {
+    "code": 2500,
+    "description": "Grading",
+    "division": "Site Work"
+  },
+  {
+    "code": 2510,
+    "description": "Water Dist. Systems Lbr.",
+    "division": "Site Work"
+  },
+  {
+    "code": 2511,
+    "description": "Water Dist. Systems Mat.",
+    "division": "Site Work"
+  },
+  {
+    "code": 2512,
+    "description": "Domestic Water Systems",
+    "division": "Site Work"
+  },
+  {
+    "code": 2515,
+    "description": "Water & Soil Fees",
+    "division": "Site Work"
+  },
+  {
+    "code": 2520,
+    "description": "Curb & Gutter Labor",
+    "division": "Site Work"
+  },
+  {
+    "code": 2521,
+    "description": "Curb & Gutter Mat.",
+    "division": "Site Work"
+  },
+  {
+    "code": 2522,
+    "description": "Curb & Gutter Survey",
+    "division": "Site Work"
+  },
+  {
+    "code": 2523,
+    "description": "Stamped Concrete Sidewalk -  L",
+    "division": "Site Work"
+  },
+  {
+    "code": 2524,
+    "description": "Stamped Concrete Sidewalk -  M",
+    "division": "Site Work"
+  },
+  {
+    "code": 2525,
+    "description": "Stamped Concrete Paving",
+    "division": "Site Work"
+  },
+  {
+    "code": 2526,
+    "description": "Stain Seal Sidewalk - L",
+    "division": "Site Work"
+  },
+  {
+    "code": 2527,
+    "description": "Stain Seal Sidewalk - M",
+    "division": "Site Work"
+  },
+  {
+    "code": 2529,
+    "description": "Sanitary Sewer",
+    "division": "Site Work"
+  },
+  {
+    "code": 2530,
+    "description": "Sanitary Sewer Labor",
+    "division": "Site Work"
+  },
+  {
+    "code": 2531,
+    "description": "Sanitary Sewer Mat",
+    "division": "Site Work"
+  },
+  {
+    "code": 2532,
+    "description": "San Sewer Survey",
+    "division": "Site Work"
+  },
+  {
+    "code": 2533,
+    "description": "San Sewer Bedding Stone",
+    "division": "Site Work"
+  },
+  {
+    "code": 2534,
+    "description": "Select Backfill for Pipe",
+    "division": "Site Work"
+  },
+  {
+    "code": 2535,
+    "description": "Select Fill",
+    "division": "Site Work"
+  },
+  {
+    "code": 2536,
+    "description": "Bedding Foundation Stone",
+    "division": "Site Work"
+  },
+  {
+    "code": 2553,
+    "description": "Natural Gas Distribution",
+    "division": "Site Work"
+  },
+  {
+    "code": 2554,
+    "description": "Gas Main Subcontractor",
+    "division": "Site Work"
+  },
+  {
+    "code": 2630,
+    "description": "Storm Drainage Labor",
+    "division": "Site Work"
+  },
+  {
+    "code": 2631,
+    "description": "Storm Drainage Mat.",
+    "division": "Site Work"
+  },
+  {
+    "code": 2632,
+    "description": "Storm Dr. Survey",
+    "division": "Site Work"
+  },
+  {
+    "code": 2633,
+    "description": "Storm Dr. Bedding Stone",
+    "division": "Site Work"
+  },
+  {
+    "code": 2634,
+    "description": "Storm Drainage",
+    "division": "Site Work"
+  },
+  {
+    "code": 2640,
+    "description": "Water Syst. potable-M",
+    "division": "Site Work"
+  },
+  {
+    "code": 2665,
+    "description": "Water Syst. potable-L",
+    "division": "Site Work"
+  },
+  {
+    "code": 2666,
+    "description": "Water syst. fire prot.- M",
+    "division": "Site Work"
+  },
+  {
+    "code": 2667,
+    "description": "Water syst. fire prot.-L",
+    "division": "Site Work"
+  },
+  {
+    "code": 2668,
+    "description": "Water syst. fire protection",
+    "division": "Site Work"
+  },
+  {
+    "code": 2670,
+    "description": "Wells & Pumps",
+    "division": "Site Work"
+  },
+  {
+    "code": 2700,
+    "description": "ABC Stone Material",
+    "division": "Site Work"
+  },
+  {
+    "code": 2701,
+    "description": "ABC Stone Labor",
+    "division": "Site Work"
+  },
+  {
+    "code": 2702,
+    "description": "Rip Rap Labor",
+    "division": "Site Work"
+  },
+  {
+    "code": 2703,
+    "description": "Rip Rap Mat.",
+    "division": "Site Work"
+  },
+  {
+    "code": 2704,
+    "description": "#57 Stone Labor",
+    "division": "Site Work"
+  },
+  {
+    "code": 2705,
+    "description": "# 57 Stone Mat.",
+    "division": "Site Work"
+  },
+  {
+    "code": 2706,
+    "description": "Parking Lot Striping",
+    "division": "Site Work"
+  },
+  {
+    "code": 2707,
+    "description": "Track layout",
+    "division": "Site Work"
+  },
+  {
+    "code": 2708,
+    "description": "Track Grading",
+    "division": "Site Work"
+  },
+  {
+    "code": 2709,
+    "description": "Track Stone Base",
+    "division": "Site Work"
+  },
+  {
+    "code": 2710,
+    "description": "Track Paving",
+    "division": "Site Work"
+  },
+  {
+    "code": 2711,
+    "description": "Track Synthetic Surface",
+    "division": "Site Work"
+  },
+  {
+    "code": 2712,
+    "description": "Concrete Edging",
+    "division": "Site Work"
+  },
+  {
+    "code": 2713,
+    "description": "Concrete Sidewalks - M",
+    "division": "Site Work"
+  },
+  {
+    "code": 2713.5,
+    "description": "Concrete Sidewalks - L",
+    "division": "Site Work"
+  },
+  {
+    "code": 2714,
+    "description": "Field Events",
+    "division": "Site Work"
+  },
+  {
+    "code": 2715,
+    "description": "Concrete Sidewalks",
+    "division": "Site Work"
+  },
+  {
+    "code": 2716,
+    "description": "Sidewalk Repairs",
+    "division": "Site Work"
+  },
+  {
+    "code": 2717,
+    "description": "Concrete Repairs",
+    "division": "Site Work"
+  },
+  {
+    "code": 2718,
+    "description": "Decorative Concrete",
+    "division": "Site Work"
+  },
+  {
+    "code": 2720,
+    "description": "Site Drainage",
+    "division": "Site Work"
+  },
+  {
+    "code": 2725,
+    "description": "Steel Casing Jack & Bore",
+    "division": "Site Work"
+  },
+  {
+    "code": 2726,
+    "description": "Directional Bore",
+    "division": "Site Work"
+  },
+  {
+    "code": 2727,
+    "description": "Retaining Wall",
+    "division": "Site Work"
+  },
+  {
+    "code": 2728,
+    "description": "Guardrail",
+    "division": "Site Work"
+  },
+  {
+    "code": 2730,
+    "description": "Sewer Force Main",
+    "division": "Site Work"
+  },
+  {
+    "code": 2731,
+    "description": "Sewer Slip Lining",
+    "division": "Site Work"
+  },
+  {
+    "code": 2732,
+    "description": "Air Release Valve",
+    "division": "Site Work"
+  },
+  {
+    "code": 2733,
+    "description": "Pump Station Upgrades",
+    "division": "Site Work"
+  },
+  {
+    "code": 2734,
+    "description": "Pump Rental",
+    "division": "Site Work"
+  },
+  {
+    "code": 2735,
+    "description": "Pump Station - M",
+    "division": "Site Work"
+  },
+  {
+    "code": 2736,
+    "description": "Pump Station - L",
+    "division": "Site Work"
+  },
+  {
+    "code": 2737,
+    "description": "Pump Station - Electrical",
+    "division": "Site Work"
+  },
+  {
+    "code": 2739,
+    "description": "Septic tank Systems",
+    "division": "Site Work"
+  },
+  {
+    "code": 2740,
+    "description": "Fine Grade for Paving",
+    "division": "Site Work"
+  },
+  {
+    "code": 2741,
+    "description": "Hot mix asph. paving-M",
+    "division": "Site Work"
+  },
+  {
+    "code": 2742,
+    "description": "Asphalt overlay",
+    "division": "Site Work"
+  },
+  {
+    "code": 2743,
+    "description": "Mill existing asphalt",
+    "division": "Site Work"
+  },
+  {
+    "code": 2744,
+    "description": "Asphalt Patching",
+    "division": "Site Work"
+  },
+  {
+    "code": 2745,
+    "description": "Gravel Entrance",
+    "division": "Site Work"
+  },
+  {
+    "code": 2746,
+    "description": "D.O.T. Turning Lane",
+    "division": "Site Work"
+  },
+  {
+    "code": 2747,
+    "description": "Roadway",
+    "division": "Site Work"
+  },
+  {
+    "code": 2750,
+    "description": "Hot mix asph. paving-L",
+    "division": "Site Work"
+  },
+  {
+    "code": 2755,
+    "description": "Asphalt Paving",
+    "division": "Site Work"
+  },
+  {
+    "code": 2760,
+    "description": "Painted traffic lines",
+    "division": "Site Work"
+  },
+  {
+    "code": 2761,
+    "description": "Striping",
+    "division": "Site Work"
+  },
+  {
+    "code": 2772,
+    "description": "Parking Bumpers",
+    "division": "Site Work"
+  },
+  {
+    "code": 2776,
+    "description": "Concrete Sidewalk Lbr.",
+    "division": "Site Work"
+  },
+  {
+    "code": 2777,
+    "description": "Concrete Sidewalk Mat.",
+    "division": "Site Work"
+  },
+  {
+    "code": 2779,
+    "description": "Concrete Curb & Gutter",
+    "division": "Site Work"
+  },
+  {
+    "code": 2780,
+    "description": "Unit Pavers",
+    "division": "Site Work"
+  },
+  {
+    "code": 2810,
+    "description": "Pipe & Fittings",
+    "division": "Site Work"
+  },
+  {
+    "code": 2811,
+    "description": "Piping & Fitting labor",
+    "division": "Site Work"
+  },
+  {
+    "code": 2823,
+    "description": "Gate Loops",
+    "division": "Site Work"
+  },
+  {
+    "code": 2824,
+    "description": "Composite Fencing",
+    "division": "Site Work"
+  },
+  {
+    "code": 2825,
+    "description": "Fencing Ornamental",
+    "division": "Site Work"
+  },
+  {
+    "code": 2826,
+    "description": "Chain link fencing & gates",
+    "division": "Site Work"
+  },
+  {
+    "code": 2827,
+    "description": "Flag Pole Sub",
+    "division": "Site Work"
+  },
+  {
+    "code": 2828,
+    "description": "Wood Fence",
+    "division": "Site Work"
+  },
+  {
+    "code": 2829,
+    "description": "Fencing Allowance",
+    "division": "Site Work"
+  },
+  {
+    "code": 2880,
+    "description": "Landscaping Allowance",
+    "division": "Site Work"
+  },
+  {
+    "code": 2890,
+    "description": "Landscaping",
+    "division": "Site Work"
+  },
+  {
+    "code": 2895,
+    "description": "Landscaping-S",
+    "division": "Site Work"
+  },
+  {
+    "code": 2895.1,
+    "description": "Landscaping-S",
+    "division": "Site Work"
+  },
+  {
+    "code": 2900,
+    "description": "Landscaping-L",
+    "division": "Site Work"
+  },
+  {
+    "code": 2900.5,
+    "description": "Irrigation Piping",
+    "division": "Site Work"
+  },
+  {
+    "code": 2901,
+    "description": "Sodding",
+    "division": "Site Work"
+  },
+  {
+    "code": 2902,
+    "description": "Seeding & Mulching",
+    "division": "Site Work"
+  },
+  {
+    "code": 2903,
+    "description": "Retention Pond",
+    "division": "Site Work"
+  },
+  {
+    "code": 2904,
+    "description": "Import Fill & Compact",
+    "division": "Site Work"
+  },
+  {
+    "code": 2905,
+    "description": "Flume",
+    "division": "Site Work"
+  },
+  {
+    "code": 2906,
+    "description": "HC Signs",
+    "division": "Site Work"
+  },
+  {
+    "code": 2907,
+    "description": "Dumpster Enclosure",
+    "division": "Site Work"
+  },
+  {
+    "code": 2908,
+    "description": "Sports Court Asphalt",
+    "division": "Site Work"
+  },
+  {
+    "code": 2909,
+    "description": "Sports Court Striping",
+    "division": "Site Work"
+  },
+  {
+    "code": 2910,
+    "description": "Sports Court Athletic Parts",
+    "division": "Site Work"
+  },
+  {
+    "code": 2911,
+    "description": "Sports Court - M",
+    "division": "Site Work"
+  },
+  {
+    "code": 2912,
+    "description": "Sports Court - L",
+    "division": "Site Work"
+  },
+  {
+    "code": 2913,
+    "description": "Bike Rack",
+    "division": "Site Work"
+  },
+  {
+    "code": 2914,
+    "description": "Sewer Lift Station -Allowance",
+    "division": "Site Work"
+  },
+  {
+    "code": 2915,
+    "description": "Soils-Allowance",
+    "division": "Site Work"
+  },
+  {
+    "code": 2916,
+    "description": "Soils Testing",
+    "division": "Site Work"
+  },
+  {
+    "code": 2917,
+    "description": "Cement Soil Stabilization",
+    "division": "Site Work"
+  },
+  {
+    "code": 2918,
+    "description": "Benches & Bike Racks",
+    "division": "Site Work"
+  },
+  {
+    "code": 2919,
+    "description": "Sewer Pump Station",
+    "division": "Site Work"
+  },
+  {
+    "code": 2920,
+    "description": "PS Electrical Allowance",
+    "division": "Site Work"
+  },
+  {
+    "code": 2980,
+    "description": "Playground Equipment",
+    "division": "Site Work"
+  },
+  {
+    "code": 2990,
+    "description": "Sitework Sub",
+    "division": "Site Work"
+  },
+  {
+    "code": 2995,
+    "description": "Retaining Wall",
+    "division": "Site Work"
+  },
+  {
+    "code": 3000,
+    "description": "Concrete",
+    "division": "Concrete"
+  },
+  {
+    "code": 3001,
+    "description": "Foundation Layout - L",
+    "division": "Concrete"
+  },
+  {
+    "code": 3002,
+    "description": "Foundation footings - Material",
+    "division": "Concrete"
+  },
+  {
+    "code": 3003,
+    "description": "Foundations footings - labor",
+    "division": "Concrete"
+  },
+  {
+    "code": 3004,
+    "description": "Precast Walls-Sub",
+    "division": "Concrete"
+  },
+  {
+    "code": 3005,
+    "description": "Canopy Concrete Footings",
+    "division": "Concrete"
+  },
+  {
+    "code": 3006,
+    "description": "Hydraulic Cement Underlayment",
+    "division": "Concrete"
+  },
+  {
+    "code": 3007,
+    "description": "Pre-Cast Concrete",
+    "division": "Concrete"
+  },
+  {
+    "code": 3008,
+    "description": "Pre-Cast Concrete Step Treads",
+    "division": "Concrete"
+  },
+  {
+    "code": 3010,
+    "description": "Concrete Labor",
+    "division": "Concrete"
+  },
+  {
+    "code": 3020,
+    "description": "Concrete Misc",
+    "division": "Concrete"
+  },
+  {
+    "code": 3021,
+    "description": "Concrete Misc. Allowance",
+    "division": "Concrete"
+  },
+  {
+    "code": 3022,
+    "description": "Concrete Material-Allowance",
+    "division": "Concrete"
+  },
+  {
+    "code": 3100,
+    "description": "Foundation Formwork",
+    "division": "Concrete"
+  },
+  {
+    "code": 3200,
+    "description": "Foundation Reinf. Slab Prep.",
+    "division": "Concrete"
+  },
+  {
+    "code": 3300,
+    "description": "Found. Cast-in-Place - M",
+    "division": "Concrete"
+  },
+  {
+    "code": 3301,
+    "description": "Found. Cast-in-Place - L",
+    "division": "Concrete"
+  },
+  {
+    "code": 3302,
+    "description": "Slab on Grade-M",
+    "division": "Concrete"
+  },
+  {
+    "code": 3303,
+    "description": "Slab on Grade-L",
+    "division": "Concrete"
+  },
+  {
+    "code": 3304,
+    "description": "Slab on Deck-M",
+    "division": "Concrete"
+  },
+  {
+    "code": 3305,
+    "description": "Slab on Deck-L",
+    "division": "Concrete"
+  },
+  {
+    "code": 3306,
+    "description": "Vibro Piers",
+    "division": "Concrete"
+  },
+  {
+    "code": 3310,
+    "description": "Concrete footing",
+    "division": "Concrete"
+  },
+  {
+    "code": 3311,
+    "description": "CONCRETE CUTTING",
+    "division": "Concrete"
+  },
+  {
+    "code": 3315,
+    "description": "Concrete Slab",
+    "division": "Concrete"
+  },
+  {
+    "code": 3320,
+    "description": "Concrete Sidewalks",
+    "division": "Concrete"
+  },
+  {
+    "code": 3324,
+    "description": "Stamped Concrete Patios",
+    "division": "Concrete"
+  },
+  {
+    "code": 3326,
+    "description": "Concrete Stair Infill",
+    "division": "Concrete"
+  },
+  {
+    "code": 3327,
+    "description": "Hollow Core Planks",
+    "division": "Concrete"
+  },
+  {
+    "code": 3328,
+    "description": "Structural Re-design",
+    "division": "Concrete"
+  },
+  {
+    "code": 3329,
+    "description": "Shotcrete",
+    "division": "Concrete"
+  },
+  {
+    "code": 3330,
+    "description": "Cementious Roof Deck",
+    "division": "Concrete"
+  },
+  {
+    "code": 3340,
+    "description": "Slab prep",
+    "division": "Concrete"
+  },
+  {
+    "code": 3349,
+    "description": "GFRC",
+    "division": "Concrete"
+  },
+  {
+    "code": 3600,
+    "description": "Grout",
+    "division": "Concrete"
+  },
+  {
+    "code": 3601,
+    "description": "Rebar and Wire mesh",
+    "division": "Concrete"
+  },
+  {
+    "code": 3602,
+    "description": "Shoring",
+    "division": "Concrete"
+  },
+  {
+    "code": 3603,
+    "description": "Slab GPR",
+    "division": "Concrete"
+  },
+  {
+    "code": 3604,
+    "description": "Fuel Station Area Concrete",
+    "division": "Concrete"
+  },
+  {
+    "code": 3605,
+    "description": "Rebar Chairs",
+    "division": "Concrete"
+  },
+  {
+    "code": 4000,
+    "description": "Masonry",
+    "division": "Masonry"
+  },
+  {
+    "code": 4000.001,
+    "description": "Masonry-Labor",
+    "division": "Masonry"
+  },
+  {
+    "code": 4001,
+    "description": "Block",
+    "division": "Masonry"
+  },
+  {
+    "code": 4002,
+    "description": "Brick",
+    "division": "Masonry"
+  },
+  {
+    "code": 4003,
+    "description": "Brick Pavers",
+    "division": "Masonry"
+  },
+  {
+    "code": 4004,
+    "description": "Stone Pavers",
+    "division": "Masonry"
+  },
+  {
+    "code": 4050,
+    "description": "Masonry Accessories",
+    "division": "Masonry"
+  },
+  {
+    "code": 4210,
+    "description": "Brick and Block Accessories",
+    "division": "Masonry"
+  },
+  {
+    "code": 4211,
+    "description": "Brick labor",
+    "division": "Masonry"
+  },
+  {
+    "code": 4215,
+    "description": "Brick Cleaning",
+    "division": "Masonry"
+  },
+  {
+    "code": 4220,
+    "description": "CMU - M",
+    "division": "Masonry"
+  },
+  {
+    "code": 4221,
+    "description": "CMU -  L",
+    "division": "Masonry"
+  },
+  {
+    "code": 4250,
+    "description": "Clean Brick for Re-Use",
+    "division": "Masonry"
+  },
+  {
+    "code": 4260,
+    "description": "Water Repellent Coating",
+    "division": "Masonry"
+  },
+  {
+    "code": 4270,
+    "description": "Glass Block Masonry",
+    "division": "Masonry"
+  },
+  {
+    "code": 4720,
+    "description": "Pre-Cast Stone - M",
+    "division": "Masonry"
+  },
+  {
+    "code": 4721,
+    "description": "Pre-Cast Stone - L",
+    "division": "Masonry"
+  },
+  {
+    "code": 4725,
+    "description": "Block Fill",
+    "division": "Masonry"
+  },
+  {
+    "code": 4800,
+    "description": "Decorative Stone",
+    "division": "Masonry"
+  },
+  {
+    "code": 5000,
+    "description": "Metals",
+    "division": "Metals"
+  },
+  {
+    "code": 5001,
+    "description": "Pipe Bollards",
+    "division": "Metals"
+  },
+  {
+    "code": 5002,
+    "description": "Monumental Stair Allowance",
+    "division": "Metals"
+  },
+  {
+    "code": 5100,
+    "description": "Struct Steel-M",
+    "division": "Metals"
+  },
+  {
+    "code": 5101,
+    "description": "Struct Steel Erect-L",
+    "division": "Metals"
+  },
+  {
+    "code": 5102,
+    "description": "Acoustical Deck Erection",
+    "division": "Metals"
+  },
+  {
+    "code": 5200,
+    "description": "Steel Columns",
+    "division": "Metals"
+  },
+  {
+    "code": 5310,
+    "description": "Steel Decking",
+    "division": "Metals"
+  },
+  {
+    "code": 5400,
+    "description": "Metal framing-M",
+    "division": "Metals"
+  },
+  {
+    "code": 5401,
+    "description": "Metal framing-L",
+    "division": "Metals"
+  },
+  {
+    "code": 5402,
+    "description": "Panelized Metal Structure",
+    "division": "Metals"
+  },
+  {
+    "code": 5410,
+    "description": "Light guage metal trusses",
+    "division": "Metals"
+  },
+  {
+    "code": 5500,
+    "description": "Metal Fabrications-M",
+    "division": "Metals"
+  },
+  {
+    "code": 5550,
+    "description": "Aluminum Railings",
+    "division": "Metals"
+  },
+  {
+    "code": 5600,
+    "description": "Metal Fabrications-L",
+    "division": "Metals"
+  },
+  {
+    "code": 5700,
+    "description": "Ornamental Metal",
+    "division": "Metals"
+  },
+  {
+    "code": 5800,
+    "description": "Metal Stairs & Rails",
+    "division": "Metals"
+  },
+  {
+    "code": 5900,
+    "description": "Removable Rail System",
+    "division": "Metals"
+  },
+  {
+    "code": 5901,
+    "description": "Metal Canopies",
+    "division": "Metals"
+  },
+  {
+    "code": 5902,
+    "description": "Pole Racks",
+    "division": "Metals"
+  },
+  {
+    "code": 6000,
+    "description": "Wood & Plastics",
+    "division": "Wood & Plastics"
+  },
+  {
+    "code": 6100,
+    "description": "Rough Framing - M",
+    "division": "Wood & Plastics"
+  },
+  {
+    "code": 6101,
+    "description": "Rough Framing - L",
+    "division": "Wood & Plastics"
+  },
+  {
+    "code": 6102,
+    "description": "Dormers",
+    "division": "Wood & Plastics"
+  },
+  {
+    "code": 6103,
+    "description": "Rough Framing-S",
+    "division": "Wood & Plastics"
+  },
+  {
+    "code": 6110,
+    "description": "Sub-Floor Framing",
+    "division": "Wood & Plastics"
+  },
+  {
+    "code": 6112,
+    "description": "Decorative Wall Panels",
+    "division": "Wood & Plastics"
+  },
+  {
+    "code": 6115,
+    "description": "Wood Decking",
+    "division": "Wood & Plastics"
+  },
+  {
+    "code": 6120,
+    "description": "Wall Framing - M",
+    "division": "Wood & Plastics"
+  },
+  {
+    "code": 6121,
+    "description": "Wall framing -  L",
+    "division": "Wood & Plastics"
+  },
+  {
+    "code": 6129,
+    "description": "Framing Constructability",
+    "division": "Wood & Plastics"
+  },
+  {
+    "code": 6130,
+    "description": "Roof Framing - M",
+    "division": "Wood & Plastics"
+  },
+  {
+    "code": 6131,
+    "description": "Roof framing labor",
+    "division": "Wood & Plastics"
+  },
+  {
+    "code": 6132,
+    "description": "Roof Repair",
+    "division": "Wood & Plastics"
+  },
+  {
+    "code": 6135,
+    "description": "Wood Blckng. - Allowance",
+    "division": "Wood & Plastics"
+  },
+  {
+    "code": 6140,
+    "description": "Wood Fascia",
+    "division": "Wood & Plastics"
+  },
+  {
+    "code": 6150,
+    "description": "Siding & Exterior Trim",
+    "division": "Wood & Plastics"
+  },
+  {
+    "code": 6155,
+    "description": "Interior Trim",
+    "division": "Wood & Plastics"
+  },
+  {
+    "code": 6160,
+    "description": "Vinyl Railing Material",
+    "division": "Wood & Plastics"
+  },
+  {
+    "code": 6161,
+    "description": "Vinyl Railing Labor",
+    "division": "Wood & Plastics"
+  },
+  {
+    "code": 6170,
+    "description": "Column Covers Material",
+    "division": "Wood & Plastics"
+  },
+  {
+    "code": 6171,
+    "description": "Column Covers Labor",
+    "division": "Wood & Plastics"
+  },
+  {
+    "code": 6180,
+    "description": "Glued-Laminated Beam",
+    "division": "Wood & Plastics"
+  },
+  {
+    "code": 6181,
+    "description": "Glued-Laminated Beam Install",
+    "division": "Wood & Plastics"
+  },
+  {
+    "code": 6190,
+    "description": "Truss (Prefab) - M",
+    "division": "Wood & Plastics"
+  },
+  {
+    "code": 6191,
+    "description": "Truss (Prefab) - L",
+    "division": "Wood & Plastics"
+  },
+  {
+    "code": 6200,
+    "description": "Finish Carpentry-M",
+    "division": "Wood & Plastics"
+  },
+  {
+    "code": 6201,
+    "description": "Finish carpentry-L",
+    "division": "Wood & Plastics"
+  },
+  {
+    "code": 6202,
+    "description": "Finish carpentry-S",
+    "division": "Wood & Plastics"
+  },
+  {
+    "code": 6400,
+    "description": "Custom Casework-M",
+    "division": "Wood & Plastics"
+  },
+  {
+    "code": 6401,
+    "description": "Custom casework-L",
+    "division": "Wood & Plastics"
+  },
+  {
+    "code": 6402,
+    "description": "Custom Casework",
+    "division": "Wood & Plastics"
+  },
+  {
+    "code": 6403,
+    "description": "Casework Allowance",
+    "division": "Wood & Plastics"
+  },
+  {
+    "code": 6700,
+    "description": "Rough Hardware",
+    "division": "Wood & Plastics"
+  },
+  {
+    "code": 6750,
+    "description": "Granite",
+    "division": "Wood & Plastics"
+  },
+  {
+    "code": 6760,
+    "description": "Solid Surface",
+    "division": "Wood & Plastics"
+  },
+  {
+    "code": 6775,
+    "description": "Tub Surrounds",
+    "division": "Wood & Plastics"
+  },
+  {
+    "code": 6800,
+    "description": "Misc. Architectural",
+    "division": "Wood & Plastics"
+  },
+  {
+    "code": 6810,
+    "description": "Wood Wall in Lobby",
+    "division": "Wood & Plastics"
+  },
+  {
+    "code": 6815,
+    "description": "Reception Desk",
+    "division": "Wood & Plastics"
+  },
+  {
+    "code": 6900,
+    "description": "Shelving",
+    "division": "Wood & Plastics"
+  },
+  {
+    "code": 7000,
+    "description": "Thermal & Moisture Protection",
+    "division": "Thermal Moisture Protection"
+  },
+  {
+    "code": 7001,
+    "description": "Gutters & Downspouts",
+    "division": "Thermal Moisture Protection"
+  },
+  {
+    "code": 7160,
+    "description": "Damproofing",
+    "division": "Thermal Moisture Protection"
+  },
+  {
+    "code": 7200,
+    "description": "Insulation",
+    "division": "Thermal Moisture Protection"
+  },
+  {
+    "code": 7200.5,
+    "description": "Insulation-Metal Building",
+    "division": "Thermal Moisture Protection"
+  },
+  {
+    "code": 7225,
+    "description": "Core Fill Insulation",
+    "division": "Thermal Moisture Protection"
+  },
+  {
+    "code": 7250,
+    "description": "Column Covers",
+    "division": "Thermal Moisture Protection"
+  },
+  {
+    "code": 7260,
+    "description": "Spray Foam Insulation",
+    "division": "Thermal Moisture Protection"
+  },
+  {
+    "code": 7270,
+    "description": "Firestopping",
+    "division": "Thermal Moisture Protection"
+  },
+  {
+    "code": 7271,
+    "description": "Caulking & Fireproofing",
+    "division": "Thermal Moisture Protection"
+  },
+  {
+    "code": 7280,
+    "description": "Air Barrier",
+    "division": "Thermal Moisture Protection"
+  },
+  {
+    "code": 7298,
+    "description": "Applied Fireproofing",
+    "division": "Thermal Moisture Protection"
+  },
+  {
+    "code": 7299,
+    "description": "Waterproofing",
+    "division": "Thermal Moisture Protection"
+  },
+  {
+    "code": 7300,
+    "description": "Standing Seam Metal Roof",
+    "division": "Thermal Moisture Protection"
+  },
+  {
+    "code": 7301,
+    "description": "Roofing labor",
+    "division": "Thermal Moisture Protection"
+  },
+  {
+    "code": 7305,
+    "description": "Roofing",
+    "division": "Thermal Moisture Protection"
+  },
+  {
+    "code": 7306,
+    "description": "Roofing Patio Allowance",
+    "division": "Thermal Moisture Protection"
+  },
+  {
+    "code": 7310,
+    "description": "Roof shingle system",
+    "division": "Thermal Moisture Protection"
+  },
+  {
+    "code": 7315,
+    "description": "Roof Sheathing - Allowance",
+    "division": "Thermal Moisture Protection"
+  },
+  {
+    "code": 7320,
+    "description": "Roof Insulation - Allowance",
+    "division": "Thermal Moisture Protection"
+  },
+  {
+    "code": 7325,
+    "description": "Wood Blocking - Allowance",
+    "division": "Thermal Moisture Protection"
+  },
+  {
+    "code": 7330,
+    "description": "Wood Fascia Bd. - Allowance",
+    "division": "Thermal Moisture Protection"
+  },
+  {
+    "code": 7400,
+    "description": "Metal Wall Panels",
+    "division": "Thermal Moisture Protection"
+  },
+  {
+    "code": 7410,
+    "description": "Manuf. Wall Pnls.-M",
+    "division": "Thermal Moisture Protection"
+  },
+  {
+    "code": 7420,
+    "description": "Manuf. Wall Pnls.-L",
+    "division": "Thermal Moisture Protection"
+  },
+  {
+    "code": 7430,
+    "description": "Roof Pnls.-M",
+    "division": "Thermal Moisture Protection"
+  },
+  {
+    "code": 7440,
+    "description": "Roof Pnls.-L",
+    "division": "Thermal Moisture Protection"
+  },
+  {
+    "code": 7700,
+    "description": "TPO Roofing",
+    "division": "Thermal Moisture Protection"
+  },
+  {
+    "code": 7800,
+    "description": "Expansion Control",
+    "division": "Thermal Moisture Protection"
+  },
+  {
+    "code": 7850,
+    "description": "Aluminum Canopies",
+    "division": "Thermal Moisture Protection"
+  },
+  {
+    "code": 7900,
+    "description": "Joint Sealents",
+    "division": "Thermal Moisture Protection"
+  },
+  {
+    "code": 8000,
+    "description": "Doors & Frames",
+    "division": "Doors & Windows"
+  },
+  {
+    "code": 8001,
+    "description": "Glass Block",
+    "division": "Doors & Windows"
+  },
+  {
+    "code": 8002,
+    "description": "Glass Doors",
+    "division": "Doors & Windows"
+  },
+  {
+    "code": 8050,
+    "description": "Sliding Metal Barn Doors",
+    "division": "Doors & Windows"
+  },
+  {
+    "code": 8100,
+    "description": "Metal Doors & Frames Mat.",
+    "division": "Doors & Windows"
+  },
+  {
+    "code": 8101,
+    "description": "Metal Doors & Frames Labor",
+    "division": "Doors & Windows"
+  },
+  {
+    "code": 8102,
+    "description": "Metal Door Labor",
+    "division": "Doors & Windows"
+  },
+  {
+    "code": 8150,
+    "description": "HM Frames Wood Doors Hdwr",
+    "division": "Doors & Windows"
+  },
+  {
+    "code": 8200,
+    "description": "Wood Door Mat.",
+    "division": "Doors & Windows"
+  },
+  {
+    "code": 8201,
+    "description": "Wood Door Lbr.",
+    "division": "Doors & Windows"
+  },
+  {
+    "code": 8202,
+    "description": "Automatic Door Openers",
+    "division": "Doors & Windows"
+  },
+  {
+    "code": 8205,
+    "description": "Sliding Door Acrylic Panels",
+    "division": "Doors & Windows"
+  },
+  {
+    "code": 8300,
+    "description": "Special Doors",
+    "division": "Doors & Windows"
+  },
+  {
+    "code": 8305,
+    "description": "Access Doors",
+    "division": "Doors & Windows"
+  },
+  {
+    "code": 8310,
+    "description": "Storm Door Mat.",
+    "division": "Doors & Windows"
+  },
+  {
+    "code": 8311,
+    "description": "Storm Door Lbr.",
+    "division": "Doors & Windows"
+  },
+  {
+    "code": 8330,
+    "description": "Coiling Doors and Grill",
+    "division": "Doors & Windows"
+  },
+  {
+    "code": 8360,
+    "description": "Overhead Doors",
+    "division": "Doors & Windows"
+  },
+  {
+    "code": 8400,
+    "description": "Mirrors",
+    "division": "Doors & Windows"
+  },
+  {
+    "code": 8410,
+    "description": "Alum. Entr. & Strfrnt. - M",
+    "division": "Doors & Windows"
+  },
+  {
+    "code": 8415,
+    "description": "Alum. Entr. & Strfrnt. - S",
+    "division": "Doors & Windows"
+  },
+  {
+    "code": 8420,
+    "description": "Alum. Entr. & Strfrnt. - L",
+    "division": "Doors & Windows"
+  },
+  {
+    "code": 8430,
+    "description": "Alum. StoreFrnt Curtain Wall",
+    "division": "Doors & Windows"
+  },
+  {
+    "code": 8500,
+    "description": "Windows Mat.",
+    "division": "Doors & Windows"
+  },
+  {
+    "code": 8501,
+    "description": "Window Labor",
+    "division": "Doors & Windows"
+  },
+  {
+    "code": 8502,
+    "description": "Window Restoration",
+    "division": "Doors & Windows"
+  },
+  {
+    "code": 8503,
+    "description": "Window Water Testing",
+    "division": "Doors & Windows"
+  },
+  {
+    "code": 8504,
+    "description": "Window Material Tax",
+    "division": "Doors & Windows"
+  },
+  {
+    "code": 8510,
+    "description": "Security Screen Lbr.",
+    "division": "Doors & Windows"
+  },
+  {
+    "code": 8511,
+    "description": "Security Screen Mat.",
+    "division": "Doors & Windows"
+  },
+  {
+    "code": 8512,
+    "description": "Glass Privacy Film",
+    "division": "Doors & Windows"
+  },
+  {
+    "code": 8600,
+    "description": "Skylights",
+    "division": "Doors & Windows"
+  },
+  {
+    "code": 8700,
+    "description": "Hardware - M",
+    "division": "Doors & Windows"
+  },
+  {
+    "code": 8701,
+    "description": "Hardware-Door&Wind",
+    "division": "Doors & Windows"
+  },
+  {
+    "code": 8702,
+    "description": "Hardware - L",
+    "division": "Doors & Windows"
+  },
+  {
+    "code": 8800,
+    "description": "Door Operators",
+    "division": "Doors & Windows"
+  },
+  {
+    "code": 8810,
+    "description": "Electric Locks",
+    "division": "Doors & Windows"
+  },
+  {
+    "code": 8900,
+    "description": "Counter Shutters",
+    "division": "Doors & Windows"
+  },
+  {
+    "code": 8901,
+    "description": "Sage Glass Controls",
+    "division": "Doors & Windows"
+  },
+  {
+    "code": 8902,
+    "description": "Installation of Sage Glass Controls",
+    "division": "Doors & Windows"
+  },
+  {
+    "code": 8950,
+    "description": "Window Film Graphics",
+    "division": "Doors & Windows"
+  },
+  {
+    "code": 9000,
+    "description": "Finishes",
+    "division": "Finishes"
+  },
+  {
+    "code": 9100,
+    "description": "Stucco-M",
+    "division": "Finishes"
+  },
+  {
+    "code": 9105,
+    "description": "STUCCO-S",
+    "division": "Finishes"
+  },
+  {
+    "code": 9125,
+    "description": "EIFS",
+    "division": "Finishes"
+  },
+  {
+    "code": 9150,
+    "description": "Stucco-L",
+    "division": "Finishes"
+  },
+  {
+    "code": 9200,
+    "description": "Lath & Plaster",
+    "division": "Finishes"
+  },
+  {
+    "code": 9225,
+    "description": "Drywall MetalFraming Insul.",
+    "division": "Finishes"
+  },
+  {
+    "code": 9250,
+    "description": "Gyp. Board - M",
+    "division": "Finishes"
+  },
+  {
+    "code": 9251,
+    "description": "Gyp. Board -  L",
+    "division": "Finishes"
+  },
+  {
+    "code": 9252,
+    "description": "Steel stud & Drywall",
+    "division": "Finishes"
+  },
+  {
+    "code": 9253,
+    "description": "Gypsum Undlymt with 1 2'' styf",
+    "division": "Finishes"
+  },
+  {
+    "code": 9290,
+    "description": "Glass Fiber Reinforced Concret",
+    "division": "Finishes"
+  },
+  {
+    "code": 9300,
+    "description": "Ceramic Tile - M",
+    "division": "Finishes"
+  },
+  {
+    "code": 9305,
+    "description": "Ceramic Tile-S",
+    "division": "Finishes"
+  },
+  {
+    "code": 9310,
+    "description": "Ceramic Tile - L",
+    "division": "Finishes"
+  },
+  {
+    "code": 9500,
+    "description": "Acoustical Clgs. - M",
+    "division": "Finishes"
+  },
+  {
+    "code": 9501,
+    "description": "Acoustical Clgs. -  L",
+    "division": "Finishes"
+  },
+  {
+    "code": 9502,
+    "description": "Acoustical Clgs. - S",
+    "division": "Finishes"
+  },
+  {
+    "code": 9505,
+    "description": "Acoustical Ceilings",
+    "division": "Finishes"
+  },
+  {
+    "code": 9506,
+    "description": "Acoustical Sprayed Ceilings",
+    "division": "Finishes"
+  },
+  {
+    "code": 9510,
+    "description": "Acoustical Clgs. -  Allowance",
+    "division": "Finishes"
+  },
+  {
+    "code": 9525,
+    "description": "Wood Ceilings",
+    "division": "Finishes"
+  },
+  {
+    "code": 9600,
+    "description": "Flooring",
+    "division": "Finishes"
+  },
+  {
+    "code": 9620,
+    "description": "Terrazo Flooring",
+    "division": "Finishes"
+  },
+  {
+    "code": 9630,
+    "description": "Epoxy Flooring",
+    "division": "Finishes"
+  },
+  {
+    "code": 9640,
+    "description": "Stone Flooring",
+    "division": "Finishes"
+  },
+  {
+    "code": 9650,
+    "description": "Wood Flooring",
+    "division": "Finishes"
+  },
+  {
+    "code": 9660,
+    "description": "Resilient Flooring",
+    "division": "Finishes"
+  },
+  {
+    "code": 9665,
+    "description": "Sealed Concrete Floors",
+    "division": "Finishes"
+  },
+  {
+    "code": 9670,
+    "description": "Resilient Flooring - L",
+    "division": "Finishes"
+  },
+  {
+    "code": 9680,
+    "description": "Carpet - M",
+    "division": "Finishes"
+  },
+  {
+    "code": 9681,
+    "description": "Owner Carpet Allowance",
+    "division": "Finishes"
+  },
+  {
+    "code": 9685,
+    "description": "CARPET= S",
+    "division": "Finishes"
+  },
+  {
+    "code": 9690,
+    "description": "Carpet - L",
+    "division": "Finishes"
+  },
+  {
+    "code": 9700,
+    "description": "Seamless Vinyl Flooring",
+    "division": "Finishes"
+  },
+  {
+    "code": 9750,
+    "description": "VCT Base Access.",
+    "division": "Finishes"
+  },
+  {
+    "code": 9770,
+    "description": "Wall Base",
+    "division": "Finishes"
+  },
+  {
+    "code": 9771,
+    "description": "Pre-finished panels",
+    "division": "Finishes"
+  },
+  {
+    "code": 9772,
+    "description": "Pre-fin. panels labor",
+    "division": "Finishes"
+  },
+  {
+    "code": 9800,
+    "description": "Impact Sports Flooring",
+    "division": "Finishes"
+  },
+  {
+    "code": 9900,
+    "description": "Painting - Sub",
+    "division": "Finishes"
+  },
+  {
+    "code": 9905,
+    "description": "FRP Wall Covering",
+    "division": "Finishes"
+  },
+  {
+    "code": 9910,
+    "description": "Painting - Material",
+    "division": "Finishes"
+  },
+  {
+    "code": 9940,
+    "description": "Synthetic Athletic Flooring",
+    "division": "Finishes"
+  },
+  {
+    "code": 9950,
+    "description": "Wall Coverings",
+    "division": "Finishes"
+  },
+  {
+    "code": 9960,
+    "description": "Acoustical Panels",
+    "division": "Finishes"
+  },
+  {
+    "code": 9961,
+    "description": "Acoustical Wall Panels Tectum",
+    "division": "Finishes"
+  },
+  {
+    "code": 9980,
+    "description": "Gypcrete Floor Topping",
+    "division": "Finishes"
+  },
+  {
+    "code": 10000,
+    "description": "Specialties",
+    "division": "Specialties"
+  },
+  {
+    "code": 10001,
+    "description": "Signage",
+    "division": "Specialties"
+  },
+  {
+    "code": 10002,
+    "description": "Specialties labor",
+    "division": "Specialties"
+  },
+  {
+    "code": 10003,
+    "description": "Security System",
+    "division": "Specialties"
+  },
+  {
+    "code": 10004,
+    "description": "Auditorium Seating",
+    "division": "Specialties"
+  },
+  {
+    "code": 10005,
+    "description": "Screen Porch",
+    "division": "Specialties"
+  },
+  {
+    "code": 10006,
+    "description": "Monumental Signage",
+    "division": "Specialties"
+  },
+  {
+    "code": 10007,
+    "description": "Graphics Package",
+    "division": "Specialties"
+  },
+  {
+    "code": 10100,
+    "description": "Markerboards & Tack Boards",
+    "division": "Specialties"
+  },
+  {
+    "code": 10150,
+    "description": "Markerboards",
+    "division": "Specialties"
+  },
+  {
+    "code": 10175,
+    "description": "Display Case Kisok",
+    "division": "Specialties"
+  },
+  {
+    "code": 10200,
+    "description": "Louvers & Vents",
+    "division": "Specialties"
+  },
+  {
+    "code": 10201,
+    "description": "Louver & Vents Labor",
+    "division": "Specialties"
+  },
+  {
+    "code": 10300,
+    "description": "Fireplaces & Stoves",
+    "division": "Specialties"
+  },
+  {
+    "code": 10350,
+    "description": "Flagpoles Mat.",
+    "division": "Specialties"
+  },
+  {
+    "code": 10351,
+    "description": "Flagpoles Lbr.",
+    "division": "Specialties"
+  },
+  {
+    "code": 10375,
+    "description": "Corner Guards",
+    "division": "Specialties"
+  },
+  {
+    "code": 10431,
+    "description": "Signs",
+    "division": "Specialties"
+  },
+  {
+    "code": 10432,
+    "description": "Benches",
+    "division": "Specialties"
+  },
+  {
+    "code": 10433,
+    "description": "Bike Rack",
+    "division": "Specialties"
+  },
+  {
+    "code": 10434,
+    "description": "Building Graphics",
+    "division": "Specialties"
+  },
+  {
+    "code": 10500,
+    "description": "Lockers & Shelving",
+    "division": "Specialties"
+  },
+  {
+    "code": 10520,
+    "description": "Fireextinguisher cab.-M",
+    "division": "Specialties"
+  },
+  {
+    "code": 10525,
+    "description": "Metal Lockers",
+    "division": "Specialties"
+  },
+  {
+    "code": 10530,
+    "description": "Fireextinguisher cab.-L",
+    "division": "Specialties"
+  },
+  {
+    "code": 10550,
+    "description": "Postal Specialties",
+    "division": "Specialties"
+  },
+  {
+    "code": 10555,
+    "description": "Glass Shower Enclosures",
+    "division": "Specialties"
+  },
+  {
+    "code": 10556,
+    "description": "FFE Equipment Install",
+    "division": "Specialties"
+  },
+  {
+    "code": 10557,
+    "description": "Glass Shower Enclosures",
+    "division": "Specialties"
+  },
+  {
+    "code": 10558,
+    "description": "Awnings",
+    "division": "Specialties"
+  },
+  {
+    "code": 10600,
+    "description": "Partitions - L",
+    "division": "Specialties"
+  },
+  {
+    "code": 10601,
+    "description": "Partitions - M",
+    "division": "Specialties"
+  },
+  {
+    "code": 10671,
+    "description": "Metal Storage Shelving",
+    "division": "Specialties"
+  },
+  {
+    "code": 10725,
+    "description": "TV Mounts",
+    "division": "Specialties"
+  },
+  {
+    "code": 10750,
+    "description": "Telephone Specialties",
+    "division": "Specialties"
+  },
+  {
+    "code": 10800,
+    "description": "Bath Accessories-M",
+    "division": "Specialties"
+  },
+  {
+    "code": 10810,
+    "description": "Bath Accessories-L",
+    "division": "Specialties"
+  },
+  {
+    "code": 10850,
+    "description": "Toilet Partitions  Access.",
+    "division": "Specialties"
+  },
+  {
+    "code": 10878,
+    "description": "Safe Deposit Boxes",
+    "division": "Specialties"
+  },
+  {
+    "code": 10890,
+    "description": "Display Case",
+    "division": "Specialties"
+  },
+  {
+    "code": 10900,
+    "description": "Wardrobe Closet Access.",
+    "division": "Specialties"
+  },
+  {
+    "code": 10950,
+    "description": "Entrance Mats",
+    "division": "Specialties"
+  },
+  {
+    "code": 10960,
+    "description": "Stage Curtain",
+    "division": "Specialties"
+  },
+  {
+    "code": 10965,
+    "description": "Sun Shades",
+    "division": "Specialties"
+  },
+  {
+    "code": 10970,
+    "description": "Operable Panel Partition",
+    "division": "Specialties"
+  },
+  {
+    "code": 10975,
+    "description": "Projection Screens",
+    "division": "Specialties"
+  },
+  {
+    "code": 10980,
+    "description": "Knox Box",
+    "division": "Specialties"
+  },
+  {
+    "code": 10985,
+    "description": "Walkway Canopies",
+    "division": "Specialties"
+  },
+  {
+    "code": 10986,
+    "description": "Walkway Canopies Allow",
+    "division": "Specialties"
+  },
+  {
+    "code": 10987,
+    "description": "Outdoor Pavillon",
+    "division": "Specialties"
+  },
+  {
+    "code": 10988,
+    "description": "Transformer Pit Canopy",
+    "division": "Specialties"
+  },
+  {
+    "code": 10989,
+    "description": "Canopies",
+    "division": "Specialties"
+  },
+  {
+    "code": 10990,
+    "description": "Security System",
+    "division": "Specialties"
+  },
+  {
+    "code": 10991,
+    "description": "EV Charging Stations",
+    "division": "Specialties"
+  },
+  {
+    "code": 10995,
+    "description": "Window Sills",
+    "division": "Specialties"
+  },
+  {
+    "code": 11000,
+    "description": "Equipment",
+    "division": "Equipment"
+  },
+  {
+    "code": 11001,
+    "description": "Cabinetry",
+    "division": "Equipment"
+  },
+  {
+    "code": 11002,
+    "description": "Equipment Install Labor",
+    "division": "Equipment"
+  },
+  {
+    "code": 11005,
+    "description": "Gas Log Insert",
+    "division": "Equipment"
+  },
+  {
+    "code": 11013,
+    "description": "Wall mounted vaccum cleaner",
+    "division": "Equipment"
+  },
+  {
+    "code": 11100,
+    "description": "Equipment Screens",
+    "division": "Equipment"
+  },
+  {
+    "code": 11132,
+    "description": "Projection screens",
+    "division": "Equipment"
+  },
+  {
+    "code": 11133,
+    "description": "Projector Lifts",
+    "division": "Equipment"
+  },
+  {
+    "code": 11134,
+    "description": "TV Mounts",
+    "division": "Equipment"
+  },
+  {
+    "code": 11140,
+    "description": "TV'S",
+    "division": "Equipment"
+  },
+  {
+    "code": 11144,
+    "description": "Auto Paint Spray Booth",
+    "division": "Equipment"
+  },
+  {
+    "code": 11145,
+    "description": "Single Bay Car Wash",
+    "division": "Equipment"
+  },
+  {
+    "code": 11146,
+    "description": "Truck Wash Station",
+    "division": "Equipment"
+  },
+  {
+    "code": 11150,
+    "description": "Gymnasium Equipment",
+    "division": "Equipment"
+  },
+  {
+    "code": 11151,
+    "description": "Fitness Equipment",
+    "division": "Equipment"
+  },
+  {
+    "code": 11160,
+    "description": "Loading Dock Specialties",
+    "division": "Equipment"
+  },
+  {
+    "code": 11170,
+    "description": "Basketball Goals",
+    "division": "Equipment"
+  },
+  {
+    "code": 11171,
+    "description": "Folding Bleachers",
+    "division": "Equipment"
+  },
+  {
+    "code": 11172,
+    "description": "Score boards",
+    "division": "Equipment"
+  },
+  {
+    "code": 11250,
+    "description": "Teller Equipment",
+    "division": "Equipment"
+  },
+  {
+    "code": 11275,
+    "description": "Racking Storage",
+    "division": "Equipment"
+  },
+  {
+    "code": 11276,
+    "description": "Warehouse Racks",
+    "division": "Equipment"
+  },
+  {
+    "code": 11325,
+    "description": "Deposit Box",
+    "division": "Equipment"
+  },
+  {
+    "code": 11350,
+    "description": "Self Serve Payment Kiosk",
+    "division": "Equipment"
+  },
+  {
+    "code": 11400,
+    "description": "Equipment Labor",
+    "division": "Equipment"
+  },
+  {
+    "code": 11450,
+    "description": "Appliances",
+    "division": "Equipment"
+  },
+  {
+    "code": 11451,
+    "description": "Kitchen Equipment",
+    "division": "Equipment"
+  },
+  {
+    "code": 11500,
+    "description": "Food Service Equipment",
+    "division": "Equipment"
+  },
+  {
+    "code": 11501,
+    "description": "Ice Maker",
+    "division": "Equipment"
+  },
+  {
+    "code": 11502,
+    "description": "Serving Line",
+    "division": "Equipment"
+  },
+  {
+    "code": 11600,
+    "description": "Fabric Awning",
+    "division": "Equipment"
+  },
+  {
+    "code": 11990,
+    "description": "Kitchen Hoods",
+    "division": "Equipment"
+  },
+  {
+    "code": 12000,
+    "description": "FURNISHINGS",
+    "division": "Furnishings"
+  },
+  {
+    "code": 12001,
+    "description": "Console Stations",
+    "division": "Furnishings"
+  },
+  {
+    "code": 12100,
+    "description": "Walk Off Mat   Frame",
+    "division": "Furnishings"
+  },
+  {
+    "code": 12300,
+    "description": "Adjustable Wood Shelves",
+    "division": "Furnishings"
+  },
+  {
+    "code": 12500,
+    "description": "Window Treatments",
+    "division": "Furnishings"
+  },
+  {
+    "code": 12501,
+    "description": "Owner WNDW Treatment Allowance",
+    "division": "Furnishings"
+  },
+  {
+    "code": 12502,
+    "description": "Roller Window Shades",
+    "division": "Furnishings"
+  },
+  {
+    "code": 12510,
+    "description": "Window Treatment-L",
+    "division": "Furnishings"
+  },
+  {
+    "code": 12610,
+    "description": "Fixed Lecture Room Seating",
+    "division": "Furnishings"
+  },
+  {
+    "code": 12900,
+    "description": "Building Accessories",
+    "division": "Furnishings"
+  },
+  {
+    "code": 13000,
+    "description": "Special Construction",
+    "division": "Special Construction"
+  },
+  {
+    "code": 13001,
+    "description": "Special Construction PV Allowa",
+    "division": "Special Construction"
+  },
+  {
+    "code": 13002,
+    "description": "Exterior Stair Coatings",
+    "division": "Special Construction"
+  },
+  {
+    "code": 13100,
+    "description": "Intergrated Generator",
+    "division": "Special Construction"
+  },
+  {
+    "code": 13125,
+    "description": "Portable Bleachers",
+    "division": "Special Construction"
+  },
+  {
+    "code": 13130,
+    "description": "Electronic Scoreboards",
+    "division": "Special Construction"
+  },
+  {
+    "code": 13212,
+    "description": "Pre-engineered buildings",
+    "division": "Special Construction"
+  },
+  {
+    "code": 13213,
+    "description": "Pre-eng. building erection",
+    "division": "Special Construction"
+  },
+  {
+    "code": 13300,
+    "description": "Fire-Supression Sys-M",
+    "division": "Special Construction"
+  },
+  {
+    "code": 13400,
+    "description": "Fire-Supression Sys-L",
+    "division": "Special Construction"
+  },
+  {
+    "code": 13401,
+    "description": "Gas Fire Supression System",
+    "division": "Special Construction"
+  },
+  {
+    "code": 13500,
+    "description": "Sprinkler System",
+    "division": "Special Construction"
+  },
+  {
+    "code": 13500.1,
+    "description": "Fire Line",
+    "division": "Special Construction"
+  },
+  {
+    "code": 13501,
+    "description": "Sprikler Sys Mobilization",
+    "division": "Special Construction"
+  },
+  {
+    "code": 13502,
+    "description": "Sprinkler Sys Enginnering",
+    "division": "Special Construction"
+  },
+  {
+    "code": 13503,
+    "description": "Sprinkler Sys Fabrication",
+    "division": "Special Construction"
+  },
+  {
+    "code": 13504,
+    "description": "Sprinkler Sys Labor",
+    "division": "Special Construction"
+  },
+  {
+    "code": 13555,
+    "description": "Exterior Fountian",
+    "division": "Special Construction"
+  },
+  {
+    "code": 13560,
+    "description": "Interior Fountain",
+    "division": "Special Construction"
+  },
+  {
+    "code": 13600,
+    "description": "Fire Pump",
+    "division": "Special Construction"
+  },
+  {
+    "code": 13800,
+    "description": "Swiming Pool",
+    "division": "Special Construction"
+  },
+  {
+    "code": 14000,
+    "description": "Conveying System",
+    "division": "Conveying Systems"
+  },
+  {
+    "code": 14141,
+    "description": "Elevator Engineering Shop Drwg",
+    "division": "Conveying Systems"
+  },
+  {
+    "code": 14142,
+    "description": "Elevator-M",
+    "division": "Conveying Systems"
+  },
+  {
+    "code": 14143,
+    "description": "Elevator- L",
+    "division": "Conveying Systems"
+  },
+  {
+    "code": 14240,
+    "description": "Hydraulic Elevator-M",
+    "division": "Conveying Systems"
+  },
+  {
+    "code": 14250,
+    "description": "Hydraulic Elevator-L",
+    "division": "Conveying Systems"
+  },
+  {
+    "code": 14300,
+    "description": "Wheelchair Lift",
+    "division": "Conveying Systems"
+  },
+  {
+    "code": 14660,
+    "description": "Laundry Chutes",
+    "division": "Conveying Systems"
+  },
+  {
+    "code": 15000,
+    "description": "Mechanical - HVAC",
+    "division": "Mechanical"
+  },
+  {
+    "code": 15100,
+    "description": "Plumbing - Sub",
+    "division": "Mechanical"
+  },
+  {
+    "code": 15101,
+    "description": "Plumbing - Sub-M",
+    "division": "Mechanical"
+  },
+  {
+    "code": 15105,
+    "description": "Plumbing Demolition",
+    "division": "Mechanical"
+  },
+  {
+    "code": 15110,
+    "description": "Plumbing W&V - M",
+    "division": "Mechanical"
+  },
+  {
+    "code": 15120,
+    "description": "Plumbing W&V -  L",
+    "division": "Mechanical"
+  },
+  {
+    "code": 15400,
+    "description": "Plumbing Fixtures -",
+    "division": "Mechanical"
+  },
+  {
+    "code": 15401,
+    "description": "Plumbing Fixtures -",
+    "division": "Mechanical"
+  },
+  {
+    "code": 15409,
+    "description": "Plumbing Medical Gas"
+  },
+  {
+    "code": 15410,
+    "description": "Plumbing piping -  M"
+  },
+  {
+    "code": 15411,
+    "description": "Plumb. slab rough-in-M"
+  },
+  {
+    "code": 15412,
+    "description": "Plumb. rough-in walls-M"
+  },
+  {
+    "code": 15413,
+    "description": "Plumbing H2O piping- OH"
+  },
+  {
+    "code": 15414,
+    "description": "Plumbing rough-in above slab"
+  },
+  {
+    "code": 15415,
+    "description": "Plumb. slab rough-in-L"
+  },
+  {
+    "code": 15416,
+    "description": "Plumb. rough-in walls-L"
+  },
+  {
+    "code": 15419,
+    "description": "Plumbing Clean and Punch"
+  },
+  {
+    "code": 15420,
+    "description": "Plumbing Piping -  L"
+  },
+  {
+    "code": 15450,
+    "description": "Plumbing HVAC Combo Packate"
+  },
+  {
+    "code": 15500,
+    "description": "HVAC - Sub"
+  },
+  {
+    "code": 15501,
+    "description": "HVAC Louvers"
+  },
+  {
+    "code": 15502,
+    "description": "HVAC Mobilazation"
+  },
+  {
+    "code": 15504,
+    "description": "HVAC Permit",
+    "division": "Mechanical"
+  },
+  {
+    "code": 15505,
+    "description": "HVAC Demolition",
+    "division": "Mechanical"
+  },
+  {
+    "code": 15510,
+    "description": "HVAC AHU & Fan Coils - M",
+    "division": "Mechanical"
+  },
+  {
+    "code": 15520,
+    "description": "HVAC AHU & Fan Coils -  L",
+    "division": "Mechanical"
+  },
+  {
+    "code": 15530,
+    "description": "HVAC Roof-top Equipment",
+    "division": "Mechanical"
+  },
+  {
+    "code": 15531,
+    "description": "HVAC Roof Top Labor",
+    "division": "Mechanical"
+  },
+  {
+    "code": 15535,
+    "description": "HVAC Refrigerant Piping - M",
+    "division": "Mechanical"
+  },
+  {
+    "code": 15536,
+    "description": "HVAC Refrigerant Piping- L",
+    "division": "Mechanical"
+  },
+  {
+    "code": 15550,
+    "description": "HVAC Maintenance",
+    "division": "Mechanical"
+  },
+  {
+    "code": 15555,
+    "description": "Steam Tunnel",
+    "division": "Mechanical"
+  },
+  {
+    "code": 15556,
+    "description": "Steamline Relocation",
+    "division": "Mechanical"
+  },
+  {
+    "code": 15575,
+    "description": "HVAC Controls & Interface",
+    "division": "Mechanical"
+  },
+  {
+    "code": 15576,
+    "description": "Redunant Pumps in Penthouse",
+    "division": "Mechanical"
+  },
+  {
+    "code": 15577,
+    "description": "Penthouse Equipment",
+    "division": "Mechanical"
+  },
+  {
+    "code": 15585,
+    "description": "HVAC Lucid Dashboard",
+    "division": "Mechanical"
+  },
+  {
+    "code": 15595,
+    "description": "HVAC Test Well",
+    "division": "Mechanical"
+  },
+  {
+    "code": 15600,
+    "description": "HVAC Unit Heater Material",
+    "division": "Mechanical"
+  },
+  {
+    "code": 15601,
+    "description": "HVAC Unit Heater Labor",
+    "division": "Mechanical"
+  },
+  {
+    "code": 15610,
+    "description": "HVAC Duct Sox Material",
+    "division": "Mechanical"
+  },
+  {
+    "code": 15611,
+    "description": "HVAC Duct Sox Labor",
+    "division": "Mechanical"
+  },
+  {
+    "code": 15710,
+    "description": "HVAC Heat Pump - M",
+    "division": "Mechanical"
+  },
+  {
+    "code": 15711,
+    "description": "HVAC Heat Pump -  L",
+    "division": "Mechanical"
+  },
+  {
+    "code": 15750,
+    "description": "HVAC Ventilation Fans - M",
+    "division": "Mechanical"
+  },
+  {
+    "code": 15751,
+    "description": "HVAC Ventillation Fan - L",
+    "division": "Mechanical"
+  },
+  {
+    "code": 15752,
+    "description": "HVAC V V T Control System",
+    "division": "Mechanical"
+  },
+  {
+    "code": 15755,
+    "description": "HVAC Air Distribution Material",
+    "division": "Mechanical"
+  },
+  {
+    "code": 15756,
+    "description": "HVAC Air Distribution Labor",
+    "division": "Mechanical"
+  },
+  {
+    "code": 15777,
+    "description": "3rd Party Test & Balance",
+    "division": "Mechanical"
+  },
+  {
+    "code": 15778,
+    "description": "Test & Balance",
+    "division": "Mechanical"
+  },
+  {
+    "code": 15801,
+    "description": "HVAC Ductwork - M",
+    "division": "Mechanical"
+  },
+  {
+    "code": 15802,
+    "description": "HVAC Ductwork - L",
+    "division": "Mechanical"
+  },
+  {
+    "code": 15803,
+    "description": "HVAC Sprial Duct Labor",
+    "division": "Mechanical"
+  },
+  {
+    "code": 15804,
+    "description": "HVAC Spiral Duct Material",
+    "division": "Mechanical"
+  },
+  {
+    "code": 15805,
+    "description": "HVAC Duct Installation Materia",
+    "division": "Mechanical"
+  },
+  {
+    "code": 15806,
+    "description": "HVAC Duct Installation Labor",
+    "division": "Mechanical"
+  },
+  {
+    "code": 15820,
+    "description": "HVAC Dampers - M",
+    "division": "Mechanical"
+  },
+  {
+    "code": 15821,
+    "description": "HVAC Damper - L",
+    "division": "Mechanical"
+  },
+  {
+    "code": 15850,
+    "description": "HVAC Insulation",
+    "division": "Mechanical"
+  },
+  {
+    "code": 15890,
+    "description": "HVAC Seismic Control",
+    "division": "Mechanical"
+  },
+  {
+    "code": 15902,
+    "description": "HVAC Controls - M",
+    "division": "Mechanical"
+  },
+  {
+    "code": 15903,
+    "description": "HVAC Controls - L",
+    "division": "Mechanical"
+  },
+  {
+    "code": 15940,
+    "description": "HVAC Grill,Reg,Diffusers - M",
+    "division": "Mechanical"
+  },
+  {
+    "code": 15941,
+    "description": "HVAC Grill,Reg,Diff - L",
+    "division": "Mechanical"
+  },
+  {
+    "code": 15950,
+    "description": "HVAC Hydronic Piping -M",
+    "division": "Mechanical"
+  },
+  {
+    "code": 15960,
+    "description": "HVAC Hydronic Piping- L",
+    "division": "Mechanical"
+  },
+  {
+    "code": 15961,
+    "description": "HVAC Electric Heater",
+    "division": "Mechanical"
+  },
+  {
+    "code": 15970,
+    "description": "HVAC Chilled Water Pump - M",
+    "division": "Mechanical"
+  },
+  {
+    "code": 15980,
+    "description": "HVAC Chilled Water Pump- L",
+    "division": "Mechanical"
+  },
+  {
+    "code": 15984,
+    "description": "HAVC Equipment Rental",
+    "division": "Mechanical"
+  },
+  {
+    "code": 15985,
+    "description": "HVAC Set Out Equipment",
+    "division": "Mechanical"
+  },
+  {
+    "code": 15990,
+    "description": "HVAC Start-Up & Air Bal.-L",
+    "division": "Mechanical"
+  },
+  {
+    "code": 15991,
+    "description": "HVAC Welded Bars",
+    "division": "Mechanical"
+  },
+  {
+    "code": 15995,
+    "description": "Energy Star",
+    "division": "Mechanical"
+  },
+  {
+    "code": 16000,
+    "description": "Electrical - Sub",
+    "division": "Electrical"
+  },
+  {
+    "code": 16000.1,
+    "description": "Electrical-Sub",
+    "division": "Electrical"
+  },
+  {
+    "code": 16001,
+    "description": "Electrical Mobil.",
+    "division": "Electrical"
+  },
+  {
+    "code": 16002,
+    "description": "Electrical  Close-Out",
+    "division": "Electrical"
+  },
+  {
+    "code": 16010,
+    "description": "Electrical Undergrnd - M",
+    "division": "Electrical"
+  },
+  {
+    "code": 16020,
+    "description": "Electrical Undergrnd - L",
+    "division": "Electrical"
+  },
+  {
+    "code": 16030,
+    "description": "Electrical Rough-In - M",
+    "division": "Electrical"
+  },
+  {
+    "code": 16040,
+    "description": "Electrical Rough-In - L",
+    "division": "Electrical"
+  },
+  {
+    "code": 16050,
+    "description": "Electrical Sitewk-M",
+    "division": "Electrical"
+  },
+  {
+    "code": 16051,
+    "description": "Electrical Sitewk-L",
+    "division": "Electrical"
+  },
+  {
+    "code": 16052,
+    "description": "Eletrical Demo Prep",
+    "division": "Electrical"
+  },
+  {
+    "code": 16060,
+    "description": "Electrical Demolition",
+    "division": "Electrical"
+  },
+  {
+    "code": 16100,
+    "description": "Electrical Wiring - M",
+    "division": "Electrical"
+  },
+  {
+    "code": 16101,
+    "description": "Electrical Wiring - L",
+    "division": "Electrical"
+  },
+  {
+    "code": 16110,
+    "description": "Electrical Conduit Trenching",
+    "division": "Electrical"
+  },
+  {
+    "code": 16111,
+    "description": "Electrical Conduit - M",
+    "division": "Electrical"
+  },
+  {
+    "code": 16112,
+    "description": "Electrical Conduit - L",
+    "division": "Electrical"
+  },
+  {
+    "code": 16130,
+    "description": "Electrical Boxes Fittings-M",
+    "division": "Electrical"
+  },
+  {
+    "code": 16131,
+    "description": "Electrical Boxes Fittings-L",
+    "division": "Electrical"
+  },
+  {
+    "code": 16160,
+    "description": "Electrical Panelboards - M",
+    "division": "Electrical"
+  },
+  {
+    "code": 16161,
+    "description": "Electrical Penelboards - L",
+    "division": "Electrical"
+  },
+  {
+    "code": 16170,
+    "description": "Electrical Dvces Plates-M",
+    "division": "Electrical"
+  },
+  {
+    "code": 16171,
+    "description": "Electrical Dvces Plate-L",
+    "division": "Electrical"
+  },
+  {
+    "code": 16370,
+    "description": "Electrical Transformer - M",
+    "division": "Electrical"
+  },
+  {
+    "code": 16371,
+    "description": "Electrical Transformer - L",
+    "division": "Electrical"
+  },
+  {
+    "code": 16380,
+    "description": "Electrical Switchgear - M",
+    "division": "Electrical"
+  },
+  {
+    "code": 16390,
+    "description": "Electrical Switchgear - L",
+    "division": "Electrical"
+  },
+  {
+    "code": 16401,
+    "description": "Electrical Service - M",
+    "division": "Electrical"
+  },
+  {
+    "code": 16402,
+    "description": "Electrical Service - L",
+    "division": "Electrical"
+  },
+  {
+    "code": 16496,
+    "description": "Elec.Auto. Transfer Switch",
+    "division": "Electrical"
+  },
+  {
+    "code": 16510,
+    "description": "Electrical Ltg fixtures-M",
+    "division": "Electrical"
+  },
+  {
+    "code": 16511,
+    "description": "Electrical LtG Fixture-L",
+    "division": "Electrical"
+  },
+  {
+    "code": 16512,
+    "description": "Electrical Pole Light - M",
+    "division": "Electrical"
+  },
+  {
+    "code": 16513,
+    "description": "Electrical Pole Light - L",
+    "division": "Electrical"
+  },
+  {
+    "code": 16514,
+    "description": "Electrical Pole Bases - M",
+    "division": "Electrical"
+  },
+  {
+    "code": 16515,
+    "description": "Electrical Pole Base - L",
+    "division": "Electrical"
+  },
+  {
+    "code": 16516,
+    "description": "Electrical Pump Station - M",
+    "division": "Electrical"
+  },
+  {
+    "code": 16517,
+    "description": "Electrical Pump Station - L",
+    "division": "Electrical"
+  },
+  {
+    "code": 16519,
+    "description": "Lighting Fixtures",
+    "division": "Electrical"
+  },
+  {
+    "code": 16600,
+    "description": "Site Comm IT underground",
+    "division": "Electrical"
+  },
+  {
+    "code": 16730,
+    "description": "Fire Alarm Systems - M",
+    "division": "Electrical"
+  },
+  {
+    "code": 16731,
+    "description": "Fite Alarm Systems - L",
+    "division": "Electrical"
+  },
+  {
+    "code": 16740,
+    "description": "Security System",
+    "division": "Electrical"
+  },
+  {
+    "code": 16740.1,
+    "description": "Security Rough in Contingency",
+    "division": "Electrical"
+  },
+  {
+    "code": 16745,
+    "description": "Audio Visual",
+    "division": "Electrical"
+  },
+  {
+    "code": 16745.1,
+    "description": "A V Rough in Contingency",
+    "division": "Electrical"
+  },
+  {
+    "code": 16750,
+    "description": "Nurse call systems",
+    "division": "Electrical"
+  },
+  {
+    "code": 16751,
+    "description": "Sound System",
+    "division": "Electrical"
+  },
+  {
+    "code": 16760,
+    "description": "Voice Data Systems Material",
+    "division": "Electrical"
+  },
+  {
+    "code": 16761,
+    "description": "Cameras",
+    "division": "Electrical"
+  },
+  {
+    "code": 16762,
+    "description": "IT Equipment",
+    "division": "Electrical"
+  },
+  {
+    "code": 16763,
+    "description": "Fiber Optic & Punch down",
+    "division": "Electrical"
+  },
+  {
+    "code": 16764,
+    "description": "IT AV Allowance",
+    "division": "Electrical"
+  },
+  {
+    "code": 16765,
+    "description": "Lutron Ltg. System Shade Contr",
+    "division": "Electrical"
+  },
+  {
+    "code": 16770,
+    "description": "Roadway Lighting",
+    "division": "Electrical"
+  },
+  {
+    "code": 16800,
+    "description": "Site Lighting",
+    "division": "Electrical"
+  },
+  {
+    "code": 16900,
+    "description": "Solar PV",
+    "division": "General Requirements"
+  },
+  {
+    "code": 16901,
+    "description": "Cellular Phone",
+    "division": "General Requirements"
+  },
+  {
+    "code": 17000,
+    "description": "Miscellaneous",
+    "division": "Miscellaneous"
+  },
+  {
+    "code": 17001,
+    "description": "Additional scope before closing",
+    "division": "Miscellaneous"
+  },
+  {
+    "code": 17002,
+    "description": "Misc. Contingency",
+    "division": "Miscellaneous"
+  },
+  {
+    "code": 17100,
+    "description": "Unloading materials",
+    "division": "Miscellaneous"
+  },
+  {
+    "code": 17200,
+    "description": "Tub Inserts & Surrounds Mat",
+    "division": "Miscellaneous"
+  },
+  {
+    "code": 17201,
+    "description": "Tub Inserts & Surrounds Labor",
+    "division": "Miscellaneous"
+  },
+  {
+    "code": 18000,
+    "description": "G. C. Contingency",
+    "division": "Miscellaneous"
+  },
+  {
+    "code": 18001,
+    "description": "General Trades Package",
+    "division": "Miscellaneous"
+  },
+  {
+    "code": 18010,
+    "description": "Design Contingency",
+    "division": "Miscellaneous"
+  },
+  {
+    "code": 18020,
+    "description": "Landscaping Allowance",
+    "division": "Miscellaneous"
+  },
+  {
+    "code": 18030,
+    "description": "Wood Wall Allowance",
+    "division": "Miscellaneous"
+  },
+  {
+    "code": 18040,
+    "description": "Recep. Desk Allowance",
+    "division": "Miscellaneous"
+  },
+  {
+    "code": 18050,
+    "description": "Door Hardware Allowance",
+    "division": "Miscellaneous"
+  },
+  {
+    "code": 18060,
+    "description": "Interior Signage Allowance",
+    "division": "Miscellaneous"
+  },
+  {
+    "code": 18070,
+    "description": "Exterior Signage Allowance",
+    "division": "Miscellaneous"
+  },
+  {
+    "code": 18080,
+    "description": "Fire Pump Allowance",
+    "division": "Miscellaneous"
+  },
+  {
+    "code": 18090,
+    "description": "Site Lighting Allowance",
+    "division": "Miscellaneous"
+  },
+  {
+    "code": 18095,
+    "description": "Framing Allowance",
+    "division": "Miscellaneous"
+  },
+  {
+    "code": 18150,
+    "description": "Owner's Contingency",
+    "division": "Miscellaneous"
+  },
+  {
+    "code": 18201,
+    "description": "Retail tenant Upfit",
+    "division": "General Requirements"
+  },
+  {
+    "code": 18202,
+    "description": "Bath Vanity",
+    "division": "Finishes"
+  },
+  {
+    "code": 18203,
+    "description": "H.M. Doors & Frames",
+    "division": "Miscellaneous"
+  },
+  {
+    "code": 18204,
+    "description": "Allowance No. 4",
+    "division": "Miscellaneous"
+  },
+  {
+    "code": 18205,
+    "description": "Allowance No. 5",
+    "division": "Miscellaneous"
+  },
+  {
+    "code": 18206,
+    "description": "Allowance No. 6",
+    "division": "Miscellaneous"
+  },
+  {
+    "code": 18207,
+    "description": "Allowance No. 7",
+    "division": "Miscellaneous"
+  },
+  {
+    "code": 18208,
+    "description": "Alloawnce No. 8",
+    "division": "Miscellaneous"
+  },
+  {
+    "code": 18209,
+    "description": "Allowance No. 9",
+    "division": "Miscellaneous"
+  },
+  {
+    "code": 18210,
+    "description": "Allowance No. 10",
+    "division": "Miscellaneous"
+  },
+  {
+    "code": 18211,
+    "description": "Allowance No. 11",
+    "division": "Miscellaneous"
+  },
+  {
+    "code": 18212,
+    "description": "Allowance No. 12",
+    "division": "Miscellaneous"
+  },
+  {
+    "code": 18213,
+    "description": "Allowance No. 13",
+    "division": "Miscellaneous"
+  },
+  {
+    "code": 18214,
+    "description": "Allowance No. 14",
+    "division": "Miscellaneous"
+  },
+  {
+    "code": 18215,
+    "description": "Allowance No. 15",
+    "division": "Miscellaneous"
+  },
+  {
+    "code": 18216,
+    "description": "Allowance No. 16",
+    "division": "Miscellaneous"
+  },
+  {
+    "code": 18217,
+    "description": "Allowance No. 17",
+    "division": "Miscellaneous"
+  },
+  {
+    "code": 18218,
+    "description": "Allowance No. 18",
+    "division": "Miscellaneous"
+  },
+  {
+    "code": 18219,
+    "description": "Allowance No. 19",
+    "division": "Miscellaneous"
+  },
+  {
+    "code": 18220,
+    "description": "Allowance No. 20",
+    "division": "Miscellaneous"
+  },
+  {
+    "code": 18221,
+    "description": "Allowance No. 21",
+    "division": "Miscellaneous"
+  },
+  {
+    "code": 18222,
+    "description": "Allowance No. 22",
+    "division": "Miscellaneous"
+  },
+  {
+    "code": 18223,
+    "description": "Allowance No. 23",
+    "division": "Miscellaneous"
+  },
+  {
+    "code": 18224,
+    "description": "Allowance No. 24",
+    "division": "Miscellaneous"
+  },
+  {
+    "code": 18300,
+    "description": "Allowance CM-00",
+    "division": "Miscellaneous"
+  },
+  {
+    "code": 18301,
+    "description": "Allowance CM-01",
+    "division": "Miscellaneous"
+  },
+  {
+    "code": 18302,
+    "description": "Allowance CM-02",
+    "division": "Miscellaneous"
+  },
+  {
+    "code": 18303,
+    "description": "Allowance CM-03",
+    "division": "Miscellaneous"
+  },
+  {
+    "code": 18304,
+    "description": "Allowance CM-04",
+    "division": "Miscellaneous"
+  },
+  {
+    "code": 18305,
+    "description": "Allowance CM-05",
+    "division": "Miscellaneous"
+  },
+  {
+    "code": 18306,
+    "description": "Allowance CM-06",
+    "division": "Miscellaneous"
+  },
+  {
+    "code": 18307,
+    "description": "Allowance CM-07",
+    "division": "Miscellaneous"
+  },
+  {
+    "code": 18308,
+    "description": "Allowance CM-08",
+    "division": "Miscellaneous"
+  },
+  {
+    "code": 18309,
+    "description": "Precon Due Diligence",
+    "division": "Miscellaneous"
+  },
+  {
+    "code": 19000,
+    "description": "Bonds",
+    "division": "Miscellaneous"
+  },
+  {
+    "code": 20116,
+    "description": "Alternate Rough In 2nd Floor",
+    "division": "Miscellaneous"
+  },
+  {
+    "code": 21001,
+    "description": "Alternate #1",
+    "division": "Miscellaneous"
+  },
+  {
+    "code": 21002,
+    "description": "Alternate #2",
+    "division": "Miscellaneous"
+  },
+  {
+    "code": 21003,
+    "description": "Alternate #3",
+    "division": "Miscellaneous"
+  },
+  {
+    "code": 21004,
+    "description": "Alternate #4",
+    "division": "Miscellaneous"
+  },
+  {
+    "code": 21005,
+    "description": "Alternate #5",
+    "division": "Miscellaneous"
+  },
+  {
+    "code": 99010,
+    "description": "Labor - Estimating CM@R",
+    "division": "General Requirements"
+  },
+  {
+    "code": 99020,
+    "description": "Labor - Operations CM@R",
+    "division": "General Requirements"
+  },
+  {
+    "code": 99030,
+    "description": "Technology Reprographic Cost CM@R",
+    "division": "General Requirements"
+  },
+  {
+    "code": 99040,
+    "description": "HUB Activities CM@R",
+    "division": "General Requirements"
+  },
+  {
+    "code": 99041,
+    "description": "Workforce Dev Coordinator",
+    "division": "General Requirements"
+  },
+  {
+    "code": 99050,
+    "description": "BIM Design CM@R",
+    "division": "General Requirements"
+  },
+  {
+    "code": 99060,
+    "description": "Architectural Design CM@R",
+    "division": "General Requirements"
+  },
+  {
+    "code": 99070,
+    "description": "Fuel - PreCon",
+    "division": "General Requirements"
+  },
+  {
+    "code": 99080,
+    "description": "Safety - PreCon",
+    "division": "General Requirements"
+  },
+  {
+    "code": 99101,
+    "description": "Cost of Living Escalation",
+    "division": "General Requirements"
+  },
+  {
+    "code": 100100,
+    "description": "Equip. Fuel",
+    "division": "Equipment Costs"
+  },
+  {
+    "code": 100200,
+    "description": "Equip. Oil   Lube   Hydr.",
+    "division": "Equipment Costs"
+  },
+  {
+    "code": 100300,
+    "description": "Full Service",
+    "division": "Equipment Costs"
+  },
+  {
+    "code": 100350,
+    "description": "Material taxes",
+    "division": "General Requirements"
+  },
+  {
+    "code": 100400,
+    "description": "Tires",
+    "division": "Equipment Costs"
+  },
+  {
+    "code": 100450,
+    "description": "Demising Wall- metal 6\"",
+    "division": "Finishes"
+  },
+  {
+    "code": 100500,
+    "description": "Equip. Maintenance Repair",
+    "division": "Equipment Costs"
+  },
+  {
+    "code": 100600,
+    "description": "Equip. Overhaul",
+    "division": "Equipment Costs"
+  },
+  {
+    "code": 100650,
+    "description": "Equip. Major Repair",
+    "division": "Equipment Costs"
+  },
+  {
+    "code": 100700,
+    "description": "Equip. Storage",
+    "division": "Equipment Costs"
+  },
+  {
+    "code": 100800,
+    "description": "Equip. Tax Lic.",
+    "division": "Equipment Costs"
+  },
+  {
+    "code": 100850,
+    "description": "Equip. Insurance",
+    "division": "Equipment Costs"
+  },
+  {
+    "code": 100900,
+    "description": "Equip. Financing",
+    "division": "Equipment Costs"
+  },
+  {
+    "code": 100950,
+    "description": "Equip. Depreciation",
+    "division": "Equipment Costs"
+  },
+  {
+    "code": 100951,
+    "description": "Equip. Rental",
+    "division": "Equipment Costs"
+  },
+  {
+    "code": 105000,
+    "description": "Metcon Fee, Gener Conditions & Overhead",
+    "division": "General Requirements"
+  },
+  {
+    "code": 126613,
+    "description": "Telescoping Bleachers",
+    "division": "Furnishings"
+  }
+]

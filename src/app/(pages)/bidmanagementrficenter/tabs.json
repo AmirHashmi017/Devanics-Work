@@ -1,0 +1,22 @@
+[
+  {
+    "label": "Overview",
+    "value": "overview"
+  },
+  {
+    "label": "Project Team",
+    "value": "project-team"
+  },
+  {
+    "label": "Bidding team",
+    "value": "bidding-team"
+  },
+  {
+    "label": "Documents",
+    "value": "documents"
+  },
+  {
+    "label": "RFI Center",
+    "value": "rfi-center"
+  }
+]

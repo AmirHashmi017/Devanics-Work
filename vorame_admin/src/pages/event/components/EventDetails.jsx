@@ -20,7 +20,7 @@ const EventDetails = () => {
   if (isLoading) return <Loader />;
   if (error) return <Error error={error} />;
 
-  const { eventName, date, time, description } = apiResponse.data;
+  const { eventName, date, time, description} = apiResponse.data;
 
   return (
     <div>
@@ -33,9 +33,7 @@ const EventDetails = () => {
         <Typography variant="body1" fontWeight={600} fontSize={24}>
           Event Details
         </Typography>
-        <CustomButton sx={{ p: 1, borderRadius: "8px" }} >
-          Join Event
-        </CustomButton>
+        
       </Box>
       <Box
         borderRadius="10px"

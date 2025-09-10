@@ -11,7 +11,7 @@ import moment from "moment";
 import CreateEvent from "./CreateEvent";
 
 const SingleEvent = (eventData) => {
-  const { _id,  date, time, description, reservations } = eventData;
+  const { _id,  date, time, duration, description, reservations, start_url } = eventData;
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [openUpdateModal, setOpenUpdateModal] = useState(false);
   const [openStatusModal, setOpenStatusModal] = useState(false);
@@ -37,17 +37,27 @@ const SingleEvent = (eventData) => {
   // today date in moment format
   const today = moment().startOf('day');
 
-  const checkEventStatus = () => {
-    const formattedData = moment(date);
+const checkEventStatus = () => {
+  const today = moment(); 
+  const eventDateTime = moment(`${date} ${time}`, "YYYY-MM-DD HH:mm"); 
 
-    if (formattedData.isSame(today, 'day')) {
-      return 'today'
-    } else if (formattedData.isAfter(today)) {
-      return 'upcoming'
+  const eventEndTime = moment(eventDateTime).add(duration, "minutes");
+
+  if (today.isSame(eventDateTime, "day")) {
+    if (today.isBetween(eventDateTime, eventEndTime)) {
+      return "today"; 
+    } else if (today.isBefore(eventDateTime)) {
+      return "upcoming"; 
     } else {
-      return 'completed'
+      return "completed"; 
     }
+  } else if (eventDateTime.isAfter(today, "day")) {
+    return "upcoming"; 
+  } else {
+    return "completed"; 
   }
+};
+
 
   const eventStatus = checkEventStatus();
   const daysLeft = moment(date).diff(moment(today), 'days');
@@ -102,6 +112,10 @@ const SingleEvent = (eventData) => {
   };
 
   const handleJoinEvent = (e) => {
+    if(start_url)
+    {
+    window.open(start_url, "_blank");
+    }
     e.stopPropagation();
     // Add join event logic here
     console.log('Join event clicked');

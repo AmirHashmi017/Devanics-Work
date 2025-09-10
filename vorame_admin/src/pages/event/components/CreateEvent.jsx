@@ -16,6 +16,7 @@ const CreateEvent = ({ setOpen, eventData = null }) => {
     eventName = "",
     date = null,
     time = null,
+    duration= null,
     description = "",
   } = eventData || {};
 
@@ -25,6 +26,7 @@ const CreateEvent = ({ setOpen, eventData = null }) => {
     eventName,
     date,
     time,
+    duration,
     description,
   };
 
@@ -32,6 +34,7 @@ const CreateEvent = ({ setOpen, eventData = null }) => {
     eventName: yup.string().required("Event Name is required"),
     date: yup.string().required("Date is required"),
     time: yup.string().required("Time is required"),
+    duration: yup.string().required("Duration is required"),
     description: yup.string().required("Description is required"),
   });
 
@@ -80,6 +83,17 @@ const CreateEvent = ({ setOpen, eventData = null }) => {
                 label="Time"
                 name="time"
                 placeholder="Select Time"
+              />
+              <FormControl
+                control="select"
+                label="Duration"
+                name="duration"
+                placeholder="Select Duration"
+                options={[
+                  { label: "15 minutes", value: 15 },
+                  { label: "30 minutes", value: 30 },
+                  { label: "45 minutes", value: 45 },
+                ]}
               />
               <FormControl
                 control="textarea"

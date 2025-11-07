@@ -15,10 +15,23 @@ export class UserController {
     }
   }
 
+  // Block/Unblock user from boardroom
+  async blockUser(req: Request, res: Response) {
+    try {
+      const user = await userService.blockUser(req.params);
+      return res.status(user.statusCode).json(user);
+    } catch (error) {
+      let errorMessage = generateErrorResponse(error);
+      return res.status(errorMessage.statusCode).json(errorMessage);
+    }
+  }
+
+
+
   // get user accounts by admin
   async getUsers(req: Request, res: Response) {
     try {
-      const user = await userService.getUsers(req);
+      const user = await userService.getUsers(req.query,req.payload);
       return res.status(user.statusCode).json(user);
     } catch (error) {
       let errorMessage = generateErrorResponse(error);
@@ -30,6 +43,36 @@ export class UserController {
   async getUserById(req: Request, res: Response) {
     try {
       const user = await userService.getUserById(req);
+      return res.status(user.statusCode).json(user);
+    } catch (error) {
+      let errorMessage = generateErrorResponse(error);
+      return res.status(errorMessage.statusCode).json(errorMessage);
+    }
+  }
+
+  // get user id by username
+  async getUserByName(req: Request, res: Response) {
+    try {
+      const result = await userService.getUserByName(req);
+      // Return only the id in response body
+      return res.status(result.statusCode).json({ id: result.data.id });
+    } catch (error) {
+      let errorMessage = generateErrorResponse(error);
+      return res.status(errorMessage.statusCode).json(errorMessage);
+    }
+  }
+  async getStreak(req: Request, res: Response) {
+    try {
+      const user = await userService.getStreak(req);
+      return res.status(user.statusCode).json(user);
+    } catch (error) {
+      let errorMessage = generateErrorResponse(error);
+      return res.status(errorMessage.statusCode).json(errorMessage);
+    }
+  }
+  async setStreak(req: Request, res: Response) {
+    try {
+      const user = await userService.setStreak(req);
       return res.status(user.statusCode).json(user);
     } catch (error) {
       let errorMessage = generateErrorResponse(error);
@@ -128,6 +171,27 @@ export class UserController {
     try {
       const account = await userService.deleteAccount(req.params);
       return res.status(account.statusCode).json(account);
+    } catch (error) {
+      let errorMessage = generateErrorResponse(error);
+      return res.status(errorMessage.statusCode).json(errorMessage);
+    }
+  }
+
+  // Notification preferences
+  async enableNotification(req: Request, res: Response) {
+    try {
+      const out = await userService.updateNotificationPreference(req.payload, req.body, true);
+      return res.status(out.statusCode).json(out);
+    } catch (error) {
+      let errorMessage = generateErrorResponse(error);
+      return res.status(errorMessage.statusCode).json(errorMessage);
+    }
+  }
+
+  async disableNotification(req: Request, res: Response) {
+    try {
+      const out = await userService.updateNotificationPreference(req.payload, req.body, false);
+      return res.status(out.statusCode).json(out);
     } catch (error) {
       let errorMessage = generateErrorResponse(error);
       return res.status(errorMessage.statusCode).json(errorMessage);

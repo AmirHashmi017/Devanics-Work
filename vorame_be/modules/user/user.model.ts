@@ -38,6 +38,8 @@ let companySchema = new Schema<IUser>(
     isEmailVerified: { type: Boolean, default: false },
     isPhoneVerified: { type: Boolean, default: false },
     isActive: { type: String, default: "active" },
+    isBoardroomBlocked: {type: Boolean, default: false},
+    isTouchpointBlocked: {type: Boolean, default: false},
     loginAttempts: { type: Number, default: 0 },
     providerId: { type: String, default: "" },
     providerType: { type: String, default: "" },
@@ -92,6 +94,43 @@ let companySchema = new Schema<IUser>(
       type: Boolean,
       default: true,
     },
+    currentStreak:{
+      type: Number,
+      default:0
+    },
+    streakUpdatedDate:{
+      type: Date
+    },
+    FCMToken: {
+      type: [String],
+      default: [],
+    },
+    // Notification preferences (all enabled by default)
+    notifyDirectMessage: { type: Boolean, default: true }, // 1. Someone sends you a message
+    notifyGroupChatMessage: { type: Boolean, default: true }, // 2. Group chat message received
+    notifyMentionInPost: { type: Boolean, default: true }, // 3. Mentioned in a post
+    notifyMentionInComment: { type: Boolean, default: true }, // 4. Mentioned in a comment
+    notifyMentionInReply: { type: Boolean, default: true }, // 5. Mentioned in a reply
+    notifyCommentOnYourPost: { type: Boolean, default: true }, // 6. Someone commented on your post
+    notifyReplyToYourComment: { type: Boolean, default: true }, // 7. Someone replied to your comment
+    notifyLikeOnYourPost: { type: Boolean, default: true }, // 8. Someone liked your post
+    notifyLikeOnYourComment: { type: Boolean, default: true }, // 9. Someone liked your comment
+    // New consolidated preferences
+    notifyPostComment: { type: Boolean, default: true },
+    notifyCommentReply: { type: Boolean, default: true },
+    notifyMentions: { type: Boolean, default: true },
+    notifyPostLike: { type: Boolean, default: true },
+    notifyPostRepost: { type: Boolean, default: true },
+    notifyNewFollower: { type: Boolean, default: true },
+    notifyMessageReaction: { type: Boolean, default: true },
+    notifyStreakReminder: { type: Boolean, default: true },
+    notifyStreakMilestone: { type: Boolean, default: true },
+    notifyStudySessionReminder: { type: Boolean, default: true },
+    notifyNewBlogUploaded: { type: Boolean, default: true },
+    notifyNewBookClubAvailable: { type: Boolean, default: true },
+    isProUser:{
+      type:Boolean
+    }
   },
   { timestamps: true }
 );

@@ -26,6 +26,8 @@ export default interface IUser extends Document {
   avatar: string;
   membership: string;
   isActive: string;
+  isBoardroomBlocked: Boolean;
+  isTouchpointBlocked: Boolean;
   stripeCustomerId?: string;
   stripeSubscriptionId?: string;
   userRole: string;
@@ -39,6 +41,33 @@ export default interface IUser extends Document {
   lockTime: number;
   isPasscodeActive: boolean;
   bio?: string;
+  currentStreak: number;
+  streakUpdatedDate:Date;
+  FCMToken: string[];
+  isProUser: boolean;
+  // Notification preferences
+  notifyDirectMessage: boolean;
+  notifyGroupChatMessage: boolean;
+  notifyMentionInPost: boolean;
+  notifyMentionInComment: boolean;
+  notifyMentionInReply: boolean;
+  notifyCommentOnYourPost: boolean;
+  notifyReplyToYourComment: boolean;
+  notifyLikeOnYourPost: boolean;
+  notifyLikeOnYourComment: boolean;
+  // Consolidated set
+  notifyPostComment: boolean;
+  notifyCommentReply: boolean;
+  notifyMentions: boolean;
+  notifyPostLike: boolean;
+  notifyPostRepost: boolean;
+  notifyNewFollower: boolean;
+  notifyMessageReaction: boolean;
+  notifyStreakReminder: boolean;
+  notifyStreakMilestone: boolean;
+  notifyStudySessionReminder: boolean;
+  notifyNewBlogUploaded: boolean;
+  notifyNewBookClubAvailable: boolean;
 }
 
 export interface IBlockedUser extends Document {

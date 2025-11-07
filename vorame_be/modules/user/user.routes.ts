@@ -5,11 +5,22 @@ import UserController from "./user.controller";
 import { ContactUsDto } from "./dto/contactUs.dto";
 import { authorizeRequest } from "../../middlewares/authorization.middleware";
 import { validateObjectId } from "../../middlewares/validateObjectId.middleware";
+import { adminAuthorizeRequest } from "../../middlewares/adminAuthorization.middleware";
 
 export const userRoutes = Router();
 
 userRoutes.get("/list", authorizeRequest, UserController.getUsersByAdmin);
 userRoutes.get("/users", authorizeRequest, UserController.getUsers);
+userRoutes.get("/getUserByName", authorizeRequest, UserController.getUserByName);
+
+userRoutes.patch(
+  "/blockUser/:id",
+  adminAuthorizeRequest,
+  validateObjectId,
+  UserController.blockUser
+);
+
+
 userRoutes.patch(
   "/:id",
   authorizeRequest,
@@ -66,3 +77,28 @@ userRoutes.get(
   validateObjectId,
   UserController.followings
 );
+
+userRoutes.put(
+  "/setStreak",
+  authorizeRequest,
+  UserController.setStreak
+);
+
+userRoutes.get(
+  "/getStreak",
+  authorizeRequest,
+  UserController.getStreak
+);
+
+// Notification preferences
+userRoutes.patch(
+  "/notifications/enable",
+  authorizeRequest,
+  UserController.enableNotification
+);
+userRoutes.patch(
+  "/notifications/disable",
+  authorizeRequest,
+  UserController.disableNotification
+);
+

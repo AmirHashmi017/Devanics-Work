@@ -6,7 +6,7 @@ export type IPurchaseHistory = {
     planId: string | IPlan, // Reference to the plan the user is currently subscribed to
     startDate: Date,
     endDate: Date | null, // Null for lifetime subscriptions
-    status: "active" | "cancelled" | "expired" // active, expired, cancelled
+    status: "active" | "cancelled" | "expired" | "trial" | "trial_ending" | "payment_failed"
     subscriptionId: string;
     paymentIntentId: string;
     user: string | IUser;

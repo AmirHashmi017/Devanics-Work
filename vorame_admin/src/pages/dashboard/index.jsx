@@ -63,9 +63,9 @@ const Dashboard = () => {
         isLoading,
         error,
         data: apiResponse,
-    } = useApiQuery({ 
-        queryKey: [DASHBOARD_STATS, duration], 
-        url: DASHBOARD_STATS + (duration ? `/?duration=${duration}` : '') 
+    } = useApiQuery({
+        queryKey: [DASHBOARD_STATS, duration],
+        url: DASHBOARD_STATS + (duration ? `/?duration=${duration}` : ''), otherOptions: { refetchOnWindowFocus: false }
     });
 
     const handleChange = (event) => {
@@ -94,11 +94,11 @@ const Dashboard = () => {
                     renderValue={(selected) => {
                         if (!selected) {
                             return (
-                                <Typography 
-                                    sx={{ 
+                                <Typography
+                                    sx={{
                                         color: '#999999',
                                         fontSize: '14px',
-                                        fontWeight: 400 
+                                        fontWeight: 400
                                     }}
                                 >
                                     Years

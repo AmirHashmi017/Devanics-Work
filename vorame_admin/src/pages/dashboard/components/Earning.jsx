@@ -36,7 +36,7 @@ const Earning = ({ duration, totalUsers, paidUsers, freeUsers }) => {
     queryKey: [DASHBOARD_EARNING_REPORT, reportDuration],
     url:
       DASHBOARD_EARNING_REPORT +
-      (reportDuration === 'month' ? `/?duration=month` : ""),
+      (reportDuration === 'month' ? `/?duration=month` : ""), otherOptions: { refetchOnWindowFocus: false }
   });
 
   const handleDurationChange = (e) => {
@@ -163,7 +163,7 @@ const Earning = ({ duration, totalUsers, paidUsers, freeUsers }) => {
               size="small"
               onChange={handleDurationChange}
               displayEmpty
-               IconComponent={KeyboardArrowDownIcon} 
+              IconComponent={KeyboardArrowDownIcon}
               renderValue={(selected) => {
                 if (!selected) return "Monthly";
                 return durationOptions[selected];

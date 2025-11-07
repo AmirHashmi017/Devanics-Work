@@ -8,125 +8,147 @@ import { duration } from "moment";
 class DashboardService {
   constructor() { }
 
-  //   total users
-  async getTotalUsers(duration = '') {
-    const currentDate = new Date();
-
-    let query: any = { userRole: { $ne: 'admin' } };
-
-    if (duration === 'month') {
-      // Get users for the last month
-      const lastMonth = new Date(currentDate);
-      lastMonth.setMonth(currentDate.getMonth() - 1);
-
-      query.createdAt = {
-        $gte: new Date(lastMonth.getFullYear(), lastMonth.getMonth(), 1),
-        $lt: new Date(currentDate.getFullYear(), currentDate.getMonth(), 1)
-      };
+  private calculatePercentage(current: number, previous: number): number {
+    if (previous === 0) {
+      return current > 0 ? 100 : 0;
     }
-    else if (duration === 'year') {
-      // Get users for the current year
-      query.createdAt = {
-        $gte: new Date(currentDate.getFullYear(), 0, 1),
-        $lt: new Date(currentDate.getFullYear() + 1, 0, 1)
-      };
-    }
-
-    // Fetch users based on the adjusted query
-    const usersCount = await Users.find(query).countDocuments();
-    return usersCount;
+    return Math.round(((current - previous) / previous) * 100);
   }
+  //   total users
+  async getTotalUsers(duration = '', isPrevious = false) {
+  const currentDate = new Date();
+
+  let query: any = { userRole: { $ne: 'admin' } };
+
+  if (duration === 'month') {
+    const targetMonth = new Date(currentDate);
+    if (isPrevious) {
+      targetMonth.setMonth(currentDate.getMonth() - 2); // Previous month
+    } else {
+      targetMonth.setMonth(currentDate.getMonth() - 1); // Current month
+    }
+
+    const monthStart = new Date(targetMonth.getFullYear(), targetMonth.getMonth(), 1);
+    const monthEnd = new Date(targetMonth.getFullYear(), targetMonth.getMonth() + 1, 1);
+
+    query.createdAt = {
+      $gte: monthStart,
+      $lt: monthEnd
+    };
+  }
+  else if (duration === 'year') {
+    const targetYear = isPrevious ? currentDate.getFullYear() - 1 : currentDate.getFullYear();
+    
+    query.createdAt = {
+      $gte: new Date(targetYear, 0, 1),
+      $lt: new Date(targetYear + 1, 0, 1)
+    };
+  }
+
+  const usersCount = await Users.find(query).countDocuments();
+  return usersCount;
+}
 
   //  get users
-  async getUsers(status = 'paid', duration = '') {
-    const currentDate = new Date();
+  async getUsers(status = 'paid', duration = '', isPrevious = false) {
+  const currentDate = new Date();
 
-    // Create the match condition for purchase history based on status (paid or free)
-    const matchCondition: any = {
-      userRole: { $ne: 'admin' },
-      $expr: status === 'paid' ? { $gt: [{ $size: '$purchaseHistory' }, 0] } : {
-        $eq: [{ $size: '$purchaseHistory' }, 0]
-      }
+  const matchCondition: any = {
+    userRole: { $ne: 'admin' },
+    $expr: status === 'paid' ? { $gt: [{ $size: '$purchaseHistory' }, 0] } : {
+      $eq: [{ $size: '$purchaseHistory' }, 0]
+    }
+  };
+
+  if (duration === 'month') {
+    const targetMonth = new Date(currentDate);
+    if (isPrevious) {
+      targetMonth.setMonth(currentDate.getMonth() - 2); // Previous month
+    } else {
+      targetMonth.setMonth(currentDate.getMonth() - 1); // Current month
+    }
+
+    const monthStart = new Date(targetMonth.getFullYear(), targetMonth.getMonth(), 1);
+    const monthEnd = new Date(targetMonth.getFullYear(), targetMonth.getMonth() + 1, 1);
+
+    matchCondition.createdAt = {
+      $gte: monthStart,
+      $lt: monthEnd
     };
-
-    // If duration is provided (monthly or yearly), adjust the query accordingly
-    if (duration === 'month') {
-      const lastMonth = new Date(currentDate);
-      lastMonth.setMonth(currentDate.getMonth() - 1);
-
-      matchCondition.createdAt = {
-        $gte: new Date(lastMonth.getFullYear(), lastMonth.getMonth(), 1),
-        $lt: new Date(currentDate.getFullYear(), currentDate.getMonth(), 1)
-      };
-    }
-    else if (duration === 'year') {
-      const startOfYear = new Date(currentDate.getFullYear(), 0, 1);
-
-      matchCondition.createdAt = {
-        $gte: startOfYear,
-        $lt: new Date(currentDate.getFullYear() + 1, 0, 1)
-      };
-    }
-
-    // Perform the aggregation with the match conditions and lookup
-    const users = await Users.aggregate([
-      {
-        $lookup: {
-          from: 'purchasehistories',
-          localField: '_id',
-          foreignField: 'user',
-          as: 'purchaseHistory'
-        }
-      },
-      {
-        $match: matchCondition
-      }
-    ]);
-
-    return users.length;
   }
+  else if (duration === 'year') {
+    const targetYear = isPrevious ? currentDate.getFullYear() - 1 : currentDate.getFullYear();
+    
+    matchCondition.createdAt = {
+      $gte: new Date(targetYear, 0, 1),
+      $lt: new Date(targetYear + 1, 0, 1)
+    };
+  }
+
+  const users = await Users.aggregate([
+    {
+      $lookup: {
+        from: 'purchasehistories',
+        localField: '_id',
+        foreignField: 'user',
+        as: 'purchaseHistory'
+      }
+    },
+    {
+      $match: matchCondition
+    }
+  ]);
+
+  return users.length;
+}
 
 
   // total earning
 
-  async getTotalEarning(duration = '') {
-    const currentDate = new Date();
+  async getTotalEarning(duration = '', isPrevious = false) {
+  const currentDate = new Date();
 
-    // Initialize match condition
-    const matchCondition: any = {};
+  const matchCondition: any = {};
 
-    // If duration is provided (monthly or yearly), adjust the query accordingly
-    if (duration === 'month') {
-      const lastMonth = new Date(currentDate);
-      lastMonth.setMonth(currentDate.getMonth() - 1);
-      matchCondition.createdAt = {
-        $gte: new Date(lastMonth.getFullYear(), lastMonth.getMonth(), 1),
-        $lt: new Date(currentDate.getFullYear(), currentDate.getMonth(), 1)
-      };
-    }
-    else if (duration === 'year') {
-      const startOfYear = new Date(currentDate.getFullYear(), 0, 1);
-      matchCondition.createdAt = {
-        $gte: startOfYear,
-        $lt: new Date(currentDate.getFullYear() + 1, 0, 1)
-      };
+  if (duration === 'month') {
+    const targetMonth = new Date(currentDate);
+    if (isPrevious) {
+      targetMonth.setMonth(currentDate.getMonth() - 2); // Previous month
+    } else {
+      targetMonth.setMonth(currentDate.getMonth() - 1); // Current month
     }
 
-    // Perform the query with filtering based on matchCondition
-    const total = await PurchaseHistory.find(matchCondition)
-      .populate('planId')
-      .then((purchaseHistories) => {
-        return purchaseHistories.reduce((total, purchase) => {
-          const purchaseData: any = purchase;
-          if (purchase.planId) {
-            total += purchaseData.planId.price || 0;
-          }
-          return total;
-        }, 0);
-      });
+    const monthStart = new Date(targetMonth.getFullYear(), targetMonth.getMonth(), 1);
+    const monthEnd = new Date(targetMonth.getFullYear(), targetMonth.getMonth() + 1, 1);
 
-    return total;
+    matchCondition.createdAt = {
+      $gte: monthStart,
+      $lt: monthEnd
+    };
   }
+  else if (duration === 'year') {
+    const targetYear = isPrevious ? currentDate.getFullYear() - 1 : currentDate.getFullYear();
+    
+    matchCondition.createdAt = {
+      $gte: new Date(targetYear, 0, 1),
+      $lt: new Date(targetYear + 1, 0, 1)
+    };
+  }
+
+  const total = await PurchaseHistory.find(matchCondition)
+    .populate('planId')
+    .then((purchaseHistories) => {
+      return purchaseHistories.reduce((total, purchase) => {
+        const purchaseData: any = purchase;
+        if (purchase.planId) {
+          total += purchaseData.planId.price || 0;
+        }
+        return total;
+      }, 0);
+    });
+
+  return total;
+}
 
 
 
@@ -308,22 +330,52 @@ class DashboardService {
 
   //   dashboard stats
   async dashboardStats({ query }) {
+  const { duration = "month" } = query || {};
 
-    const { duration = "month" } = query || {};
+  // Current period data
+  const totalUsers = await this.getTotalUsers(duration);
+  const paidUsers = await this.getUsers('paid', duration);
+  const freeUsers = await this.getUsers('free', duration);
+  const totalEarning = await this.getTotalEarning(duration);
+  
+  // Previous period data
+  const prevTotalUsers = await this.getTotalUsers(duration, true);
+  const prevPaidUsers = await this.getUsers('paid', duration, true);
+  const prevTotalEarning = await this.getTotalEarning(duration, true);
 
-    const totalUsers = await this.getTotalUsers(duration);
-    const paidUsers = await this.getUsers('paid', duration);
-    const freeUsers = await this.getUsers('free', duration);
-    const totalEarning = await this.getTotalEarning(duration);
-    const reportData = await this.getEarningReport(duration || 'month');
-    const countryStats = await this.getCountryWiseUsers(duration);
+  // Calculate percentages
+  const totalUsersPercentage = this.calculatePercentage(totalUsers, prevTotalUsers);
+  const paidUsersPercentage = this.calculatePercentage(paidUsers, prevPaidUsers);
+  const earningPercentage = this.calculatePercentage(totalEarning, prevTotalEarning);
 
-    return {
-      message: ResponseMessage.SUCCESSFUL,
-      statusCode: EHttpStatus.OK,
-      data: { totalUsers, paidUsers, freeUsers, totalEarning, reportData, countryStats }
-    };
-  }
+  // Determine trends
+  const totalUsersTrend = totalUsers >= prevTotalUsers ? 'up' : 'down';
+  const paidUsersTrend = paidUsers >= prevPaidUsers ? 'up' : 'down';
+  const earningTrend = totalEarning >= prevTotalEarning ? 'up' : 'down';
+
+  const reportData = await this.getEarningReport(duration || 'month');
+  const countryStats = await this.getCountryWiseUsers(duration);
+
+  return {
+    message: ResponseMessage.SUCCESSFUL,
+    statusCode: EHttpStatus.OK,
+    data: { 
+      totalUsers, 
+      paidUsers, 
+      freeUsers, 
+      totalEarning, 
+      reportData, 
+      countryStats,
+      // ADD THESE NEW FIELDS
+      totalUsersPercentage: Math.abs(totalUsersPercentage),
+      paidUsersPercentage: Math.abs(paidUsersPercentage),
+      earningPercentage: Math.abs(earningPercentage),
+      totalUsersTrend,
+      paidUsersTrend,
+      earningTrend
+    }
+  };
+}
 
 
   //  earning for report section

@@ -36,6 +36,50 @@ export default function ProfileTable({ onEdit }: ProfileTableProps) {
     })
   }, [dispatch])
 
+  const callMcpTool = async (toolName: string, args: any) => {
+  try {
+    const res = await fetch("http://localhost:4000/mcp", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json, text/event-stream', 
+      },
+      body: JSON.stringify({
+        jsonrpc: "2.0",
+        method: "tools/call",
+        params: {
+          name: toolName,
+          arguments: args,
+        },
+        id: Date.now(),
+      }),
+    });
+    
+    const data = await res.json();
+    console.log(`${toolName} response:`, data);
+    if (data.result?.content?.[0]?.text) {
+      return JSON.parse(data.result.content[0].text);
+    }
+    
+    if (data.error) {
+      throw new Error(data.error.message || 'MCP error');
+    }
+    
+    return data;
+  } catch (err: any) {
+    console.error(`${toolName} error:`, err);
+    throw new Error(err.message || 'Request failed');
+  }
+};
+
+const handleLogin = async () => {
+  const email = "mobeen@gmail.com";
+  const password = "Mobeen123";
+
+  const result = await callMcpTool("auth_login", { email, password });
+  console.log("Login result:", result);
+};
+
   const handleStatusChange = (id: string, status: string) => {
     const validStatus = status as "In Progress" | "Draft" | "Completed"
     if (["In Progress", "Draft", "Completed"].includes(status)) {
@@ -128,6 +172,7 @@ export default function ProfileTable({ onEdit }: ProfileTableProps) {
         <div className="content">
           <div className="content__header">
             <div className="content__tabs">
+            <button onClick={handleLogin}>Test MCP Login</button>
               <button
                 onClick={() => {
                   setActiveTab("active")

@@ -14,7 +14,7 @@ import FormData from "form-data";
 import cors from "cors";
 
 
-const PYTHON_API = process.env.VOLVOX_API_URL || "http://localhost:8000/api/v1";
+const PYTHON_API = process.env.VOLVOX_API_URL || "https://volvox-backend.onrender.com/api/v1";
 const NODEJS_API = process.env.DEVANICS_API_URL || "http://localhost:3001/api";
 
 interface VolvoxUser {

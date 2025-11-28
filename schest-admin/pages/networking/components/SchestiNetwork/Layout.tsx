@@ -1,0 +1,112 @@
+import { useEffect, useState } from 'react';
+import Search from '../Search';
+import { Pagination } from 'antd';
+import SingleUserCard from '../SingleUserCard';
+import NoData from '../NoData';
+import { useSelector } from 'react-redux';
+import { NetworkSearchTypes } from '../..';
+import { networkingService } from 'src/services/networking.service';
+import SkeletonLoader from 'src/components/loader/Skeleton';
+const { debounce } = require('lodash');
+
+type Props = {
+  userRole: string;
+};
+
+const Layout = ({ userRole }: Props) => {
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<unknown>('');
+  const [schestiUsers, setSchestiUsers] = useState<[] | null>(null);
+  const [searchText, setSearchText] = useState('');
+  const [locationText, setLocationText] = useState('');
+  const { schestiNetwork } = useSelector((state: any) => state.network);
+  const {
+    selectedStates,
+    selectedTrades,
+  }: {
+    selectedStates: string[];
+    selectedTrades: string[];
+  } = useSelector((state: any) => state.network);
+  const [filters, setFilters] = useState({
+    page: 1,
+    limit: 10,
+    totalPages: 0,
+    totalRecords: 0,
+  });
+
+  const getSchestiUsers = async () => {
+    try {
+      const { data } = await networkingService.httpGetSchestiUsers({
+        userRole,
+        page: filters.page - 1,
+        limit: filters.limit,
+        searchText,
+        locationText,
+        selectedTrades: selectedTrades.join(','),
+        selectedStates: selectedStates.join(','),
+      });
+
+      const { users, totalPages, totalRecords } = data;
+
+      setSchestiUsers(users);
+
+      setFilters((prev) => ({ ...prev, totalPages, totalRecords }));
+    } catch (error) {
+      console.log(error, 'Error at getSchestiUsers');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    debounce(getSchestiUsers, 500)();
+  }, [
+    userRole,
+    schestiNetwork,
+    searchText,
+    locationText,
+    filters.page,
+    selectedStates,
+    selectedTrades,
+  ]);
+
+  return (
+    <div>
+      <Search
+        searchValuesHandler={({
+          searchText,
+          locationText,
+        }: NetworkSearchTypes) => {
+          setSearchText(searchText);
+          setLocationText(locationText);
+        }}
+      />
+      {!schestiUsers || isLoading ? (
+        <SkeletonLoader />
+      ) : schestiUsers && schestiUsers.length > 0 ? (
+        <div>
+          <div className="grid grid-cols-3 gap-4">
+            {schestiUsers.map((userData: any) => (
+              <SingleUserCard {...userData} />
+            ))}
+          </div>
+          <div className="mt-1 flex justify-center">
+            <Pagination
+              current={filters.page}
+              pageSize={filters.limit}
+              showPrevNextJumpers={false}
+              total={filters.totalRecords}
+              onChange={(page) => {
+                setFilters({ ...filters, page });
+              }}
+            />
+          </div>
+        </div>
+      ) : (
+        <NoData />
+      )}
+    </div>
+  );
+};
+
+export default Layout;

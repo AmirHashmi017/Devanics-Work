@@ -23,7 +23,15 @@ export class PricingPlanController {
       return res.status(errorMessage.statusCode).json(errorMessage);
     }
   }
-
+async getPricingPlansByCountry(req: Request, res: Response) {
+  try {
+    const pricingPlans = await pricingPlanService.getPricingPlansByCountry(req);
+    return res.status(pricingPlans.statusCode).json(pricingPlans);
+  } catch (error) {
+    let errorMessage = generateErrorResponse(error);
+    return res.status(errorMessage.statusCode).json(errorMessage);
+  }
+}
   async getAllPricingPlans(req: Request, res: Response) {
     try {
       const pricingPlans = await pricingPlanService.getAllPricingPlans(req);

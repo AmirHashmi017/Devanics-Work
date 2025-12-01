@@ -3,29 +3,98 @@ import { ResponseMessage } from '../../enums/resMessage.enum';
 import pricingPlanModel from './pricingPlan.model';
 import { EHttpStatus } from '../../enums/httpStatus.enum';
 import { stripe } from '../../helper/stripe.helper';
-import * as paypal from '../../helper/paypal';
-import IPricingPlan from './pricingPlan.interface';
+import IPricingPlan, { LocalizedPrice } from './pricingPlan.interface';
 import Users from '../../modules/user/user.model';
 import { PricingPlanDto } from './pricingPlan.dto';
 import { createPaymobSubscriptionPlan } from '../../helper/paymob';
 import { config } from '../../config/config';
+import { 
+  validateCurrencySupport, 
+  checkCurrencySupport 
+} from '../../helper/currencySupport.helper';
+import { CustomError } from '../../errors/custom.error';
 
 class PricingPlanService {
   async addNewPricingPlan(req: Request) {
-    const { planName, type } = req.body as PricingPlanDto;
-    let pricingPlan: IPricingPlan;
-    pricingPlan = await pricingPlanModel.findOne({ planName, type });
+    const { 
+      planName, 
+      type, 
+      basePrice, 
+      duration, 
+      localizedPricing,
+      isInternal 
+    } = req.body as PricingPlanDto;
+
+    // Check if plan already exists
+    let pricingPlan: IPricingPlan = await pricingPlanModel.findOne({ 
+      planName, 
+      type 
+    });
+    
     if (pricingPlan) {
+      throw new CustomError(
+        EHttpStatus.CONFLICT,
+        ResponseMessage.ALREADY_PLAN_EXIST
+      );
+    }
+
+    if (isInternal) {
+      pricingPlan = new pricingPlanModel({
+        ...req.body,
+        baseCurrency: 'USD',
+        localizedPricing: localizedPricing.map(lp => ({
+          ...lp,
+          stripeSupported: false,
+          paymobSupported: false,
+        })),
+      });
+      await pricingPlan.save();
+      
       return {
-        message: ResponseMessage.ALREADY_PLAN_EXIST,
-        statusCode: EHttpStatus.CONFLICT,
+        message: ResponseMessage.SUCCESSFUL,
+        statusCode: EHttpStatus.CREATED,
+        data: { pricingPlan },
       };
     }
+
+    const validatedPricing: LocalizedPrice[] = [];
+    const unsupportedCurrencies: string[] = [];
+
+    for (const localPrice of localizedPricing) {
+      try {
+        const currencySupport = validateCurrencySupport(localPrice.currency);
+        
+        validatedPricing.push({
+          country: localPrice.country,
+          countryCode: localPrice.countryCode,
+          currency: localPrice.currency,
+          price: localPrice.price,
+          stripeSupported: currencySupport.stripeSupported,
+          paymobSupported: currencySupport.paymobSupported,
+        });
+      } catch (error) {
+        unsupportedCurrencies.push(
+          `${localPrice.currency} (${localPrice.country})`
+        );
+      }
+    }
+
+
+    if (unsupportedCurrencies.length > 0) {
+      throw new CustomError(
+        EHttpStatus.BAD_REQUEST,
+        `The following currencies are not supported by Stripe or Paymob: ${unsupportedCurrencies.join(', ')}. ` +
+        `Please use supported currencies or mark the plan as internal.`
+      );
+    }
+
     pricingPlan = new pricingPlanModel({
       ...req.body,
+      baseCurrency: 'USD',
+      localizedPricing: validatedPricing,
     });
 
-    if (!req.body.isInternal) {
+    try {
       const stripeProduct = await stripe.products.create({
         name: pricingPlan.planName,
         description: pricingPlan.planDescription,
@@ -36,21 +105,10 @@ class PricingPlanService {
         },
       });
 
-      const result = await createPaymobSubscriptionPlan({
-        name: pricingPlan.planName,
-        amount_cents: pricingPlan.egpPrice * 100,
-        frequency: pricingPlan.duration === 'yearly' ? 365 : 30,
-        integration: Number(config.PAYMOB_INTEGRATION_ID),
-        is_active: true,
-        plan_type: 'rent',
-        use_transaction_amount: true,
-        webhook_url: `${config.PAYMOB_WEBHOOK_END_POINT}/paymob-webhook`,
-      });
+      pricingPlan.stripeProductId = stripeProduct.id;
 
-      pricingPlan.paymob = result;
-
-      const stripePrice = await stripe.prices.create({
-        unit_amount: pricingPlan.price * 100,
+      const baseStripePrice = await stripe.prices.create({
+        unit_amount: Math.round(pricingPlan.basePrice * 100),
         currency: 'usd',
         recurring: {
           interval: pricingPlan.duration === 'yearly' ? 'year' : 'month',
@@ -58,103 +116,71 @@ class PricingPlanService {
         product: stripeProduct.id,
         metadata: {
           planId: pricingPlan._id.toString(),
+          localized: 'false',
         },
       });
 
-      pricingPlan.stripeProductId = stripeProduct.id;
-      pricingPlan.stripePriceId = stripePrice.id;
-
-      if (pricingPlan.egpPrice) {
-        const stripeEGPPrice = await stripe.prices.create({
-          unit_amount: pricingPlan.egpPrice * 100,
-          currency: 'egp',
-          recurring: {
-            interval: pricingPlan.duration === 'yearly' ? 'year' : 'month',
-          },
-          product: stripeProduct.id,
-          metadata: {
-            planId: pricingPlan._id.toString(),
-          },
-        });
-        pricingPlan.stripeEGPPriceId = stripeEGPPrice.id;
-      }
-
-      // const paypalProduct = await paypal.PaypalProduct.createProduct({
-      //   category: 'SOFTWARE',
-      //   description: pricingPlan.planDescription,
-      //   name: pricingPlan.planName,
-      //   type: 'SERVICE',
-      //   id: `P-${pricingPlan._id.toString()}`,
-      // });
-
-      // const billingCycles = [];
-      // if (pricingPlan.freeTrailDays && pricingPlan.freeTrailDays > 0) {
-      //   billingCycles.push({
-      //     frequency: {
-      //       interval_unit: 'DAY',
-      //       interval_count: pricingPlan.freeTrailDays,
-      //     },
-      //     tenure_type: 'TRIAL',
-      //     sequence: 1,
-      //     total_cycles: 1,
-      //     pricing_scheme: {
-      //       fixed_price: { value: '0', currency_code: 'USD' }, // Free trial
-      //     },
-      //   });
-      //   billingCycles.push({
-      //     frequency: {
-      //       interval_unit: pricingPlan.duration === 'yearly' ? 'YEAR' : 'MONTH',
-      //       interval_count: 1,
-      //     },
-      //     tenure_type: 'REGULAR',
-      //     sequence: 2,
-      //     total_cycles: 0, // 0 = infinite
-      //     pricing_scheme: {
-      //       fixed_price: {
-      //         value: pricingPlan.price.toString(),
-      //         currency_code: 'USD',
-      //       },
-      //     },
-      //   });
-      // } else {
-      //   billingCycles.push({
-      //     frequency: {
-      //       interval_unit: pricingPlan.duration === 'yearly' ? 'YEAR' : 'MONTH',
-      //       interval_count: 1,
-      //     },
-      //     tenure_type: 'REGULAR',
-      //     sequence: 1,
-      //     total_cycles: 0, // 0 = infinite
-      //     pricing_scheme: {
-      //       fixed_price: {
-      //         value: pricingPlan.price.toString(),
-      //         currency_code: 'USD',
-      //       },
-      //     },
-      //   });
-      // }
-
-      // const paypalPlan = await paypal.PaypalSubscriptionPlan.create({
-      //   name: pricingPlan.planName,
-      //   product_id: paypalProduct.id,
-      //   description: pricingPlan.planDescription,
-      //   billing_cycles: billingCycles,
-      //   payment_preferences: {
-      //     setup_fee: {
-      //       value: '0',
-      //       currency_code: 'USD',
-      //     },
-      //     setup_fee_failure_action: 'CANCEL',
-      //     payment_failure_threshold: 3,
-      //     auto_bill_outstanding: true,
-      //   },
-      // });
-
-      // pricingPlan.paypalProductId = paypalProduct.id;
-      // pricingPlan.paypalPlanId = paypalPlan.id;
+      pricingPlan.stripePriceId = baseStripePrice.id;
+    } catch (error) {
+      throw new CustomError(
+        EHttpStatus.BAD_REQUEST,
+        `Failed to create Stripe base product: ${error.message}`
+      );
     }
 
+    for (let i = 0; i < validatedPricing.length; i++) {
+      const localPrice = validatedPricing[i];
+
+      if (localPrice.stripeSupported) {
+        try {
+          const stripePrice = await stripe.prices.create({
+            unit_amount: Math.round(localPrice.price * 100),
+            currency: localPrice.currency.toLowerCase(),
+            recurring: {
+              interval: pricingPlan.duration === 'yearly' ? 'year' : 'month',
+            },
+            product: pricingPlan.stripeProductId,
+            metadata: {
+              planId: pricingPlan._id.toString(),
+              country: localPrice.country,
+              countryCode: localPrice.countryCode,
+              localized: 'true',
+            },
+          });
+
+          validatedPricing[i].stripePriceId = stripePrice.id;
+          console.log(` Stripe price created for ${localPrice.currency}: ${stripePrice.id}`);
+        } catch (error) {
+          console.error(` Failed to create Stripe price for ${localPrice.currency}:`, error.message);
+          
+        }
+      }
+
+      if (localPrice.paymobSupported) {
+        try {
+          const paymobPlan = await createPaymobSubscriptionPlan({
+            name: `${pricingPlan.planName} - ${localPrice.country}`,
+            amount_cents: Math.round(localPrice.price * 100),
+            frequency: pricingPlan.duration === 'yearly' ? 365 : 30,
+            integration: Number(config.PAYMOB_INTEGRATION_ID),
+            is_active: true,
+            plan_type: 'rent',
+            use_transaction_amount: true,
+            webhook_url: `${config.PAYMOB_WEBHOOK_END_POINT}/paymob-webhook`,
+          });
+
+          validatedPricing[i].paymobPlanId = paymobPlan.id;
+          console.log(` Paymob plan created for ${localPrice.currency}: ${paymobPlan.id}`);
+        } catch (error) {
+          console.error(` Failed to create Paymob plan for ${localPrice.currency}:`, error.message);
+          
+        }
+      }
+    }
+
+    pricingPlan.localizedPricing = validatedPricing;
     await pricingPlan.save();
+
     return {
       message: ResponseMessage.SUCCESSFUL,
       statusCode: EHttpStatus.CREATED,
@@ -162,7 +188,6 @@ class PricingPlanService {
     };
   }
 
-  // here is pagination is pending regarding total pricing plan
   async getAllPricingPlans(req: Request) {
     let pricingPlans = await pricingPlanModel
       .find({ isActive: true })
@@ -184,6 +209,7 @@ class PricingPlanService {
       data: { pricingPlans },
     };
   }
+
   async getUserPricingPlan(req: Request) {
     const { _id } = req.payload;
     const user = await Users.findById(_id);
@@ -238,16 +264,6 @@ class PricingPlanService {
       } catch (error) {
         console.log('Update pricing plan for stripe error', error);
       }
-      // if (pricingPlan.paypalPlanId) {
-      //   try {
-      //     await paypal.PaypalSubscriptionPlan.update(pricingPlan.paypalPlanId, {
-      //       name: pricingPlan.planName,
-      //       description: pricingPlan.planDescription,
-      //     });
-      //   } catch (error) {
-      //     console.log('Update pricing plan for paypal error', error);
-      //   }
-      // }
     }
 
     return {
@@ -274,6 +290,7 @@ class PricingPlanService {
       data: { pricingPlan },
     };
   }
+
   async updatePricingPlanStatus(req: Request) {
     const { planId } = req.params;
     let pricingPlan: IPricingPlan;
@@ -300,19 +317,18 @@ class PricingPlanService {
         active: pricingPlan.isActive,
       });
 
-      // try {
-      //   if (pricingPlan.isActive) {
-      //     await paypal.PaypalSubscriptionPlan.activate(
-      //       pricingPlan.paypalPlanId
-      //     );
-      //   } else {
-      //     await paypal.PaypalSubscriptionPlan.deactivate(
-      //       pricingPlan.paypalPlanId
-      //     );
-      //   }
-      // } catch (error) {
-      //   console.log(this.updatePricingPlanStatus, 'Error for Paypal', error);
-      // }
+      // Update all localized Stripe prices
+      for (const localPrice of pricingPlan.localizedPricing) {
+        if (localPrice.stripePriceId) {
+          try {
+            await stripe.prices.update(localPrice.stripePriceId, {
+              active: pricingPlan.isActive,
+            });
+          } catch (error) {
+            console.log(`Error updating Stripe price for ${localPrice.currency}:`, error);
+          }
+        }
+      }
     }
 
     return {
@@ -321,6 +337,77 @@ class PricingPlanService {
       data: { pricingPlan },
     };
   }
+  async getPricingPlansByCountry(req: Request) {
+  const { countryCode } = req.params;
+  const { duration, type } = req.query as { duration?: string; type?: string };
+
+  const query: any = { isActive: true };
+  if (duration) query.duration = duration;
+  if (type) query.type = type;
+
+  const allPlans = await pricingPlanModel
+    .find(query)
+    .sort({ createdAt: -1 })
+    .lean();
+
+  if (allPlans.length === 0) {
+    return {
+      message: ResponseMessage.SUCCESSFUL,
+      statusCode: EHttpStatus.OK,
+      data: {
+        pricingPlans: [],
+        countryCode: countryCode.toUpperCase(),
+        hasLocalPricing: false,
+      },
+    };
+  }
+
+  const plansWithLocalPricing = allPlans
+    .map((plan: any) => {
+      const localized = plan.localizedPricing?.find(
+        (lp: LocalizedPrice) =>
+          lp.countryCode?.toUpperCase() === countryCode.toUpperCase()
+      );
+
+      if (localized) {
+        return {
+          ...plan,
+          displayPrice: localized.price,
+          displayCurrency: localized.currency.toUpperCase(),
+          localizedPriceData: localized,
+          paymentMethods: [
+            ...(localized.stripeSupported ? ['Stripe'] : []),
+            ...(localized.paymobSupported ? ['Paymob'] : []),
+          ].filter(Boolean),
+          preferredPaymentMethod: localized.paymobSupported ? 'Paymob' : 'Stripe',
+        };
+      }
+      return null;
+    })
+    .filter(Boolean);
+
+  const hasLocalPricing = plansWithLocalPricing.length > 0;
+  const finalPlans = hasLocalPricing
+    ? plansWithLocalPricing
+    : allPlans.map((plan: any) => ({
+        ...plan,
+        displayPrice: plan.basePrice,
+        displayCurrency: 'USD',
+        localizedPriceData: null,
+        paymentMethods: ['Stripe'], 
+        preferredPaymentMethod: 'Stripe',
+      }));
+
+  return {
+    message: ResponseMessage.SUCCESSFUL,
+    statusCode: EHttpStatus.OK,
+    data: {
+      pricingPlans: finalPlans,
+      countryCode: countryCode.toUpperCase(),
+      hasLocalPricing,
+    },
+  };
+}
 }
 
 export default new PricingPlanService();

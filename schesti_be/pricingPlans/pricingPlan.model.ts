@@ -1,6 +1,39 @@
 import mongoose, { Schema } from 'mongoose';
 import IPlanPricing from './pricingPlan.interface';
 
+const localizedPriceSchema = new Schema({
+  country: {
+    type: String,
+    required: true,
+  },
+  countryCode: {
+    type: String,
+    required: true,
+  },
+  currency: {
+    type: String,
+    required: true,
+  },
+  price: {
+    type: Number,
+    required: true,
+  },
+  stripeSupported: {
+    type: Boolean,
+    default: false,
+  },
+  stripePriceId: {
+    type: String,
+  },
+  paymobSupported: {
+    type: Boolean,
+    default: false,
+  },
+  paymobPlanId: {
+    type: Number,
+  },
+}, { _id: false });
+
 export const pricingPlanSchema = new Schema<IPlanPricing>(
   {
     type: {
@@ -9,11 +42,13 @@ export const pricingPlanSchema = new Schema<IPlanPricing>(
     planName: {
       type: String,
     },
-    price: {
+    basePrice: {
       type: Number,
+      required: true,
     },
-    egpPrice: {
-      type: Number,
+    baseCurrency: {
+      type: String,
+      default: 'USD',
     },
     duration: {
       type: String,
@@ -34,9 +69,6 @@ export const pricingPlanSchema = new Schema<IPlanPricing>(
     stripePriceId: {
       type: String,
     },
-    stripeEGPPriceId: {
-      type: String,
-    },
     stripeProductId: {
       type: String,
     },
@@ -44,13 +76,23 @@ export const pricingPlanSchema = new Schema<IPlanPricing>(
       type: Boolean,
     },
 
+    localizedPricing: {
+      type: [localizedPriceSchema],
+      default: [],
+    },
+
+    egpPrice: {
+      type: Number,
+    },
+    stripeEGPPriceId: {
+      type: String,
+    },
     paypalPlanId: {
       type: String,
     },
     paypalProductId: {
       type: String,
     },
-
     paymob: {
       type: Object,
     },

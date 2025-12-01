@@ -16,6 +16,20 @@ class PricingPlanService extends HttpService {
       `${this.pricingPlanPrefix}/get-pricing-plans?page=${page}&limit=${limit}`
     );
 
+    httpGetPricingPlansByCountry = (
+    countryCode: string,
+    duration?: string,
+    type?: string
+  ): Promise<IResponseInterface<any>> => {
+    const params = new URLSearchParams();
+    if (duration) params.append('duration', duration);
+    if (type) params.append('type', type);
+    
+    return this.get(
+      `${this.pricingPlanPrefix}/get-pricing-plans-by-country/${countryCode}?${params.toString()}`
+    );
+  };
+
   httpGetUserPricingPlan = (): Promise<
     IResponseInterface<{ plan: IPricingPlan }>
   > => this.get(`${this.pricingPlanPrefix}/user`);

@@ -39,3 +39,8 @@ pricingPlanRoutes.put(
   '/update-pricing-plan-status/:planId',
   PlanController.updatePricingPlanStatus
 );
+
+pricingPlanRoutes.get(
+  '/get-pricing-plans-by-country/:countryCode',
+  PlanController.getPricingPlansByCountry
+);

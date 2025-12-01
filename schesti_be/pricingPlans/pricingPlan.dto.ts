@@ -1,4 +1,27 @@
-import { IsString, IsNumber, IsBoolean, IsOptional } from 'class-validator';
+import { 
+  IsString, 
+  IsNumber, 
+  IsBoolean, 
+  IsOptional, 
+  IsArray, 
+  ValidateNested,
+  ArrayMinSize 
+} from 'class-validator';
+import { Type } from 'class-transformer';
+
+export class LocalizedPriceDto {
+  @IsString()
+  country: string;
+
+  @IsString()
+  countryCode: string;
+
+  @IsString()
+  currency: string;
+
+  @IsNumber()
+  price: number;
+}
 
 export class PricingPlanDto {
   @IsString()
@@ -8,13 +31,18 @@ export class PricingPlanDto {
   planName: string;
 
   @IsNumber()
-  price: Number;
+  basePrice: number;
+
+  @IsOptional()
+  @IsString()
+  baseCurrency?: string;
 
   @IsString()
-  duration: Number;
+  duration: string;
 
-  // @IsNumber()
-  // freeTrailDays: Number;
+  @IsOptional()
+  @IsNumber()
+  freeTrailDays?: number;
 
   @IsString()
   planDescription: string;
@@ -25,4 +53,10 @@ export class PricingPlanDto {
   @IsOptional()
   @IsBoolean()
   isInternal: boolean;
+
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => LocalizedPriceDto)
+  @ArrayMinSize(1, { message: 'At least one localized price is required' })
+  localizedPricing: LocalizedPriceDto[];
 }

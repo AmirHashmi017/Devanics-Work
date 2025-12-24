@@ -1,0 +1,264 @@
+<style>
+
+  #propstack-loader {
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+    background: #ffffff; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; z-index: 999999999;
+    transition: opacity 0.8s ease; opacity: 1; pointer-events: auto;
+  }
+  #propstack-loader.hidden { opacity: 0; pointer-events: none; }
+  .hide-until-loaded { opacity: 0; transition: opacity 0.8s ease; }
+  body.loaded .hide-until-loaded { opacity: 1; }
+  .propstack-spinner {
+    width: 70px; height: 70px; border: 6px solid #f0f0f0;
+    border-top: 6px solid #0057FF; border-radius: 50%;
+    animation: spin 1s linear infinite; margin-bottom: 24px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  #propstack-loader p { margin: 0; font-size: 18px; color: #333; }
+
+    .floorplan, .map {
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+  }
+  .floorplan:hover, .map:hover {
+    opacity: 0.85;
+  }
+  .floorplan.no-document, .map.no-location {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  .map-modal {
+    display: none; position: fixed; top: 0; left: 0;
+    width: 100vw; height: 100vh; background: rgba(0,0,0,0.9);
+    z-index: 9999999; justify-content: center; align-items: center;
+  }
+  .map-modal.active { display: flex; }
+  .map-container {
+    width: 92%; max-width: 1000px; height: 85vh;
+    background: white; border-radius: 16px; overflow: hidden;
+    position: relative; box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  }
+  #google-map { width: 100%; height: 100%; }
+  .close-map {
+    position: absolute; top: 15px; right: 20px; z-index: 10;
+    font-size: 36px; color: white; background: rgba(0,0,0,0.6);
+    width: 56px; height: 56px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+  }
+</style>
+
+<div id="propstack-loader">
+  <div class="propstack-spinner"></div>
+  <p>Loading property details...</p>
+</div>
+
+
+<div class="floorplan hide-until-loaded">View Exposé / Floor Plan</div>
+<div class="map hide-until-loaded">Show on Map</div>
+
+<div class="map-modal" id="mapModal">
+  <div class="map-container">
+    <div class="close-map" onclick="document.getElementById('mapModal').classList.remove('active')">&times;</div>
+    <div id="google-map"></div>
+  </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+  const API_KEY = "wCBXa-uV4yJ03Ebty0tYtGOz-JHGndBM6iBeLoWV";
+  const GOOGLE_MAPS_API_KEY = "AIzaSyDrC-HX3cZhFLdZkLVTlnt197-02bI4xM4";
+  
+  const urlParams = new URLSearchParams(window.location.search);
+  const propertyId = urlParams.get("propertyId");
+  if (!propertyId) { hideLoaderAndShowPage(); return; }
+
+  let firstDocumentUrl = null;
+  let propertyLat = null;
+  let propertyLng = null;
+
+  try {
+    const [res, res2, docRes] = await Promise.all([
+      fetch(`https://api.propstack.de/v1/units/${propertyId}?new=1`, {
+        headers: { "accept": "application/json", "X-Api-Key": API_KEY }
+      }),
+      fetch("https://api.propstack.de/v2/properties?with_total=false&page=1&per=10&sort_by=created_at", {
+        headers: { "accept": "application/json", "X-Api-Key": API_KEY }
+      }),
+      fetch(`https://api.propstack.de/v2/properties/${propertyId}`, {
+        headers: { "accept": "application/json", "X-Api-Key": API_KEY }
+      }).catch(() => ({ ok: false }))
+    ]);
+
+    if (!res.ok) throw new Error("API error " + res.status);
+    const property = await res.json();
+
+    propertyLat = property.location?.latitude || property.lat || null;
+    propertyLng = property.location?.longitude || property.lng || null;
+
+    if (docRes.ok) {
+      const docData = await docRes.json();
+      const docs = docData.documents || docData.data?.documents || [];
+      if (docs.length > 0) {
+        docs.sort((a, b) => (a.position || 0) - (b.position || 0));
+        firstDocumentUrl = docs[0].doc?.url || docs[0].url;
+      }
+    }
+
+    document.querySelectorAll(".floorplan").forEach(el => {
+      if (firstDocumentUrl) {
+        el.onclick = () => window.open(firstDocumentUrl, "_blank", "noopener,noreferrer");
+      } else {
+        el.classList.add("no-document");
+        el.title = "No document available";
+      }
+    });
+
+    document.querySelectorAll(".map").forEach(el => {
+      if (propertyLat && propertyLng) {
+        el.onclick = () => {
+          document.getElementById("mapModal").classList.add("active");
+          loadGoogleMaps(propertyLat, propertyLng);
+        };
+      } else {
+        el.classList.add("no-location");
+        el.title = "Location not available";
+      }
+    });
+
+    const set = (sel, val, suffix = "") => {
+      const el = document.querySelector(sel);
+      if (el && val != null) el.textContent = val + suffix;
+    };
+
+    set(".totalprice", property.price?.value ? property.price.value.toLocaleString() + " €" : "Price on request");
+    set(".tablet-heading", property.name || "Unnamed Property");
+    set(".roomno", property.number_of_rooms?.value || 0);
+    set(".bdroom", property.number_of_bed_rooms?.value || 0);
+    set(".baths", property.number_of_bath_rooms?.value || 0);
+    set(".area", property.plot_area?.value, " sq.ft");
+    set(".flooring", Array.isArray(property.flooring_type?.value) ? property.flooring_type.value.join(", ") : "N/A");
+
+    const descEl = document.querySelector(".description");
+    if (descEl) descEl.textContent = property.description_note?.value || property.other_note?.value || "No description available.";
+
+    set(".detailscontainer .object-type-class", property.object_type || "N/A");
+    set(".detailscontainer .condition", property.condition?.value || "N/A");
+    set(".detailscontainer .rooms", property.number_of_rooms?.value || 0);
+    set(".detailscontainer .beds", property.number_of_bed_rooms?.value || 0);
+    set(".detailscontainer .baths", property.number_of_bath_rooms?.value || 0);
+    set(".detailscontainer .floors", property.number_of_floors?.value || "N/A");
+    set(".detailscontainer .garages", property.number_of_parking_spaces?.value || 0);
+    set(".detailscontainer .parkingspaces", property.number_of_parking_spaces?.value || 0);
+    set(".detailscontainer .livingarea", property.living_space?.value, " sq.ft" || "N/A");
+    set(".detailscontainer .plotarea", property.plot_area?.value, " sq.ft" || "N/A");
+    set(".construction-year", property.construction_year?.value || "N/A");
+    set(".energy-efficiency", property.energy_efficiency_class?.value || "N/A");
+    set(".energy-certificate-available", property.energy_certificate_availability?.value?.includes("liegt") ? "Yes" : "No");
+    set(".energy-certificate-type", property.building_energy_rating_type?.value || "N/A");
+    set(".final-energy-demand", property.thermal_characteristic?.value ? property.thermal_characteristic.value + " kWh/m²a" : "N/A");
+    set(".type-of-heating", property.heating_type?.value || "N/A");
+    set(".energy-source", property.firing_types?.value || "N/A");
+    set(".energy-includes-hot-water", property.energy_consumption_contains_warm_water?.value ? "Yes" : "No");
+
+    // Tags
+    const tagsContainer = document.querySelector('.property-tabs');
+    if (tagsContainer) {
+      tagsContainer.innerHTML = '';
+      const tagList = [
+        { label: 'Garage', check: property.parking_space_types?.value?.includes('Garage') || property.number_of_parking_spaces?.value > 0 },
+        { label: 'Terrace', check: property.terrace },
+        { label: 'Balcony', check: property.balcony },
+        { label: 'Garden', check: property.garden },
+        { label: 'Fireplace', check: property.chimney },
+        { label: 'Basement', check: property.cellar },
+        { label: 'Lift', check: property.lift },
+        { label: 'Sauna', check: property.sauna },
+      ];
+      tagList.forEach(tag => {
+        if (tag.check) {
+          const tagEl = document.createElement('div');
+          tagEl.className = 'tab1';
+          const span = document.createElement('span');
+          span.className = 'property-tags';
+          span.textContent = tag.label;
+          tagEl.appendChild(span);
+          tagsContainer.appendChild(tagEl);
+        }
+      });
+    }
+
+    const imgs = property.images || [];
+    const showImg = (el, url) => { if (el && url) { el.src = el.srcset = url; el.style.display = "block"; } else if (el) el.style.display = "none"; };
+    showImg(document.querySelector(".property-detail-image1"), imgs[0]?.url);
+    showImg(document.querySelector(".property-detail-image2"), imgs[1]?.url);
+    document.querySelectorAll(".house-detail-imagegallery-1").forEach((el, i) => showImg(el, imgs[i]?.url));
+    document.querySelectorAll(".house-detail-imagegallery-2").forEach((el, i) => showImg(el, imgs[i+2]?.url));
+
+    if (res2.ok) {
+      const { data } = await res2.json();
+      const featured = data.slice(0, 2);
+      document.querySelectorAll(".propertiesfeatured .card").forEach((card, i) => {
+        const p = featured[i];
+        if (!p) return;
+        const setc = (s, v) => { const e = card.querySelector(s); if (e) e.textContent = v || "N/A"; };
+        const img = card.querySelector(".card-image-wrapper");
+        if (img && p.images?.[0]) { img.src = img.srcset = p.images[0].url; img.style.display = "block"; }
+        setc(".pricce", p.price ? p.price.toLocaleString() + " €" : "Price on request");
+        setc(".titlename", p.name);
+        setc(".desc", (p.description_note || "").substring(0,150) + (p.description_note?.length > 150 ? "..." : ""));
+        setc(".region", p.region);
+        setc(".bedroomsnb", (p.number_of_bed_rooms || 0) + " Bedrooms");
+        setc(".arear", p.plot_area ? p.plot_area + " sq.ft" : "N/A");
+      });
+    }
+
+  } catch (err) {
+    console.error("Error:", err);
+  } finally {
+    hideLoaderAndShowPage();
+  }
+
+  function hideLoaderAndShowPage() {
+    const loader = document.getElementById("propstack-loader");
+    if (loader) {
+      loader.classList.add("hidden");
+      setTimeout(() => {
+        document.body.classList.add("loaded");
+        loader.remove();
+      }, 800);
+    } else {
+      document.body.classList.add("loaded");
+    }
+  }
+
+  function loadGoogleMaps(lat, lng) {
+    if (window.google?.maps?.Map) {
+      initMap(lat, lng);
+      return;
+    }
+    const script = document.createElement("script");
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_API_KEY}&callback=initGoogleMap`;
+    script.async = true;
+    window.initGoogleMap = () => initMap(lat, lng);
+    document.head.appendChild(script);
+  }
+
+  function initMap(lat, lng) {
+    const map = new google.maps.Map(document.getElementById("google-map"), {
+      center: { lat: lat, lng: lng },
+      zoom: 17,
+      mapTypeId: "roadmap",
+      styles: [{ featureType: "poi", stylers: [{ visibility: "off" }] }]
+    });
+    new google.maps.Marker({
+      position: { lat: lat, lng: lng },
+      map: map,
+      icon: "https://maps.google.com/mapfiles/ms/icons/red-dot.png",
+      title: "Property Location"
+    });
+  }
+});
+</script>

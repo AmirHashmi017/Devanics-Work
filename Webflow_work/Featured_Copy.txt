@@ -1,0 +1,386 @@
+<div class="code-embed-6 w-embed w-script">
+<style>
+  .collection-item-7 {
+    opacity: 0;
+    transition: opacity 0.4s ease-in-out;
+  }
+  .p-text-card-new {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .view-all {
+    display: none;
+    margin: 40px auto 0;
+    text-align: center;
+  }
+  .view-all.show {
+    display: block !important;
+  }
+  /* IMAGE – fixed height, full width, rounded top */
+  .featured-image-wrapper-new {
+    display: block !important;
+    width: 100% !important;
+    height: 237px !important;
+    overflow: hidden !important;
+    border-radius: 12px 12px 0 0 !important;
+  }
+  .featured-image-wrapper-new a {
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+  }
+  .card-image-wrapper-new {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: center !important;
+    display: block !important;
+    border-radius: 12px 12px 0 0 !important;
+  }
+  /* CARD HEIGHTS – SPECIFIC PER BREAKPOINT */
+  .featured-card-list-new {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+  @media (min-width: 1920px) { .featured-card-list-new { height: 620px !important; } }
+  @media (max-width: 1919px) { .featured-card-list-new { height: 600px !important; } }
+  @media (max-width: 991px) { .featured-card-list-new { height: 580px !important; } }
+  @media (max-width: 767px) { .featured-card-list-new { height: 550px !important; } }
+  @media (max-width: 479px) { .featured-card-list-new { height: 520px !important; } }
+  /* Content area */
+  .featured-card-content {
+    flex: 1 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    padding: 24px !important;
+  }
+  .card-featured-content { flex-grow: 1 !important; }
+  .p-text-card-new.main { margin-bottom: 16px !important; }
+  /* Icon text area */
+  .icon-text-cards-new {
+    display: flex !important;
+    align-items: center !important;
+    flex-wrap: wrap !important;
+    gap: 12px !important;
+    margin-top: auto !important;
+  }
+  .text-and-icon-new,
+  .text-and-icon {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+  }
+  /* Hide Webflow messages */
+  .w-form-done, .w-form-fail { display: none !important; }
+  .no-properties-message {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 80px 20px;
+    font-size: 20px;
+    color: #888;
+  }
+  #propstack-loader {
+    position: fixed;
+    inset: 0;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 999999;
+    transition: opacity 0.6s ease;
+  }
+  #propstack-loader.hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
+  .propstack-spinner {
+    width: 70px;
+    height: 70px;
+    border: 6px solid #eee;
+    border-top: 6px solid #0057ff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 20px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+</style>
+
+<script>
+const GOOGLE_MAPS_API_KEY = "AIzaSyDrC-HX3cZhFLdZkLVTlnt197-02bI4xM4";
+
+let googleMapsLoaded = false;
+
+function initPropertiesMap(centerLat, centerLng, zoomLevel, markersData = [], fitBounds = false) {
+  const mapElement = document.getElementById('properties-map');
+  if (!mapElement) return;
+
+  const map = new google.maps.Map(mapElement, {
+    zoom: zoomLevel,
+    center: { lat: centerLat, lng: centerLng },
+    mapTypeId: 'roadmap',
+    styles: [{ featureType: "poi", stylers: [{ visibility: "off" }] }]
+  });
+
+  const infoWindow = new google.maps.InfoWindow();
+  const bounds = new google.maps.LatLngBounds();
+
+  markersData.forEach(data => {
+    const marker = new google.maps.Marker({
+      position: data.position,
+      map: map,
+      title: data.title,
+      icon: "https://maps.google.com/mapfiles/ms/icons/red-dot.png"
+    });
+
+    marker.addListener('click', () => {
+      infoWindow.setContent(data.infoHTML);
+      infoWindow.open(map, marker);
+    });
+
+    bounds.extend(data.position);
+  });
+
+  if (fitBounds && markersData.length > 0 && !bounds.isEmpty()) {
+    map.fitBounds(bounds);
+    google.maps.event.addListenerOnce(map, 'bounds_changed', () => {
+      if (map.getZoom() > 15) map.setZoom(15);
+    });
+  }
+}
+
+function loadGoogleMapsAndInit(centerLat, centerLng, zoom, markers = [], fit = false) {
+  if (googleMapsLoaded && window.google?.maps?.Map) {
+    initPropertiesMap(centerLat, centerLng, zoom, markers, fit);
+    return;
+  }
+
+  const script = document.createElement('script');
+  script.src = `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_API_KEY}&callback=onGoogleMapsLoaded`;
+  script.async = true;
+  window.onGoogleMapsLoaded = () => {
+    googleMapsLoaded = true;
+    initPropertiesMap(centerLat, centerLng, zoom, markers, fit);
+  };
+  document.head.appendChild(script);
+}
+
+document.addEventListener("DOMContentLoaded", async () => {
+  const collectionListWrapper = document.querySelector('.w-dyn-items');
+  const viewAllButton = document.querySelector('.view-all');
+  const searchForm = document.querySelector('#wf-form-Feature-Search-Form');
+  let allProperties = [];
+
+  function hideLoader() {
+    const loader = document.getElementById("propstack-loader");
+    if (loader) loader.classList.add("hidden");
+  }
+
+  function showNoPropertiesMessage() {
+    const oldMsg = collectionListWrapper?.querySelector('.no-properties-message');
+    if (oldMsg) oldMsg.remove();
+    document.querySelectorAll('.collection-item-7').forEach(item => item.style.opacity = '0');
+    const msg = document.createElement('div');
+    msg.className = 'no-properties-message';
+    msg.innerHTML = `
+      <div style="font-size:60px; opacity:0.3; margin-bottom:20px;">🏠</div>
+      <h3>No Properties Found</h3>
+      <p>Try adjusting your search filters.</p>
+    `;
+    collectionListWrapper?.appendChild(msg);
+    if (viewAllButton) {
+      viewAllButton.style.display = 'none';
+      viewAllButton.classList.remove('show');
+    }
+  }
+
+  function renderProperty(item, property) {
+    const titleEl = item.querySelector('.card-text-featured-new');
+    if (titleEl) titleEl.textContent = property.name || 'Unnamed Property';
+
+    const descEl = item.querySelector('.p-text-card-new.main') || item.querySelector('.p-text-card-new');
+    if (descEl) {
+      descEl.textContent = property.description_note || property.other_note || 'No description available';
+    }
+
+    const imgEl = item.querySelector('.card-image-wrapper-new');
+    if (imgEl && property.images?.[0]?.url) {
+      imgEl.src = property.images[0].url;
+      imgEl.srcset = property.images[0].url;
+      imgEl.alt = property.name || 'Property';
+    }
+
+    const locationEl = item.querySelector('.location') || item.querySelector('.text-and-icon-new > div:nth-child(2)');
+    const bedroomsEl = item.querySelector('.Bedroom') || item.querySelector('.bedroom');
+    const housesizeEl = item.querySelector('.house-size');
+    if (locationEl) locationEl.textContent = property.region || '—';
+    if (bedroomsEl) bedroomsEl.textContent = property.number_of_rooms ?? '—';
+    if (housesizeEl) {
+      housesizeEl.textContent = property.plot_area ? `${property.plot_area} sq. ft.` : 'N/A';
+    }
+
+    const detailLink = item.querySelector('.link-block.link');
+    if (detailLink) {
+      detailLink.href = `/properties/property?propertyId=${property.id || property._id}`;
+    }
+
+    item.style.cursor = 'pointer';
+    item.onclick = (e) => {
+      if (e.target.closest('a')) return;
+      window.location.href = detailLink.href;
+    };
+    item.style.opacity = '1';
+  }
+
+  function showAllProperties() {
+    const template = document.querySelector('.collection-item-7');
+    if (!template || !collectionListWrapper) return;
+    allProperties.slice(6).forEach(property => {
+      const clone = template.cloneNode(true);
+      clone.style.opacity = '0';
+      collectionListWrapper.appendChild(clone);
+      renderProperty(clone, property);
+    });
+    if (viewAllButton) {
+      viewAllButton.style.display = 'none';
+      viewAllButton.classList.remove('show');
+    }
+  }
+
+  async function loadProperties(filters = {}) {
+    try {
+      let url = 'https://api.propstack.de/v2/properties?with_total=true&page=1&per=50&sort_by=created_at';
+      if (filters.type) url += `&marketing_type=${filters.type}`;
+      if (filters.rs_type) url += `&rs_type=${filters.rs_type}`;
+
+      const res = await fetch(url, {
+        headers: {
+          'accept': 'application/json',
+          'X-Api-Key': 'wCBXa-uV4yJ03Ebty0tYtGOz-JHGndBM6iBeLoWV'
+        }
+      });
+      if (!res.ok) throw new Error('API error');
+      const json = await res.json();
+      allProperties = json.data || [];
+
+      collectionListWrapper?.querySelector('.no-properties-message')?.remove();
+
+      if (allProperties.length === 0) {
+        showNoPropertiesMessage();
+        hideLoader();
+        return;
+      }
+
+      const items = Array.from(document.querySelectorAll('.collection-item-7'));
+      allProperties.slice(0, 6).forEach((prop, i) => {
+        if (items[i]) renderProperty(items[i], prop);
+      });
+      items.slice(6).forEach(item => item.style.opacity = '0');
+
+      if (viewAllButton) {
+        if (allProperties.length > 6) {
+          viewAllButton.style.display = 'block';
+          viewAllButton.classList.add('show');
+        } else {
+          viewAllButton.style.display = 'none';
+          viewAllButton.classList.remove('show');
+        }
+      }
+
+      // === RICH MAP MARKER POPUPS ===
+      const markersData = [];
+
+      allProperties.forEach(property => {
+        const lat = property.location?.latitude || property.lat;
+        const lng = property.location?.longitude || property.lng;
+
+        if (lat != null && lng != null && !isNaN(lat) && !isNaN(lng)) {
+          const imgUrl = property.images?.[0]?.url || 'https://via.placeholder.com/320x200?text=No+Image';
+          const title = property.name || 'Unnamed Property';
+          const description = property.description_note || property.other_note || 'No description available';
+          const truncatedDesc = description.length > 150 ? description.substring(0, 150) + '...' : description;
+
+          const infoHTML = `
+            <div style="width:320px; max-width:320px; font-family:system-ui,Arial,sans-serif; background:#fff; border-radius:12px; overflow:hidden; box-shadow:0 8px 30px rgba(0,0,0,0.2);">
+              <img src="${imgUrl}" alt="${title}" style="width:100%; height:200px; object-fit:cover; display:block;">
+              <div style="padding:16px;">
+                <h3 style="margin:0 0 8px; font-size:18px; font-weight:600; color:#111;">${title}</h3>
+                <p style="margin:0 0 16px; font-size:14px; line-height:1.5; color:#555;">${truncatedDesc}</p>
+                <div style="display:flex; flex-wrap:wrap; gap:20px; align-items:center; font-size:14px; color:#333; margin-bottom:28px;">
+                  <div style="display:flex; align-items:center; gap:8px;">
+                    <img src="https://media.istockphoto.com/id/1428616222/vector/map-pin-icon-for-design-easily-editable.jpg?s=612x612&w=0&k=20&c=wyZNPflUqy7w_iVSXUQl-NcOkuXQUtAGu1hzSAO4kdY=" style="width:18px; height:18px;" alt="Location">
+                    <span>${property.region || '—'}</span>
+                  </div>
+                  <div style="display:flex; align-items:center; gap:8px;">
+                    <img src="https://static.vecteezy.com/system/resources/thumbnails/067/671/025/small/minimalist-bed-icon-silhouette-in-flat-format-vector.jpg" style="width:18px; height:18px;" alt="Rooms">
+                    <span>Beds: ${property.number_of_rooms ?? '—'}</span>
+                  </div>
+                  <div style="display:flex; align-items:center; gap:8px;">
+                    <img src="https://png.pngtree.com/png-vector/20220707/ourmid/pngtree-vector-line-icons-isolated-on-white-background-for-room-area-and-flat-size-measurements-vector-png-image_47492472.jpg" style="width:18px; height:18px;" alt="Area">
+                    <span>Area: ${property.plot_area ? property.plot_area + ' sq. ft.' : 'N/A'}</span>
+                  </div>
+                </div>
+                <div style="text-align:center;">
+                  <a href="/properties/property?propertyId=${property.id || property._id}" 
+                     style="display:inline-flex; align-items:center; gap:6px; color:#0057ff; font-weight:600; font-size:15px; text-decoration:none;">
+                    View Details
+                    <img src="https://www.clipartmax.com/png/middle/88-885478_free-arrow-clipart-transparent-background-arrow-pointing-diagonally-up.png" 
+                         style="width:14px; height:14px;" alt="↗">
+                  </a>
+                </div>
+              </div>
+            </div>
+          `;
+          markersData.push({
+            position: { lat: parseFloat(lat), lng: parseFloat(lng) },
+            title: title,
+            infoHTML: infoHTML
+          });
+        }
+      });
+
+      if (markersData.length > 0) {
+        const first = markersData[0].position;
+        loadGoogleMapsAndInit(first.lat, first.lng, 12, markersData, true);
+      } else {
+        // Fallback to Berlin if no properties have coordinates
+        loadGoogleMapsAndInit(52.5200, 13.4050, 11, [], false);
+      }
+
+      hideLoader();
+    } catch (err) {
+      console.error('Load error:', err);
+      hideLoader();
+    }
+  }
+
+  if (viewAllButton) {
+    viewAllButton.addEventListener('click', e => {
+      e.preventDefault();
+      showAllProperties();
+    });
+  }
+
+  if (searchForm) {
+    searchForm.addEventListener('submit', async e => {
+      e.preventDefault();
+      searchForm.querySelectorAll('.w-form-done, .w-form-fail').forEach(msg => {
+        msg.style.display = 'none';
+      });
+      const data = Object.fromEntries(new FormData(searchForm));
+      const filters = {};
+      if (data.Type) filters.type = data.Type;
+      if (data['Property-Type']) filters.rs_type = data['Property-Type'];
+      await loadProperties(filters);
+    });
+  }
+
+  await loadProperties();
+});
+</script>
+</div>

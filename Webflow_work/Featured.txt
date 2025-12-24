@@ -1,0 +1,421 @@
+<style>
+  .collection-item {
+    opacity: 0;
+    transition: opacity 0.4s ease-in-out;
+  }
+
+  .p-text-card {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .view-all {
+    display: none;
+    margin: 40px auto 0 auto;
+    text-align: center;
+  }
+
+  .view-all.show {
+    display: block;
+  }
+
+  #propstack-loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 999999999;
+    transition: opacity 0.8s ease;
+    opacity: 1;
+  }
+
+  #propstack-loader.hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .propstack-spinner {
+    width: 70px;
+    height: 70px;
+    border: 6px solid #f0f0f0;
+    border-top: 6px solid #0057FF;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 20px;
+  }
+
+  .no-properties-message {
+    text-align: center;
+    padding: 80px 20px;
+    font-size: 20px;
+    color: #888;
+    grid-column: 1 / -1;
+  }
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+</style>
+
+<div id="propstack-loader">
+  <div class="propstack-spinner"></div>
+  <p>Loading properties...</p>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+  const GOOGLE_MAPS_API_KEY = "AIzaSyDrC-HX3cZhFLdZkLVTlnt197-02bI4xM4";
+  const collectionList = document.querySelector('.w-dyn-items');
+  const viewAllButton = document.querySelector('.view-all');
+  let allProperties = [];
+
+  // UNIVERSAL FUNCTION – Works for Collection List cards
+  function showNoPropertiesMessage() {
+    document.querySelectorAll('.collection-item').forEach(item => item.remove());
+    const msg = document.createElement('div');
+    msg.className = 'no-properties-message';
+    msg.innerHTML = `
+      <div style="font-size:60px;margin-bottom:20px;opacity:0.3">🏠</div>
+      <h3>No Properties Found</h3>
+      <p>Try adjusting your search filters or location.</p>
+    `;
+    collectionList.appendChild(msg);
+    if (viewAllButton) {
+      viewAllButton.style.display = 'none';
+      viewAllButton.classList.remove('show');
+    }
+  }
+
+  function makeCardClickable(card, property) {
+    if (!card || !property) return;
+    card.style.cursor = 'pointer';
+    card.onclick = null;
+    card.onclick = function(e) {
+      if (e.target.closest('.property-card-favorite, .wishlist-btn, .favorite-button, [data-name="favorite"]')) {
+        return;
+      }
+      card.style.transition = 'transform 0.15s ease';
+      card.style.transform = 'scale(0.98)';
+      setTimeout(() => {
+        window.location.href = `https://berlin-home.webflow.io/properties/property?propertyId=${property.id || property._id}`;
+      }, 120);
+    };
+    card.addEventListener('mouseenter', () => {
+      card.style.transform = 'translateY(-4px)';
+      card.style.boxShadow = '0 10px 30px rgba(0,0,0,0.1)';
+    });
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = 'translateY(0)';
+      card.style.boxShadow = '';
+    });
+  }
+
+  function hideLoader() {
+    const loader = document.getElementById("propstack-loader");
+    if (loader) {
+      loader.classList.add("hidden");
+      setTimeout(() => document.body.classList.add("loaded"), 800);
+    }
+  }
+
+  function initGooglePlacesAutocomplete() {
+    const locationInput = document.querySelector('input[name="Location"], input[placeholder*="Place"], input[placeholder*="City"], input[placeholder*="Street"]');
+    if (!locationInput) return;
+
+    if (!window.google?.maps?.places) {
+      const script = document.createElement('script');
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_API_KEY}&libraries=places&callback=googlePlacesReady`;
+      script.async = true;
+      window.googlePlacesReady = () => {
+        const autocomplete = new google.maps.places.Autocomplete(locationInput, {
+          types: ['geocode'],
+          componentRestrictions: { country: [] }
+        });
+        autocomplete.addListener('place_changed', () => {
+          const place = autocomplete.getPlace();
+          if (!place.geometry) return;
+          locationInput.value = place.formatted_address || place.name;
+          window.searchLat = place.geometry.location.lat();
+          window.searchLng = place.geometry.location.lng();
+          let postalCode = '', city = '', country = '';
+          place.address_components.forEach(comp => {
+            const types = comp.types;
+            if (types.includes('postal_code')) postalCode = comp.long_name;
+            if (types.includes('locality') || types.includes('postal_town')) city = comp.long_name;
+            if (types.includes('country')) country = comp.short_name;
+          });
+          window.searchZip = postalCode || null;
+          window.searchCity = city || null;
+          window.searchCountry = country || null;
+          console.log('Location selected → ZIP:', window.searchZip, 'City:', window.searchCity, 'Country:', window.searchCountry);
+        });
+      };
+      document.head.appendChild(script);
+    }
+  }
+
+  // Extended parseFormData with all supported filters
+  function parseFormData(formObject) {
+    const filters = {};
+    if (formObject['Property-Type']) filters.rs_type = formObject['Property-Type'];
+    if (formObject['Price-Upto']) {
+      const val = formObject['Price-Upto'];
+      if (val.includes('+')) {
+        filters.price_from = parseInt(val.split('+')[0]);
+      } else if (val.includes('-')) {
+        const [from, to] = val.split('-').map(x => parseInt(x));
+        filters.price_from = from;
+        filters.price_to = to;
+      }
+    }
+    if (formObject['No-of-Rooms']) {
+      const val = formObject['No-of-Rooms'];
+      if (val.includes('+')) {
+        filters.number_of_bed_rooms_from = parseInt(val.split('+')[0]);
+      } else {
+        filters.number_of_bed_rooms_to = parseInt(val);
+      }
+    }
+    if (formObject['Living-Area']) {
+      filters.living_space_to = parseInt(formObject['Living-Area']);
+    }
+    if (formObject['Distance-Radius']) {
+      const val = formObject['Distance-Radius'];
+      filters.radius = val.includes('+') ? parseInt(val.split('+')[0]) : parseInt(val);
+    }
+    if (formObject['Type']) filters.type = formObject['Type'];
+
+    // === NEW SUPPORTED FILTERS ===
+    if (formObject['Baujahr']) {
+      filters.construction_year_from = parseInt(formObject['Baujahr']);
+    }
+    if (formObject['Usable-area']) {
+      filters.property_space_value_from = parseInt(formObject['Usable-area']);
+    }
+
+    const categories = [];
+    if (formObject['Top-floor'] === 'on') categories.push('ROOF_STOREY');
+    if (formObject['Maisonette'] === 'on') categories.push('MAISONETTE');
+    if (formObject['Loft-Studio-Atelier'] === 'on') categories.push('LOFT');
+    if (formObject['Penthouse'] === 'on') categories.push('PENTHOUSE');
+    if (formObject['Terraces'] === 'on') categories.push('TERRACED_FLAT');
+    if (formObject['Ground-floor'] === 'on') categories.push('GROUND_FLOOR');
+    if (formObject['Basement'] === 'on') categories.push('HALF_BASEMENT');
+    if (formObject['Garage'] === 'on') categories.push('GARAGE');
+    if (formObject['Underground-garage'] === 'on') categories.push('UNDERGROUND_GARAGE');
+    if (formObject['Carport'] === 'on') categories.push('CARPORT');
+    if (formObject['Outdoor-parking-space'] === 'on') categories.push('STREET_PARKING');
+    if (categories.length > 0) {
+      filters.rs_category = categories.join(',');
+    }
+
+    // Rented filter – not supported in API, but handled gracefully
+    if (formObject['Rented'] === 'No') {
+      console.log("Rented = No → showing only available properties (default API behavior)");
+    }
+    return filters;
+  }
+
+  // Update Property-Type dropdown in ALL forms
+  function updatePropertyTypeOptions(marketingType) {
+    const propertyTypeOptions = {
+      'BUY': [
+        { value: 'OFFICE', label: 'Office' },
+        { value: 'GASTRONOMY', label: 'Gastronomy' },
+        { value: 'STORE', label: 'Store' },
+        { value: 'SPECIAL_PURPOSE', label: 'Special Purpose' }
+      ],
+      'RENT': [
+        { value: 'APARTMENT', label: 'Apartment' },
+        { value: 'HOUSE', label: 'House' },
+        { value: 'GARAGE', label: 'Garage' },
+        { value: 'SHORT_TERM_ACCOMMODATION', label: 'Short Term Accommodation' }
+      ]
+    };
+    document.querySelectorAll('select[name="Property-Type"]').forEach(select => {
+      const currentValue = select.value;
+      const firstOption = select.options[0];
+      select.innerHTML = '';
+      select.appendChild(firstOption);
+      const options = propertyTypeOptions[marketingType] || propertyTypeOptions['BUY'];
+      options.forEach(opt => {
+        const el = document.createElement('option');
+        el.value = opt.value;
+        el.textContent = opt.label;
+        select.appendChild(el);
+      });
+      select.value = currentValue;
+    });
+  }
+
+  function renderProperty(item, property) {
+    const nameEl = item.querySelector('.card-text-featured');
+    const descEl = item.querySelector('.p-text-card');
+    const locationEl = item.querySelector('.location');
+    const bedroomsEl = item.querySelector('.bedrooms');
+    const housesizeEl = item.querySelector('.housesize');
+    const cardImage = item.querySelector(".card-image-wrapper");
+
+    if (cardImage && property.images?.[0]) {
+      cardImage.src = cardImage.srcset = property.images[0].url;
+      cardImage.alt = property.name || "Property image";
+    }
+    if (nameEl) nameEl.textContent = property.name || "Unnamed Property";
+    if (descEl) {
+      const desc = property.description_note || property.other_note || "No description available";
+      descEl.textContent = desc;
+    }
+    if (locationEl) locationEl.textContent = property.region || "Unknown region";
+    if (bedroomsEl) bedroomsEl.textContent = `Bedrooms: ${property.number_of_rooms ?? "—"}`;
+    if (housesizeEl) housesizeEl.textContent = property.plot_area ? `${property.plot_area} sq. ft.` : "Area: N/A";
+
+    const button = item.querySelector('.link');
+    if (button) button.href = `https://berlin-home.webflow.io/properties/property?propertyId=${property.id || property._id}`;
+
+    makeCardClickable(item, property);
+    item.style.opacity = "1";
+  }
+
+  function showAllProperties() {
+    const templateItem = document.querySelector('.collection-item');
+    if (!templateItem) return;
+    const remaining = allProperties.slice(6);
+    remaining.forEach(property => {
+      const item = templateItem.cloneNode(true);
+      item.style.opacity = "0";
+      collectionList.appendChild(item);
+      renderProperty(item, property);
+    });
+    if (viewAllButton) {
+      viewAllButton.style.display = 'none';
+      viewAllButton.classList.remove('show');
+    }
+  }
+
+  async function fetchAndUpdateFeaturedProperties(useFilters = false, customFilters = null) {
+    try {
+      let apiUrl = "https://api.propstack.de/v2/properties?with_total=true&page=1&per=50&sort_by=created_at";
+      if (useFilters) {
+        const f = customFilters || {};
+        console.log("Applying filters:", f);
+        if (f.type) apiUrl += `&marketing_type=${f.type}`;
+        if (f.rs_type) apiUrl += `&rs_type=${f.rs_type}`;
+        if (f.rs_category) apiUrl += `&rs_category=${f.rs_category}`;
+        if (f.price_from !== undefined) apiUrl += `&price_from=${f.price_from}`;
+        if (f.price_to !== undefined) apiUrl += `&price_to=${f.price_to}`;
+        if (f.number_of_bed_rooms_from !== undefined) apiUrl += `&number_of_bed_rooms_from=${f.number_of_bed_rooms_from}`;
+        if (f.number_of_bed_rooms_to !== undefined) apiUrl += `&number_of_bed_rooms_to=${f.number_of_bed_rooms_to}`;
+        if (f.living_space_to !== undefined) apiUrl += `&living_space_to=${f.living_space_to}`;
+        if (f.construction_year_from !== undefined) apiUrl += `&construction_year_from=${f.construction_year_from}`;
+        if (f.property_space_value_from !== undefined) apiUrl += `&property_space_value_from=${f.property_space_value_from}`;
+        if (window.searchLat && window.searchLng) {
+          const radiusMeters = (f.radius || 100) * 1000;
+          apiUrl += `&lat=${window.searchLat.toFixed(6)}&lng=${window.searchLng.toFixed(6)}&radius=${radiusMeters}`;
+        }
+        if (window.searchZip) {
+          apiUrl += `&zip_code=${window.searchZip}`;
+        } else if (window.searchCountry) {
+          apiUrl += `&country=${window.searchCountry}`;
+        }
+      }
+      console.log("Fetching:", apiUrl);
+      const res = await fetch(apiUrl, {
+        headers: { "accept": "application/json", "X-Api-Key": "wCBXa-uV4yJ03Ebty0tYtGOz-JHGndBM6iBeLoWV" }
+      });
+      if (!res.ok) throw new Error("API error: " + res.status);
+      const result = await res.json();
+      allProperties = result.data || [];
+      if (allProperties.length === 0) {
+        showNoPropertiesMessage();
+        hideLoader();
+        return;
+      }
+      document.querySelectorAll('.collection-item').forEach(item => item.style.opacity = "0");
+      if (result.total <= 6) {
+        viewAllButton?.classList.remove('show');
+        viewAllButton.style.display = 'none';
+      } else {
+        viewAllButton?.classList.add('show');
+        viewAllButton.style.display = 'block';
+      }
+      const itemsToShow = allProperties.slice(0, 6);
+      const existingItems = document.querySelectorAll('.collection-item');
+      itemsToShow.forEach((property, i) => {
+        const item = existingItems[i];
+        if (item) renderProperty(item, property);
+      });
+      existingItems.forEach((item, i) => {
+        if (i >= itemsToShow.length) {
+          item.style.display = 'none';
+        }
+      });
+      hideLoader();
+    } catch (err) {
+      console.error("Error:", err);
+      hideLoader();
+    }
+  }
+
+  if (viewAllButton) {
+    viewAllButton.addEventListener('click', e => {
+      e.preventDefault();
+      showAllProperties();
+    });
+  }
+
+  // Initial load
+  await fetchAndUpdateFeaturedProperties(false);
+  initGooglePlacesAutocomplete();
+
+  // === BOTH FORMS SUPPORT ===
+  const lowerForm = document.querySelector('form[data-name="Feature Search Form"]');
+  const upperFormWrapper = document.querySelector('.popup-main, .modal-popup, .Content-main-popup, #popup-main');
+  const upperForm = upperFormWrapper ? upperFormWrapper.querySelector('form') : null;
+
+  if (lowerForm) console.log("Lower form found – master search trigger");
+  if (upperForm) console.log("Upper popup form found – values will be combined");
+
+  function setupTypeListeners() {
+    const allTypeSelects = [
+      lowerForm?.querySelector('select[name="Type"]'),
+      upperForm?.querySelector('select[name="Type"]')
+    ].filter(Boolean);
+    allTypeSelects.forEach(select => {
+      select.addEventListener('change', e => {
+        const source = select.closest('form') === lowerForm ? "lower" : "upper";
+        console.log(`Type changed in ${source} form:`, e.target.value);
+        updatePropertyTypeOptions(e.target.value);
+      });
+      if (select.value) updatePropertyTypeOptions(select.value);
+    });
+  }
+  setupTypeListeners();
+
+  if (lowerForm) {
+    lowerForm.addEventListener('submit', async e => {
+      e.preventDefault();
+      console.log("MAIN SEARCH TRIGGERED");
+      const lowerData = Object.fromEntries(new FormData(lowerForm));
+      const upperData = upperForm ? Object.fromEntries(new FormData(upperForm)) : {};
+      console.log("Lower data:", lowerData);
+      console.log("Upper data:", upperData);
+      const combinedData = { ...lowerData, ...upperData };
+      console.log("Combined data:", combinedData);
+      const filters = parseFormData(combinedData);
+      console.log("Final filters:", filters);
+      await fetchAndUpdateFeaturedProperties(true, filters);
+    });
+  }
+});
+</script>
